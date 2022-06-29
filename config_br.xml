@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+    <name>payshop</name>
+    <displayName><![CDATA[PayShop]]></displayName>
+    <version><![CDATA[0.0.1]]></version>
+    <description><![CDATA[Customize a experi&ecirc;ncia dos clientes na sua loja online.]]></description>
+    <author><![CDATA[payshop]]></author>
+    <tab><![CDATA[payments_gateways]]></tab>
+	<confirmUninstall><![CDATA[Tem certeza que você deseja remover esse módulo?]]></confirmUninstall>
+    <is_configurable>1</is_configurable>
+    <need_instance>1</need_instance>
+	<limited_countries></limited_countries>
+</module>

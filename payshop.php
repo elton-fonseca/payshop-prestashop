@@ -80,17 +80,19 @@ class Payshop extends PaymentModule
         $this->ps_version = _PS_VERSION_;
         $this->assets_ext_min = !_PS_MODE_DEV_ ? '.min' : '';
         $this->path = $this->_path;
-
     }
 
     /**
-     * Load files
+     * Load module files
      *
      * @return void
      */
     public function loadFiles()
     {
-       
+        include_once PAYSHOP_ROOT_URL . '/includes/PayshopLog.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/settings/ConfigurationPage.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/alerts/UpdateAlert.php';
+        include_once PAYSHOP_ROOT_URL . '/controllers/admin/PayshopUpdateAlertClose.php';
     }
 
     /**
@@ -107,10 +109,13 @@ class Payshop extends PaymentModule
             return false;
         }
 
+        $this->registerAdminControllers();
+
         //install hooks and dependencies
         return parent::install() &&
             $this->registerHook('payment') &&
-            $this->registerHook('paymentReturn');
+            $this->registerHook('paymentReturn') &&
+            $this->registerHook('displayAdminAfterHeader');
     }
 
     /**
@@ -128,8 +133,39 @@ class Payshop extends PaymentModule
      *
      * @return string
      */
-    public function getContext()
+    public function getContent()
     {
-        return $this->context;
+        $configurationPage = new ConfigurationPage();
+
+        return $configurationPage->getContent();
+    }
+
+    /**
+     * Show update module alert
+     *
+     * @return string
+     */
+    public function hookDisplayAdminAfterHeader()
+    {
+        $updateAlert = new UpdateAlert($this, $this->local_path);
+
+        return $updateAlert->execute();
+    }
+
+    /**
+     * Register tabs for admin controllers
+     *
+     * @return void
+     */
+    public function registerAdminControllers()
+    {
+        $tab = new Tab();
+        $tab->class_name = 'PayshopUpdateAlertClose';
+        $tab->module = $this->name;
+        $tab->name[1] = $this->name;
+
+        if (!$tab->save()) {
+            return false;
+        }
     }
 }
