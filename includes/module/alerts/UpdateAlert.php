@@ -54,8 +54,6 @@ class UpdateAlert
     {
         $this->module = $module;
         $this->local_path = $local_path;
-
-        var_dump($this->module->context->employee);
     }
 
     /**
