@@ -53,6 +53,11 @@ class Payshop extends PaymentModule
     public $confirmUninstall;
     public $ps_versions_compliancy;
     public $ps_version;
+
+    public $paymentMethods;
+    public $orderStatus;
+
+
     public static $form_alert;
     public static $form_message;
 
@@ -80,6 +85,9 @@ class Payshop extends PaymentModule
         $this->ps_version = _PS_VERSION_;
         $this->assets_ext_min = !_PS_MODE_DEV_ ? '.min' : '';
         $this->path = $this->_path;
+
+        $this->paymentMethods = new PaymentMethods($this);
+        $this->orderStatus = new OrderStatus();
     }
 
     /**
@@ -90,9 +98,25 @@ class Payshop extends PaymentModule
     public function loadFiles()
     {
         include_once PAYSHOP_ROOT_URL . '/includes/PayshopLog.php';
+
         include_once PAYSHOP_ROOT_URL . '/includes/module/settings/ConfigurationPage.php';
+
         include_once PAYSHOP_ROOT_URL . '/includes/module/alerts/UpdateAlert.php';
         include_once PAYSHOP_ROOT_URL . '/controllers/admin/PayshopUpdateAlertClose.php';
+
+        include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PaymentMethods.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/payments/CreditCard.php';
+
+        include_once PAYSHOP_ROOT_URL . '/includes/module/status/OrderStatus.php';
+
+        include_once PAYSHOP_ROOT_URL . '/includes/module/models/PayshopTransaction.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/models/PayshopEvent.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/actions/CreateOrder.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/actions/SendOrderToPayshop.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/actions/UpdateOrder.php';
+
+        include_once PAYSHOP_ROOT_URL . '/includes/sdk/PayshopClientFactory.php';
+
     }
 
     /**
@@ -109,13 +133,18 @@ class Payshop extends PaymentModule
             return false;
         }
 
+        include PAYSHOP_ROOT_URL . '/database/install.php';
         $this->registerAdminControllers();
+        $this->orderStatus->register();
+
 
         //install hooks and dependencies
         return parent::install() &&
             $this->registerHook('payment') &&
             $this->registerHook('paymentReturn') &&
-            $this->registerHook('displayAdminAfterHeader');
+            $this->registerHook('displayAdminAfterHeader') &&
+            $this->registerHook('ActionFrontControllerSetMedia') &&
+            $this->registerHook('paymentOptions');
     }
 
     /**
@@ -150,6 +179,37 @@ class Payshop extends PaymentModule
         $updateAlert = new UpdateAlert($this, $this->local_path);
 
         return $updateAlert->execute();
+    }
+
+    /**
+     * Show payment options
+     *
+     * @param  $params
+     * @return array|string|void
+     */
+    public function hookPaymentOptions($params)
+    {
+        return $this->paymentMethods->getPaymentOptions($params);
+    }
+
+    /**
+     * Register js mask used in credit card and MBWay forms
+     *
+     * @return void
+     */
+    public function hookActionFrontControllerSetMedia()
+    {
+        if ('order' === $this->context->controller->php_self) {
+            $this->context->controller->registerJavascript(
+                'mask_payshop_js',
+                $this->_path . 'views/js/mask.js',
+                [
+                    'position' => 'head',
+                    'inline' => false,
+                    'priority' => 10,
+                ]
+            );
+        }
     }
 
     /**
