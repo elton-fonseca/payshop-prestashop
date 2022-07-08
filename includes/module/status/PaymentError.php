@@ -2,6 +2,11 @@
 
 class PaymentError
 {
+    /**
+     * Register Payment Error order status
+     *
+     * @return void
+     */
     public static function register()
     {
         $orderStatusRegistered = Configuration::get('PAYSHOP_ORDER_STATUS_PAYMENT_ERROR');

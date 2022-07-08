@@ -2,6 +2,11 @@
 
 class WaitingPayment
 {
+    /**
+     * Register Waiting payment order status
+     *
+     * @return void
+     */
     public static function register()
     {
         $orderStatusRegistered = Configuration::get('PAYSHOP_ORDER_STATUS_WAITING_PAYMENT');

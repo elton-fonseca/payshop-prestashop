@@ -45,8 +45,15 @@
         $this->module = $module;
     }
 
-
+    /**
+     * Update order and payshop transaction with new status
+     *
+     * @param string $paymentMethod
+     * @return int
+     * @throws Exception
+     */
     public function execute(
+        $paymentMethod,
         $prestashopOrderId,
         $newOrderStatus,
         $payshopChargeId,
@@ -55,6 +62,13 @@
     )
     {
         $this->updatePrestashopOrder($prestashopOrderId, $newOrderStatus);
+
+        $this->addPrestashopOrderPayment(
+            $paymentMethod,
+            $prestashopOrderId, 
+            $newOrderStatus,
+            $payshopChargeId
+        );
 
         $this->updatePayshopTransaction(
             $prestashopOrderId,
@@ -65,6 +79,13 @@
         );
     }
 
+    /**
+     * Update Prestashop order status
+     *
+     * @param string $paymentMethod
+     * @return int
+     * @throws Exception
+     */
     private function updatePrestashopOrder($prestashopOrderId, $newOrderStatus)
     {
         $newOrderStatusID = Configuration::get($newOrderStatus);
@@ -75,6 +96,43 @@
         $history->addWithemail();
     }
 
+    /**
+     * Add Prestashop order payment and invoice
+     *
+     * @param string $paymentMethod
+     * @return int
+     * @throws Exception
+     */
+    private function addPrestashopOrderPayment(
+        $paymentMethod,
+        $prestashopOrderId, 
+        $newOrderStatus,
+        $payshopChargeId
+    )
+    {
+        if ('PAYSHOP_ORDER_STATUS_PAID' != $newOrderStatus) {
+            return;
+        }
+
+        $baseOrder = new Order($prestashopOrderId);
+
+        $amount = (float) $this->module->context->cart->getOrderTotal(true, Cart::BOTH);
+        $baseOrder->addOrderPayment($amount, $paymentMethod, $payshopChargeId);
+        $baseOrder->setInvoice(true);
+    }
+
+
+    /**
+     * Update Payshop transaction status
+     * 
+     * @param string $prestashopOrderId
+     * @param string $newOrderStatus
+     * @param string $payshopChargeId
+     * @param string $payshopInstrumentId
+     * @param string $payshopPaymentId
+     * @return bool
+     * @throws Exception
+     */
      private function updatePayshopTransaction(
         $prestashopOrderId,
         $newOrderStatus,

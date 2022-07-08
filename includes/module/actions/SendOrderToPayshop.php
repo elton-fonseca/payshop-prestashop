@@ -35,6 +35,9 @@
      */
     private $module;
 
+    /**
+     * @var PayshopClient
+     */
     private $payshopSDK;
 
     /**
@@ -49,7 +52,7 @@
     }
 
     /**
-     * Send charge and instrument to payshop and save result in database
+     * Send charge and instrument to payshop
      *
      * @param string $paymentMethod
      * @return int
@@ -67,6 +70,12 @@
         return $this->createInstrument($instrumentData);
     }
 
+    /**
+     * Create charge on payshop
+     *
+     * @param string $paymentMethod
+     * @return string
+     */
     private function createCharge($paymentMethod)
     {
         $orderId = (int) $this->module->currentOrder;
@@ -85,6 +94,12 @@
         return $response['response']['id'];
     }
 
+    /**
+     * Create instrument on payshop
+     *
+     * @param array $instrumentData
+     * @return array
+     */
     private function createInstrument($instrumentData)
     {
         $response = $this->payshopSDK->createInstrument($instrumentData);
@@ -94,6 +109,14 @@
         return $response['response'];
     }
 
+    /**
+     * Check Payshop response
+     *
+     * @param array $response
+     * @param string $type
+     * @return void
+     * @throws Exception
+     */
     private function checkResponse($response, $type)
     {
         if ($response['status'] == 201) {
@@ -110,5 +133,4 @@
 
         throw new Exception($message);
     }
-
 }

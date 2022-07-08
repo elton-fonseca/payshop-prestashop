@@ -65,7 +65,7 @@
     }
 
     /**
-     * Checkout if all fields are filled on checkout page
+     * Checkout if all informations are filled on checkout page
      *
      * return void
      */

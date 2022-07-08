@@ -27,16 +27,26 @@
  * to avoid any conflicts with others containers.
  */
 
-
-
 class PayshopCreditCardModuleFrontController extends ModuleFrontController
 {
+    /**
+     * @var CreateOrder
+     */
     private $createOrder;
 
+    /**
+     * @var SendOrderToPayshop
+     */
     private $sendOrderToPayshop;
 
+    /**
+     * @var UpdateOrder
+     */
     private $updateOrder;
 
+    /**
+     * Class constructor
+     */
     public function __construct()
     {
         parent::__construct();
@@ -47,12 +57,12 @@ class PayshopCreditCardModuleFrontController extends ModuleFrontController
     }
 
     /**
-     * @throws Exception
+     * Payment process with credit card
+     *
+     * @return void
      */
     public function postProcess()
     {
-        $cart = $this->context->cart;
-
         try {
             $paymentMethod = 'card';
 
@@ -64,6 +74,7 @@ class PayshopCreditCardModuleFrontController extends ModuleFrontController
             $prestashopOrderId = $this->createOrder->execute($paymentMethod);
 
             $this->updateOrder->execute(
+                $paymentMethod,
                 $prestashopOrderId,
                 $this->getOrderStatus($instrumentResponse),
                 $instrumentResponse['charge']['id'],
@@ -78,6 +89,11 @@ class PayshopCreditCardModuleFrontController extends ModuleFrontController
 
     }
 
+    /**
+     * Get card data from the request
+     *
+     * @return array
+     */
     private function getCardData()
     {
         $this->validateCardData();
@@ -93,6 +109,12 @@ class PayshopCreditCardModuleFrontController extends ModuleFrontController
         ];
     }
 
+    /**
+     * Validate card data
+     *
+     * @return void
+     * @throws \Exception
+     */
     private function validateCardData()
     {
         if (!Tools::getValue('card-number')) {
@@ -124,6 +146,12 @@ class PayshopCreditCardModuleFrontController extends ModuleFrontController
         }
     }
 
+    /**
+     * Get payment id from the instrument response
+     *
+     * @param array $instrumentResponse
+     * @return string|null
+     */
     private function paymentId($instrumentResponse)
     {
         if (isset($instrumentResponse['last_payment'])) {
@@ -133,6 +161,12 @@ class PayshopCreditCardModuleFrontController extends ModuleFrontController
         return null;
     }
 
+    /**
+     * Get order status from the instrument response
+     *
+     * @param array $instrumentResponse
+     * @return string
+     */
     public function getOrderStatus($instrumentResponse)
     {
         $issetPayment = isset($instrumentResponse['last_payment']);
@@ -146,6 +180,11 @@ class PayshopCreditCardModuleFrontController extends ModuleFrontController
         return 'PAYSHOP_ORDER_STATUS_PAYMENT_ERROR';
     }
 
+    /**
+     * Redirect to order confirmation page
+     *
+     * @return void
+     */
     private function redirectToOrderConfirmationPage()
     {
         $cart = $this->module->context->cart;

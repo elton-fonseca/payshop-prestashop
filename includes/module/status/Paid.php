@@ -2,6 +2,11 @@
 
 class Paid
 {
+    /**
+     * Register Paid order status
+     *
+     * @return void
+     */
     public static function register()
     {
         $orderStatusRegistered = Configuration::get('PAYSHOP_ORDER_STATUS_PAID');

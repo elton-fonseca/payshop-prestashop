@@ -7,6 +7,11 @@ require_once('PaymentError.php');
 
 class OrderStatus
 {
+    /**
+     * Register order status
+     *
+     * @return void
+     */
     public function register()
     {
         Paid::register();

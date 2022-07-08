@@ -116,7 +116,7 @@ abstract class AbstractModel
      * Set columns method, needs be called with select()
      *
      * @param  array $columns
-     * @return MPAbstractDB
+     * @return AbstractModel
      */
     public function columns($columns)
     {
@@ -133,7 +133,7 @@ abstract class AbstractModel
      * @param  string $column
      * @param  string $operator
      * @param  mixed  $value
-     * @return MPAbstractDB
+     * @return AbstractModel
      */
     public function where($column, $operator, $value)
     {
@@ -147,7 +147,7 @@ abstract class AbstractModel
      * @param  string $column
      * @param  string $operator
      * @param  mixed  $value
-     * @return MPAbstractDB
+     * @return AbstractModel
      */
     public function andWhere($column, $operator, $value)
     {
@@ -160,7 +160,7 @@ abstract class AbstractModel
      *
      * @param  string $column
      * @param  string $operator
-     * @return MPAbstractDB
+     * @return AbstractModel
      */
     public function orderBy($column, $operator)
     {

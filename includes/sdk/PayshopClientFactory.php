@@ -38,7 +38,7 @@ class PayshopClientFactory
     static $payshopClient = null;
 
     /**
-     * Instance the class
+     * Instanciete the class
      *
      * @return PayshopClient
      */
