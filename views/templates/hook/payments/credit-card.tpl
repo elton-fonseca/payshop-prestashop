@@ -32,7 +32,7 @@
 
             <!-- Input Card number -->
             <div class="form-group">
-                <div class="col-md-12 col-12 payshop-pb-10 payshop-px-0 payshop-m-col">
+                <div class="col-md-12 col-12 mb-1">
                     <label for="id-card-number" class="payshop-pb-5">
                         {l s='Card number' mod='payshop'}
                         <em class="payshop-required">*</em>
@@ -43,12 +43,12 @@
                         name="card-number"
                         class="form-control payshop-form-control"
                         type="text"
-                        maxlength="24"
+                        maxlength="19"
                         autocopayshoplete="off"
                         data-checkout="cardNumber"
                         onkeyup="payshop_maskInput(this, payshop_cc);"
                     />
-                    <small id="payshop-error-card-number" class="payshop-erro-form" data-main="#id-card-number" style="display: none;">
+                    <small id="payshop-error-card-number" class="payshop-erro-form" data-main="#id-card-number" style="display: none; color: #e81814;">
                         {l s='Invalid card number' mod='payshop'}
                     </small>
                 </div>
@@ -56,7 +56,7 @@
 
             <!-- Input Name and Surname -->
             <div id="payshop-card-holder-div" class="form-group">
-                <div class="col-md-12 col-12 payshop-pb-10 payshop-px-0 payshop-m-col">
+                <div class="col-md-12 col-12 mb-1">
                     <label for="id-card-holder-name" class="payshop-pb-5">
                         {l s='Name and surname of the cardholder' mod='payshop'}
                         <em class="payshop-required">*</em>
@@ -70,7 +70,7 @@
                         autocopayshoplete="off"
                         data-checkout="cardholderName"
                     />
-                    <small id="payshop-error-card-holder-name" class="payshop-erro-form" data-main="#id-card-holder-name" style="display: none;">
+                    <small id="payshop-error-card-holder-name" class="payshop-erro-form" data-main="#id-card-holder-name" style="display: none; color: #e81814;">
                         {l s='Invalid card holder name' mod='payshop'}
                     </small>
                 </div>
@@ -96,7 +96,7 @@
                         onkeyup="payshop_maskInput(this, payshop_date);"
                     />
 
-                    <small id="payshop-error-card-expiration" class="payshop-erro-form" data-main="#id-card-expiration" style="display: none;">
+                    <small id="payshop-error-card-expiration" class="payshop-erro-form" data-main="#id-card-expiration" style="display: none; color: #e81814;">
                         {l s='Invalid card expiration date' mod='payshop'}
                     </small>
                 </div>
@@ -115,7 +115,7 @@
                         type="text"
                         autocopayshoplete="off"
                         placeholder="{l s='CVV' mod='payshop'}"
-                        maxlength="4"
+                        maxlength="3"
                         data-checkout="securityCode"
                         onkeyup="payshop_maskInput(this, payshop_minteger);"
                     />
@@ -123,7 +123,7 @@
                         {l s='last 3 numbers on the back of your card' mod='payshop'}
                     </small>
 
-                    <small id="payshop-error-224" class="payshop-erro-form payshop-pt-0" data-main="#id-security-code" style="display: none;">
+                    <small id="payshop-error-security-code" class="payshop-erro-form payshop-pt-0" data-main="#id-security-code" style="display: none; color: #e81814;">
                         {l s='Invalid Security code' mod='payshop'}
                     </small>
                 </div>
@@ -138,5 +138,12 @@
     </div>
 </form>
 
-<script type="text/javascript" src="http://127.0.0.1:8000/modules/payshop/views/js/jquery-1.11.0.min.js"></script>
-<script type="text/javascript" src="http://127.0.0.1:8000/modules/payshop/views/js/card-validation.js?v=1"></script>
+<style>
+    .payshop-form-control-error {
+        border: 2px solid #eb5a5a !important;
+    }
+
+</style>
+
+<script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/card-validation.js?v=21"></script>

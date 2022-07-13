@@ -123,6 +123,21 @@
             return true;
         }
 
+        if ($response['status'] == 401 || $response['status'] == 403) {
+            $message = $this->module->l('Invalid API credentials. Check your credentials in the module settings.');
+
+        }
+
+        if (isset($response['response']['parameters']['number'])) {
+            $message = $this->module->l('Invalid card number');
+        }
+
+        if (isset($message)) {
+            PayshopLog::generate($message, 'error');
+            $this->module->context->cookie->__set('redirect_message', $message);
+            throw new Exception($message);
+        }
+
         $responseMessage = isset($response['response']['message']) ?
                                     $response['response']['message'] : 
                                     $response['response'];

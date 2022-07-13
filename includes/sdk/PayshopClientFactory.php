@@ -45,12 +45,20 @@ class PayshopClientFactory
     public static function getInstance()
     {
         if (null === self::$payshopClient) {
-            self::$payshopClient = new PayshopClient(
-                self::getPublicKey(),
-                self::getSecretKey(),
-                self::getAccountId(),
-                self::isProduction()
-            );
+            try {
+                self::$payshopClient = new PayshopClient(
+                    self::getPublicKey(),
+                    self::getSecretKey(),
+                    self::getAccountId(),
+                    self::isProduction()
+                );
+            } catch (\Exception $e) {
+                $message = 'API ' . $e->getMessage();
+                PayshopLog::generate($message, 'error');
+                echo "<h1>" . $message . "</h1>";
+                echo "<script>alert('" . $message . "')</script>";
+                exit;
+            }
         }
 
         return self::$payshopClient;

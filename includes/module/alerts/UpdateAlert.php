@@ -42,7 +42,7 @@ class UpdateAlert
     /**
      * @var string
      */
-    const ONLINE_VERSION_URL = 'C:\Users\Treinaweb\projetos\payshop\loja\version.json';
+    const ONLINE_VERSION_URL = 'https://payshop.eltonfonseca.dev/prestashop-version.json';
 
     /**
      * class constructor

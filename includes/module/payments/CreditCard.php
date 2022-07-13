@@ -17,7 +17,8 @@ class CreditCard
         );
         
         $paymentForm = $this->module->context->smarty->assign([
-            'formAction' => $formAction
+            'formAction' => $formAction,
+            'moduleUrl' => $this->module->path,
         ])
           ->fetch('module:payshop/views/templates/hook/payments/credit-card.tpl');
 

@@ -31,107 +31,15 @@
 
 (function () {
 
-  var cvvLength = null;
-  var submitted = false;
-
-  /**
-   * Initialise vars to use on JS custom-card.js
-   *
-   * @param {object} mpCustom
-   */
-  window.initializeCustom = function (mpCustom) {
-    setChangeEventOnCardNumber();
-  };
-
-
-  /**
-   * Set cvv length
-   *
-   * @param {number} length
-   */
-  function setCvvLength(length) {
-    cvvLength = length;
-  }
-
-  /**
-   * Get Amount end calculate discount for hide inputs
-   */
-  function getAmount() {
-    return document.getElementById('amount').value;
-  }
-
-  /**
-   * Set if the form has been submitted
-   */
-     function setFormSubmit() {
-      submitted = true;
-  }
-
  
- 
-  /**
-   * Clear Inputs
-   */
-  function clearInputs() {
-    hideErrors();
-    clearTax();
-    document.getElementById('id-card-number').style.background = 'no-repeat #fff';
-    document.getElementById('id-card-expiration').value = '';
-    document.getElementById('id-doc-number').value = '';
-    document.getElementById('id-security-code').value = '';
-    document.getElementById('id-card-holder-name').value = '';
-  }
-
-
-  /**
-   * Clears card number input on keyup when there's less than 4 digits
-   *
-   */
-  function setChangeEventOnCardNumber() {
-    document.getElementById('id-card-number').addEventListener('keyup', function (e) {
-      if (e.target.value.length <= 4) {
-        clearInputs();
-      }
-    });
-  }
-
-  /**
-   * Show errors
-   *
-   * @param  {object}  error
-   */
-  function showErrors(error) {
-    var form = getCardForm();
-    var serializedError = error.cause || error;
-
-    for (var x = 0; x < serializedError.length; x++) {
-      var code = serializedError[x].code;
-      var span = undefined;
-
-      if (code === '208' || code === '209' || code === '325' || code === '326') {
-        span = form.querySelector('#mp-error-208');
-      } else {
-        span = form.querySelector('#mp-error-' + code);
-      }
-
-      if (span !== undefined) {
-        span.style.display = 'block';
-        form.querySelector(span.getAttribute('data-main')).classList.add('mp-form-control-error');
-      }
-    }
-
-    focusInputError();
-    getConditionTerms();
-  }
-
   /**
    * Focus input with error
    *
    * @return bool
    */
   function focusInputError() {
-    if (document.querySelectorAll('.mp-form-control-error') !== undefined) {
-      var formInputs = document.querySelectorAll('.mp-form-control-error');
+    if (document.querySelectorAll('.payshop-form-control-error') !== undefined) {
+      var formInputs = document.querySelectorAll('.payshop-form-control-error');
       formInputs[0].focus();
     }
   }
@@ -142,11 +50,11 @@
   function hideErrors() {
     for (var x = 0; x < document.querySelectorAll('[data-checkout]').length; x++) {
       var field = document.querySelectorAll('[data-checkout]')[x];
-      field.classList.remove('mp-form-control-error');
+      field.classList.remove('payshop-form-control-error');
     }
 
-    for (var y = 0; y < document.querySelectorAll('.mp-erro-form').length; y++) {
-      var small = document.querySelectorAll('.mp-erro-form')[y];
+    for (var y = 0; y < document.querySelectorAll('.payshop-erro-form').length; y++) {
+      var small = document.querySelectorAll('.payshop-erro-form')[y];
       small.style.display = 'none';
     }
   }
@@ -154,7 +62,7 @@
   /**
    * Get condition terms input on PS17
    */
-  function getConditionTerms() {
+  function uncheckConditionTerms() {
     var terms = document.getElementById('conditions_to_approve[terms-and-conditions]');
     if (typeof terms === 'object' && terms !== null) {
       terms.checked = false;
@@ -175,9 +83,12 @@
   function validateInputs() {
     hideErrors();
 
-    var fixedInputs = validateFixedInputs();
+    var inputsNotFilled = validateinputNotFilled();
+    var numberIsInvalid = cardNumberIsInvalid();
+    var expirationIsInvalid = expirationDateIsInvalid();
+    var codeIsInvalid = cvvIsInvalid();
 
-    if (fixedInputs) {
+    if (inputsNotFilled || codeIsInvalid || expirationIsInvalid || numberIsInvalid) {
       focusInputError();
       return false;
     }
@@ -185,24 +96,82 @@
     return true;
   }
 
+    /**
+   * Validate card number length
+   *
+   * @returns {boolean}
+   */
+     function cardNumberIsInvalid() {
+      var span = getCardForm().querySelectorAll('small[data-main="#id-card-number"]');
+      var cvvInput = document.getElementById('id-card-number');
+      var numberIsInvalid = cvvInput.value.length < 19;
+
+      if (numberIsInvalid) {
+        span[0].style.display = 'block';
+        cvvInput.classList.add('payshop-form-control-error');
+        cvvInput.focus();
+      }
+
+      return numberIsInvalid;
+    }
+
+  /**
+   * Validate Expiration Date
+   *
+   * @returns {boolean}
+   */
+     function expirationDateIsInvalid() {
+      var span = getCardForm().querySelectorAll('small[data-main="#id-card-expiration"]');
+      var expirationInput = document.getElementById('id-card-expiration');
+
+      //validate string length
+      var invalidSize = expirationInput.value.length != 7;
+
+      var expirationMonth = expirationInput.value.substring(0, 2) - 1;
+      var expirationYear = expirationInput.value.substring(3, 7);
+
+      //validate month
+      var invalidMonth = expirationMonth < 0 || expirationMonth > 11;
+
+      //validate year
+      var invalidYear = expirationYear > new Date().getFullYear() + 15;  
+
+      //validate full date
+      var lastDayOfPreviousMonth = new Date();
+      lastDayOfPreviousMonth.setDate(0);
+
+      var expirationDate = new Date(expirationYear, expirationMonth);
+
+      var invalidDate = expirationDate < lastDayOfPreviousMonth;
+
+      var invalid = invalidSize || invalidMonth || invalidYear || invalidDate;
+
+      if (invalid) {
+        span[0].style.display = 'block';
+        expirationInput.classList.add('payshop-form-control-error');
+        expirationInput.focus();
+      }
+
+      return invalid;
+    }
+
   /**
    * Validate CVV length
    *
    * @returns {boolean}
    */
-     function validateCvv() {
+     function cvvIsInvalid() {
       var span = getCardForm().querySelectorAll('small[data-main="#id-security-code"]');
       var cvvInput = document.getElementById('id-security-code');
-      var cvvValidation = cvvLength === cvvInput.value.length;
+      var cvvIsInvalid = cvvInput.value.length < 3;
 
-      if (!cvvValidation) {
+      if (cvvIsInvalid) {
         span[0].style.display = 'block';
-        cvvInput.classList.add('mp-form-control-error');
+        cvvInput.classList.add('payshop-form-control-error');
         cvvInput.focus();
-        getConditionTerms();
       }
 
-      return cvvValidation;
+      return cvvIsInvalid;
     }
 
   /**
@@ -210,7 +179,7 @@
    *
    * @return bool
    */
-  function validateFixedInputs() {
+  function validateinputNotFilled() {
     var emptyInputs = false;
     var form = getCardForm();
     var formInputs = form.querySelectorAll('[data-checkout]');
@@ -228,7 +197,7 @@
             span[0].style.display = 'block';
           }
 
-          element.classList.add('mp-form-control-error');
+          element.classList.add('payshop-form-control-error');
           emptyInputs = true;
         }
       }
@@ -236,8 +205,6 @@
 
     return emptyInputs;
   }
-
- 
 
   /**
    * Disable finish order button
@@ -247,23 +214,19 @@
       sevenButton.setAttribute('disabled', 'disabled');
   }
 
-  
-
   /**
    * Handle submit from form
    */
   jQuery(function () {
     if (document.forms.payshop_card !== undefined) {
       document.forms.payshop_card.onsubmit = function () {
-        alert('teste')
-        if (validateInputs()) {
+        if (!validateInputs()) {
+          uncheckConditionTerms();
+          disableFinishOrderButton();
           return false;
         }
 
-        // getConditionTerms();
-
-        disableFinishOrderButton();
-        return false;
+        document.forms.payshop_card.submit();
       };
     }
   });

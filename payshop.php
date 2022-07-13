@@ -144,6 +144,7 @@ class Payshop extends PaymentModule
             $this->registerHook('paymentReturn') &&
             $this->registerHook('displayAdminAfterHeader') &&
             $this->registerHook('ActionFrontControllerSetMedia') &&
+            $this->registerHook('displayWrapperTop') &&
             $this->registerHook('paymentOptions');
     }
 
@@ -209,6 +210,29 @@ class Payshop extends PaymentModule
                     'priority' => 10,
                 ]
             );
+
+            $this->context->controller->addJS(
+                $this->_path . 'views/js/mask.js',
+                false
+            );
+        }
+    }
+
+    /**
+     * Display payment failure
+     *
+     * @return string
+     */
+    public function hookDisplayWrapperTop()
+    {
+        if (Tools::getValue('typeReturn') == 'failure') {
+            $cookie = $this->context->cookie;
+            if ($cookie->__isset('redirect_message')) {
+                $this->context->smarty->assign(array('redirect_message' => $cookie->__get('redirect_message')));
+                $cookie->__unset('redirect_message');
+            }
+
+            return $this->display(__FILE__, 'views/templates/hook/failure.tpl');
         }
     }
 

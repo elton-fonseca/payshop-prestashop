@@ -99,9 +99,10 @@ class PayshopCreditCardModuleFrontController extends ModuleFrontController
         $this->validateCardData();
 
         $cardExpiration = Tools::getValue('card-expiration');
+        $number = str_replace(' ', '', Tools::getValue('card-number'));
 
         return [
-            'number' => Tools::getValue('card-number'),
+            'number' => $number,
             'expiration_month' => substr($cardExpiration, 0, 2),
             'expiration_year' => substr($cardExpiration, 3, 4),
             'cvc' => Tools::getValue('card-security-code'),
@@ -121,7 +122,7 @@ class PayshopCreditCardModuleFrontController extends ModuleFrontController
             throw new Exception('Card number is required');
         }
 
-        if (strlen(Tools::getValue('card-number')) < 15) {
+        if (strlen(Tools::getValue('card-number')) != 19) {
             throw new Exception('Card number is invalid');
         }
 
@@ -137,7 +138,7 @@ class PayshopCreditCardModuleFrontController extends ModuleFrontController
             throw new Exception('Card security code is required');
         }
 
-        if (strlen(Tools::getValue('card-security-code')) < 3) {
+        if (strlen(Tools::getValue('card-security-code')) != 3) {
             throw new Exception('Card security code is invalid');
         }
 

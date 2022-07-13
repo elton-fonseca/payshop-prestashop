@@ -16,7 +16,9 @@ class PaymentMethods
     {
         $paymentOptions = [];
 
-        $paymentOptions[] =  $this->creditCard->register();
+        if (Configuration::get('PAYSHOP_CREDIT_CARD') == true) {
+            $paymentOptions[] =  $this->creditCard->register();
+        }
 
         return $paymentOptions;
     }
