@@ -98,6 +98,7 @@ class Payshop extends PaymentModule
     public function loadFiles()
     {
         include_once PAYSHOP_ROOT_URL . '/includes/PayshopLog.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/PayshopHelpers.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/settings/ConfigurationPage.php';
 
@@ -106,16 +107,20 @@ class Payshop extends PaymentModule
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PaymentMethods.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/payments/CreditCard.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/payments/MBWay.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/status/OrderStatus.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/models/PayshopTransaction.php';
-        include_once PAYSHOP_ROOT_URL . '/includes/module/models/PayshopEvent.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/models/PayshopEventModel.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/actions/CreateOrder.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/actions/SendOrderToPayshop.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/actions/UpdateOrder.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/sdk/PayshopClientFactory.php';
+
+        include_once PAYSHOP_ROOT_URL . '/includes/sdk/PayshopEvent.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/Events/ProcessEvent.php';
 
     }
 
@@ -252,4 +257,10 @@ class Payshop extends PaymentModule
             return false;
         }
     }
+}
+
+function dd(...$asd)
+{
+    var_dump($asd);
+    exit;
 }

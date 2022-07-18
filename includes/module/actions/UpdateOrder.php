@@ -88,6 +88,10 @@
      */
     private function updatePrestashopOrder($prestashopOrderId, $newOrderStatus)
     {
+        if ('PAYSHOP_ORDER_STATUS_WAITING_PAYMENT' == $newOrderStatus) {
+            return;
+        }
+
         $newOrderStatusID = Configuration::get($newOrderStatus);
 
         $history = new OrderHistory();

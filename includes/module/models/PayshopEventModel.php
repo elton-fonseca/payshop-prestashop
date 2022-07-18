@@ -29,7 +29,7 @@
 
 require_once('AbstractModel.php');
 
-class PayshopEvent extends AbstractModel
+class PayshopEventModel extends AbstractModel
 {
     public function __construct()
     {

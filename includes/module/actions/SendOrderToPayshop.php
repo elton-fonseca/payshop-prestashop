@@ -81,12 +81,17 @@
         $orderId = (int) $this->module->currentOrder;
         $total = (float) $this->module->context->cart->getOrderTotal(true, Cart::BOTH);
 
+        $webHookProcessURL = $this->module->context->link->getModuleLink(
+            $this->module->name,
+            'ProcessEvent'
+        );
+
         $response = $this->payshopSDK->createCharge([
             'charge_type' => $paymentMethod,
             'amount' => (float) $total,
             'currency' => 'EUR',
             'description' => $this->module->l('PrestaShop order #') . $orderId,
-            'event_url' => 'https://example.com/event',
+            'events_url' => str_replace('http://127.0.0.1', 'https://teste.com', $webHookProcessURL),
         ]);
 
         $this->checkResponse($response, 'charge');
@@ -145,6 +150,10 @@
         $message = $this->module->l('Error creating ' . $type . 
                                     ': Status Code:' . $response['status'] .
                                     ' Message: ' . $responseMessage);
+
+        if (isset($response['response']['parameters']['phone'])) {
+            $message = $this->module->l('Invalid phone number');
+        }
 
         throw new Exception($message);
     }
