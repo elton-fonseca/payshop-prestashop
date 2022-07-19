@@ -15,10 +15,11 @@ class MBWay
             $this->module->name,
             'MBWayCreateOrder'
         );
-        
+
         $paymentForm = $this->module->context->smarty->assign([
             'formAction' => $formAction,
             'moduleUrl' => $this->module->path,
+            'shopUrl' => $this->module->context->shop->getBaseURL()
         ])
           ->fetch('module:payshop/views/templates/hook/payments/mbway.tpl');
 

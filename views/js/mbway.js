@@ -163,7 +163,7 @@
         },
         success: function (data) {
           console.log(data);
-          showWaitingPayment();
+          waitingPayment();
           checkPayment(data.prestashopOrderId, data.sucessRedirectUrl, mbWayURL);
 
         },
@@ -177,9 +177,14 @@
     });
   }
 
-  function showWaitingPayment(){
-    var waitingPayment = document.getElementById('waiting-mbway');
-    waitingPayment.style.display = 'block';
+  function waitingPayment(display = 'block'){
+    let waitingPaymentPopup = document.getElementById('waiting-mbway');
+    waitingPaymentPopup.style.display = display;
+  }
+
+  function showDeclinedWBMay() {
+    let declinedMBWay = document.getElementById('declined-mbway');
+    declinedMBWay.style.display = 'block';
   }
 
   function checkPayment(prestashopOrderId, sucessRedirectUrl, mbWayURL){
@@ -198,6 +203,11 @@
             if(data.status == 'paid'){
               clearInterval(interval);
               window.location.href = sucessRedirectUrl;
+            }
+
+            if (data.status == 'declined') {
+              waitingPayment('none');
+              showDeclinedWBMay();
             }
           },
           error: function (data) {

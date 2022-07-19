@@ -65,15 +65,34 @@
 
 <div class="overlap" id="waiting-mbway">
     <div class="overlap-content">
-        <h5>Aguardando confirmação de pagamento no WBWay</h5>
-        <img width="250" src="https://www.ingresso-minsa.ao/cminsa_saude/public/assets/admin/images/loading.gif" />
-        <p>Você pode confirmar o pagamento mesmo se fechar essa página. Nesse caso receberá a confirmação de pagamento por email</p>
+        <h5>{l s='Waiting MBWay payment confirmation' mod='payshop'}</h5>
+        <img width="250" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/img/loading.gif" />
+        <p>
+            {l s='You can confirm the payment after close this page. ' mod='payshop'}
+            {l s='In this case, you will receive a message with confirmation' mod='payshop'}
+        </p>
+    </div>
+</div>
+
+<div class="overlap" id="declined-mbway">
+    <div class="overlap-content mbway-declined">
+        <h4 class="payshop-error-color">
+            {l s='Declined Payment' mod='payshop'}
+        </h4>
+        <p>{l s='Payment Declined on MBWay' mod='payshop'}</p>
+        <button onclick="window.location.href = '{$shopUrl|escape:'htmlall':'UTF-8'}'">
+            {l s='Close' mod='payshop'}
+        </button>
     </div>
 </div>
 
 <style>
     .payshop-form-control-error {
         border: 2px solid #eb5a5a !important;
+    }
+
+    .payshop-error-color {
+        color: #eb5a5a;
     }
 
     .overlap {
@@ -105,6 +124,10 @@
         justify-content: space-between;
     }
 
+    .mbway-declined {
+        height: 250px;
+    }
+
     .overlap-content p {
         margin-bottom: 0;
         margin-top: 10px;
@@ -113,4 +136,4 @@
 </style>
 
 <script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/jquery-1.11.0.min.js"></script>
-<script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/mbway.js?v=23"></script>
+<script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/mbway.js?v=26"></script>

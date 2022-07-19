@@ -118,9 +118,11 @@
             return;
         }
 
+        $transaction = PayshopHelpers::getTransacion('order_id', $prestashopOrderId);
+
         $baseOrder = new Order($prestashopOrderId);
 
-        $amount = (float) $this->module->context->cart->getOrderTotal(true, Cart::BOTH);
+        $amount = (float) $transaction['total'];
         $baseOrder->addOrderPayment($amount, $paymentMethod, $payshopChargeId);
         $baseOrder->setInvoice(true);
     }

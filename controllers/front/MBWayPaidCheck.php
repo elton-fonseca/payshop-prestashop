@@ -57,6 +57,11 @@ class PayshopMBWayPaidCheckModuleFrontController extends ModuleFrontController
                 return;
             }
 
+            if ($transacionStatus == 'PAYSHOP_ORDER_STATUS_PAYMENT_ERROR') {
+                echo '{"status": "declined"}';
+                return;
+            }
+
             echo '{"status": "not-paid"}';
         } catch (\Exception $e) {
             if ($e->getCode() == 404) {
