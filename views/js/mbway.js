@@ -153,9 +153,10 @@
   function createTransaction(){
 
     var phoneNumber = document.getElementById('id-phone-number').value;
+    var mbWayURL = document.getElementById('payshop_wbway').action;
 
     $.ajax({
-        url: mbWayURL + 'CreateOrder',
+        url: mbWayURL,
         type: 'POST',
         data: {
           "phone-number": phoneNumber
@@ -163,11 +164,15 @@
         success: function (data) {
           console.log(data);
           showWaitingPayment();
-          checkPayment(data.prestashopOrderId, data.sucessRedirectUrl);
+          checkPayment(data.prestashopOrderId, data.sucessRedirectUrl, mbWayURL);
 
         },
         error: function (data) {
-          console.log(data);
+          uncheckConditionTerms();
+          disableFinishOrderButton();
+
+          let spanError = document.getElementById('payshop-error-phone-number');
+          spanError.style.display = 'block';
         }
     });
   }
@@ -177,10 +182,13 @@
     waitingPayment.style.display = 'block';
   }
 
-  function checkPayment(prestashopOrderId, sucessRedirectUrl){
+  function checkPayment(prestashopOrderId, sucessRedirectUrl, mbWayURL){
+
+    mbWayPaidCheckURL = mbWayURL.replace('MBWayCreateOrder', 'MBWayPaidCheck');
+
     var interval = setInterval(function(){
       $.ajax({
-          url: mbWayURL + 'PaidCheck',
+          url: mbWayPaidCheckURL,
           type: 'POST',
           data : {
             "prestashop-order-id": prestashopOrderId
@@ -198,7 +206,4 @@
       });
     }, 3000);
   }
-
-
-
 })();

@@ -112,9 +112,5 @@
 
 </style>
 
-<script>
-    const mbWayURL = "{$formAction|escape:'htmlall':'UTF-8'}";
-</script>
-
 <script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/jquery-1.11.0.min.js"></script>
-<script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/mbway.js?v=11"></script>
+<script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/mbway.js?v=23"></script>
