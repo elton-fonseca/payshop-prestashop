@@ -27,7 +27,7 @@
  * to avoid any conflicts with others containers.
  */
 
-class PayshopMBWayCreateOrderModuleFrontController extends ModuleFrontController
+class PayshopPayshopReferenceModuleFrontController extends ModuleFrontController
 {
     /**
      * @var CreateOrder
@@ -66,11 +66,11 @@ class PayshopMBWayCreateOrderModuleFrontController extends ModuleFrontController
         header('Content-Type: application/json');
 
         try {
-            $paymentMethod = 'mbway';
+            $paymentMethod = 'payshop_reference';
 
             $instrumentResponse = $this->sendOrderToPayshop->execute(
                 $paymentMethod,
-                $this->getWBWayPhoneNumber()
+                $this->getReferenceExpiration()
             );
 
             $prestashopOrderId = $this->createOrder->execute($paymentMethod);
@@ -83,52 +83,41 @@ class PayshopMBWayCreateOrderModuleFrontController extends ModuleFrontController
                 $instrumentResponse['id']
             );
 
-            echo json_encode([
-                'status' => 'success',
-                'prestashopOrderId' => $prestashopOrderId,
-                'sucessRedirectUrl' => $this->redirectToOrderConfirmationPage()
-            ]);
+            echo $this->processReferenceInformation($instrumentResponse);
         } catch (\Exception $e) {
             echo json_encode(['error' => true, 'message' => $e->getMessage()]);
+            
             http_response_code(400);
         }
     }
 
     /**
-     * Get phone number from the request
+     * Get reference expiration by configuration
      *
      * @return array
      */
-    private function getWBWayPhoneNumber()
+    private function getReferenceExpiration()
     {
-        if (!Tools::getValue('phone-number')) {
-            throw new Exception('Phone number is required');
-        }
-
-        $number = str_replace(' ', '', Tools::getValue('phone-number'));
-
         return [
-            'phone' => $number,
+            'end_date' => "2022-07-26"
         ];
     }
 
-    private function redirectToOrderConfirmationPage()
-    {
-        $cart = $this->module->context->cart;
-        $cartId = (int) $cart->id;
-        $orderId = (int) $this->module->currentOrder;
+    private function processReferenceInformation($instrumentResponse)
+    {   
+        $referenceData = [];
 
-        $customer = new Customer($cart->id_customer);
-        $securityKey = $customer->secure_key;
+        foreach ($instrumentResponse['reference']['fields'] as $key => $item) {
+            if ($item['field'] == 'end_date') {
+                $date = new DateTime($item['value']);
+                $referenceData[$item['field']] = $date->format('d/m/Y');
+                continue;
+            }
 
-        $moduloId = (int) $this->module->id;
+            $referenceData[$item['field']] = $item['value'];
+        }
 
-        $link = $this->module->context->link->getBaseLink() . 'index.php?controller=order-confirmation&id_cart='
-        . $cartId . '&id_module='
-        . $moduloId . '&id_order=' . $orderId . '&key=' . $securityKey;
-
-        return $link;
+        return json_encode($referenceData);
     }
-
 
 }

@@ -90,6 +90,14 @@ class PaymentsSettings extends AbstractSettings
                 )
             ),
             array(
+                'col' => 8,
+                'type' => 'text',
+                'desc' => $this->module->l('Number of days for Multibanco reference to expire', 'PaymentsSettings'),
+                'name' => 'PAYSHOP_MULTIBANCO_REFERENCE_EXPIRATION_DAYS',
+                'label' => $this->module->l('Days to expire', 'PaymentsSettings'),
+                'required' => true
+            ),    
+            array(
                 'col' => 4,
                 'type' => 'switch',
                 'label' => $this->module->l('Payshop Reference', 'PaymentsSettings'),
@@ -108,7 +116,15 @@ class PaymentsSettings extends AbstractSettings
                         'label' => $this->module->l('Disable', 'PaymentsSettings')
                     )
                 )
-            ), 
+            ),
+            array(
+                'col' => 8,
+                'type' => 'text',
+                'desc' => $this->module->l('Number of days for Payshop reference to expire', 'PaymentsSettings'),
+                'name' => 'PAYSHOP_PAYSHOP_REFERENCE_EXPIRATION_DAYS',
+                'label' => $this->module->l('Days to expire', 'PaymentsSettings'), 
+                'required' => true
+            ),   
             array(
                 'col' => 4,
                 'type' => 'switch',
@@ -162,7 +178,9 @@ class PaymentsSettings extends AbstractSettings
         return array(
             'PAYSHOP_CREDIT_CARD' => Configuration::get('PAYSHOP_CREDIT_CARD'),
             'PAYSHOP_MULTIBANCO_REFERENCE' => Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE'),
+            'PAYSHOP_MULTIBANCO_REFERENCE_EXPIRATION_DAYS' => Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_EXPIRATION_DAYS'),
             'PAYSHOP_PAYSHOP_REFERENCE' => Configuration::get('PAYSHOP_PAYSHOP_REFERENCE'),
+            'PAYSHOP_PAYSHOP_REFERENCE_EXPIRATION_DAYS' => Configuration::get('PAYSHOP_PAYSHOP_REFERENCE_EXPIRATION_DAYS'),
             'PAYSHOP_CREDIT_MBWAY' => Configuration::get('PAYSHOP_CREDIT_MBWAY'),
         );
     }

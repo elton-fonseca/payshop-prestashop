@@ -75,3 +75,11 @@ foreach ($sql as $query) {
         return false;
     }
 }
+if (!Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_EXPIRATION_DAYS')) {
+    Configuration::set('PAYSHOP_MULTIBANCO_REFERENCE_EXPIRATION_DAYS', '2');
+}
+
+if (!Configuration::get('PAYSHOP_PAYSHOP_REFERENCE_EXPIRATION_DAYS')) {
+    Configuration::set('PAYSHOP_PAYSHOP_REFERENCE_EXPIRATION_DAYS', '2');
+}
+

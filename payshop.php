@@ -108,6 +108,7 @@ class Payshop extends PaymentModule
         include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PaymentMethods.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/payments/CreditCard.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/payments/MBWay.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopReference.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/status/OrderStatus.php';
 

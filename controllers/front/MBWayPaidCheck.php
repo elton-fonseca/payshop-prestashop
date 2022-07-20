@@ -53,16 +53,16 @@ class PayshopMBWayPaidCheckModuleFrontController extends ModuleFrontController
             $transacionStatus = $transacion['payment_status'];
 
             if ($transacionStatus == 'PAYSHOP_ORDER_STATUS_PAID') {
-                echo '{"status": "paid"}';
+                echo json_encode(["status" => "paid"]);
                 return;
             }
 
             if ($transacionStatus == 'PAYSHOP_ORDER_STATUS_PAYMENT_ERROR') {
-                echo '{"status": "declined"}';
+                echo json_encode(["status" => "declined"]);
                 return;
             }
 
-            echo '{"status": "not-paid"}';
+            echo json_encode(["status" => "not-paid"]);
         } catch (\Exception $e) {
             if ($e->getCode() == 404) {
                 http_response_code(404);
