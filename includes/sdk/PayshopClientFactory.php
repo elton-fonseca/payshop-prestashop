@@ -69,7 +69,7 @@ class PayshopClientFactory
      *
      * @return boolean
      */
-    private static function isProduction()
+    public static function isProduction()
     {
         return !! Configuration::get('PAYSHOP_PROD_STATUS');
     }
@@ -79,7 +79,7 @@ class PayshopClientFactory
      *
      * @return string
      */
-    private static function getPublicKey()
+    public static function getPublicKey()
     {
         if (self::isProduction() == true) {
             return Configuration::get('PAYSHOP_PUBLIC_KEY');

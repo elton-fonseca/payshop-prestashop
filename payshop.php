@@ -106,23 +106,21 @@ class Payshop extends PaymentModule
         include_once PAYSHOP_ROOT_URL . '/controllers/admin/PayshopUpdateAlertClose.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PaymentMethods.php';
-        include_once PAYSHOP_ROOT_URL . '/includes/module/payments/CreditCard.php';
-        include_once PAYSHOP_ROOT_URL . '/includes/module/payments/MBWay.php';
-        include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopReference.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopDynamicForm.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/status/OrderStatus.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/models/PayshopTransaction.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/models/PayshopEventModel.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/actions/CreateCharge.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/actions/CreateOrder.php';
-        include_once PAYSHOP_ROOT_URL . '/includes/module/actions/SendOrderToPayshop.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/actions/UpdateOrder.php';
+
 
         include_once PAYSHOP_ROOT_URL . '/includes/sdk/PayshopClientFactory.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/sdk/PayshopEvent.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/Events/ProcessEvent.php';
-
     }
 
     /**
@@ -149,7 +147,6 @@ class Payshop extends PaymentModule
             $this->registerHook('payment') &&
             $this->registerHook('paymentReturn') &&
             $this->registerHook('displayAdminAfterHeader') &&
-            $this->registerHook('ActionFrontControllerSetMedia') &&
             $this->registerHook('displayWrapperTop') &&
             $this->registerHook('paymentOptions');
     }
@@ -197,31 +194,6 @@ class Payshop extends PaymentModule
     public function hookPaymentOptions($params)
     {
         return $this->paymentMethods->getPaymentOptions($params);
-    }
-
-    /**
-     * Register js mask used in credit card and MBWay forms
-     *
-     * @return void
-     */
-    public function hookActionFrontControllerSetMedia()
-    {
-        if ('order' === $this->context->controller->php_self) {
-            $this->context->controller->registerJavascript(
-                'mask_payshop_js',
-                $this->_path . 'views/js/mask.js',
-                [
-                    'position' => 'head',
-                    'inline' => false,
-                    'priority' => 10,
-                ]
-            );
-
-            $this->context->controller->addJS(
-                $this->_path . 'views/js/mask.js',
-                false
-            );
-        }
     }
 
     /**

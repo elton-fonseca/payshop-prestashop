@@ -23,19 +23,15 @@
 * International Registered Trademark & Property of PrestaShop SA
 *}
 
-<form id="payshop_payshop_reference" class="payshop-checkout-form" method="post" action="{$formAction|escape:'htmlall':'UTF-8'}">
-    <div class="row payshop-frame-checkout-custom-seven">
-        <div id="payshop-form" class="col-xs-12 col-md-12 col-12">
-            <p>{l s='After click on confirmation button. You will see reference code for payment' mod='payshop'}</p>
-        </div>
-    </div>
-</form>
-
 <div class="overlap-payshop" id="payshop-reference">
     <div class="overlap-payshop-content">
             <h3>{l s='Confirmed Order' mod='payshop'}</h3>
         <div>
-            <h5>{l s='Payshop Reference Code' mod='payshop'}</h5>
+            <h5>{l s='Reference Informations' mod='payshop'}</h5>
+            <p id="multibanco-entity">
+                {l s='Entity: ' mod='payshop'}
+                <strong id="payshop-reference-entity"></strong>
+            </p>
             <p>
                 {l s='Reference: ' mod='payshop'}
                 <strong id="payshop-reference-reference"></strong>
@@ -49,25 +45,17 @@
                 <strong id="payshop-reference-end-date"></strong>
             </p> 
         </div>
-        <button onclick="window.location.href = '{$shopUrl|escape:'htmlall':'UTF-8'}'">
-            {l s='Close' mod='payshop'}
-        </button>
-    </div>
-</div>
-
-<div class="overlap-payshop" id="payshop-reference-error">
-    <div class="overlap-payshop-content payshop-reference-error">
-        <h5>{l s='Payshop Reference Error' mod='payshop'}</h5>
-        <p>
-            {l s='Oops! There was an error in payment, attempted ...' mod='payshop'}
-        </p>
-        <button onclick="window.location.href = '{$shopUrl|escape:'htmlall':'UTF-8'}'">
-            {l s='Close' mod='payshop'}
+        <button id="payshop-reference-view-order">
+            {l s='View Order Details' mod='payshop'}
         </button>
     </div>
 </div>
 
 <style>
+    #multibanco-entity {
+        display: none;
+    }
+
     .overlap-payshop {
         position: fixed;
         top: 0;
@@ -107,6 +95,3 @@
     }
 
 </style>
-
-<script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/jquery-1.11.0.min.js"></script>
-<script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/payshop-reference.js?v=1"></script>

@@ -62,22 +62,6 @@ class PayshopClient extends PayshopAbstractClient
     }
 
     /**
-     * Get instrument by id
-     *
-     * @param array $instrumentId
-     * @return array
-     */
-    public function getInstument($instrumentId)
-    {
-        $response = PayshopRestCli::get(
-            $this->getUrl('/instruments', $instrumentId),
-            $this->getSecretCredentials()
-        );
-
-        return $response;
-    }
-
-    /**
      * Create a new refund
      *
      * @param array $refund
@@ -95,9 +79,57 @@ class PayshopClient extends PayshopAbstractClient
     }
 
     /**
+     * Get charge by id
+     *
+     * @param array $chargeId
+     * @return array
+     */
+    public function getCharge($chargeId)
+    {
+        $response = PayshopRestCli::get(
+            $this->getUrl('/charges', $chargeId),
+            $this->getSecretCredentials()
+        );
+
+        return $response;
+    }
+
+    /**
+     * Get instrument by id
+     *
+     * @param int $instrumentId
+     * @return array
+     */
+    public function getInstrument($instrumentId)
+    {
+        $response = PayshopRestCli::get(
+            $this->getUrl('/instruments', $instrumentId),
+            $this->getSecretCredentials()
+        );
+
+        return $response;
+    }
+
+    /**
+     * Get payment by id
+     *
+     * @param int $paymentId
+     * @return array
+     */
+    public function getPayment($paymentId)
+    {
+        $response = PayshopRestCli::get(
+            $this->getUrl('/payments', $paymentId),
+            $this->getSecretCredentials()
+        );
+
+        return $response;
+    }
+
+    /**
      * Get event by id
      *
-     * @param array $refundId
+     * @param int $eventId
      * @return array
      */
     public function getEvent($eventId = null)
@@ -109,4 +141,21 @@ class PayshopClient extends PayshopAbstractClient
 
         return $response;
     }
+
+    /**
+     * Get refund by id
+     *
+     * @param int $refundId
+     * @return array
+     */
+    public function getRefund($refundId = null)
+    {
+        $response = PayshopRestCli::get(
+            $this->getUrl('/refunds', $refundId),
+            $this->getSecretCredentials()
+        );
+
+        return $response;
+    }
+
 }

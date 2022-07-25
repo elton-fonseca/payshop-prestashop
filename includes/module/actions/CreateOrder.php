@@ -83,7 +83,7 @@
             $moduleDisabed || $cartIsEmpty || $clientNotFilled || 
             $deliveryAddressNotFilled || $invoiceAddressNotFilled
         ) {
-            Tools::redirect('index.php?controller=order&step=1');
+            throw new Exception($this->module->l('Checkout fields are not filled'));
         }
     }
 

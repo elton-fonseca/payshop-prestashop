@@ -94,7 +94,7 @@ class PaymentsSettings extends AbstractSettings
                 'type' => 'text',
                 'desc' => $this->module->l('Number of days for Multibanco reference to expire', 'PaymentsSettings'),
                 'name' => 'PAYSHOP_MULTIBANCO_REFERENCE_EXPIRATION_DAYS',
-                'label' => $this->module->l('Days to expire', 'PaymentsSettings'),
+                'label' => $this->module->l('Multibanco Days to expire', 'PaymentsSettings'),
                 'required' => true
             ),    
             array(
@@ -122,7 +122,7 @@ class PaymentsSettings extends AbstractSettings
                 'type' => 'text',
                 'desc' => $this->module->l('Number of days for Payshop reference to expire', 'PaymentsSettings'),
                 'name' => 'PAYSHOP_PAYSHOP_REFERENCE_EXPIRATION_DAYS',
-                'label' => $this->module->l('Days to expire', 'PaymentsSettings'), 
+                'label' => $this->module->l('Payshop Days to expire', 'PaymentsSettings'), 
                 'required' => true
             ),   
             array(
@@ -158,7 +158,10 @@ class PaymentsSettings extends AbstractSettings
      */
     public function postFormProcess()
     {
-        $this->validate = ([]);
+        $this->validate = ([
+            'PAYSHOP_MULTIBANCO_REFERENCE_EXPIRATION_DAYS' => 'multibancoReferenceExpirationDays',
+            'PAYSHOP_PAYSHOP_REFERENCE_EXPIRATION_DAYS' => 'payshopReferenceExpirationDays'
+        ]);
 
         parent::postFormProcess();
 

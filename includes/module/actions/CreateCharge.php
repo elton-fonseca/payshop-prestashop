@@ -28,7 +28,7 @@
  * to avoid any conflicts with others containers.
  */
 
- class SendOrderToPayshop
+ class CreateCharge
  {
     /**
      * @var Modulo
@@ -58,16 +58,9 @@
      * @return int
      * @throws Exception
      */
-    public function execute($paymentMethod, $instrumentData = [])
+    public function execute($paymentMethod)
     {
-        $chargeId = $this->createCharge($paymentMethod);
-
-        $instrumentData = $instrumentData + [
-            'charge' => $chargeId,
-            'name' => 'Default instrument'
-        ];
-
-        return $this->createInstrument($instrumentData);
+        return $this->createCharge($paymentMethod);
     }
 
     /**
@@ -95,7 +88,11 @@
             //'currency' => $this->module->context->currency->iso_code,
             'description' => $shopName . $this->module->l(' order #') . $orderId,
             'events_url' => str_replace('http://127.0.0.1', 'https://teste.com', $webHookProcessURL),
+            'instrument_params' => $this->getInstrumentParams($paymentMethod),
+            'redirect_url' => 'https://eltonfonseca.dev?fc=module&module=payshop&controller=ProcessInstrument'
         ]);
+
+        dd($response);
 
         $this->checkResponse($response, 'charge');
 
@@ -103,18 +100,26 @@
     }
 
     /**
-     * Create instrument on payshop
+     * Get instrument params for the payment method
      *
-     * @param array $instrumentData
+     * @param string $paymentMethod
      * @return array
      */
-    private function createInstrument($instrumentData)
+    private function getInstrumentParams($paymentMethod)
     {
-        $response = $this->payshopSDK->createInstrument($instrumentData);
+        if ($paymentMethod == 'card') {
+            return ['enable3ds' => true];
+        }
 
-        $this->checkResponse($response, 'instrument');
+        if ($paymentMethod == 'multibanco') {
+            $qtdDaysToExpire = (int) Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_EXPIRATION_DAYS');
+        }
 
-        return $response['response'];
+        if ($paymentMethod == 'payshop_reference') {
+            $qtdDaysToExpire = (int) Configuration::get('PAYSHOP_PAYSHOP_REFERENCE_EXPIRATION_DAYS');
+        }
+
+        return ['end_date' => date('Y-m-d', strtotime('+' . $qtdDaysToExpire . ' days'))];
     }
 
     /**
@@ -133,31 +138,18 @@
 
         if ($response['status'] == 401 || $response['status'] == 403) {
             $message = $this->module->l('Invalid API credentials. Check your credentials in the module settings.');
+        } else {
+            $responseMessage = isset($response['response']['message']) ?
+                $response['response']['message'] :
+                $response['response'];
 
+            $message = $this->module->l('Error creating ' . $type .
+                ': Status Code:' . $response['status'] .
+                ' Message: ' . $responseMessage);
         }
 
-        if (isset($response['response']['parameters']['number'])) {
-            $message = $this->module->l('Invalid card number');
-        }
-
-        if (isset($message)) {
-            PayshopLog::generate($message, 'error');
-            $this->module->context->cookie->__set('redirect_message', $message);
-            throw new Exception($message);
-        }
-
-        $responseMessage = isset($response['response']['message']) ?
-                                    $response['response']['message'] : 
-                                    $response['response'];
-
-        $message = $this->module->l('Error creating ' . $type . 
-                                    ': Status Code:' . $response['status'] .
-                                    ' Message: ' . $responseMessage);
-
-        if (isset($response['response']['parameters']['phone'])) {
-            $message = $this->module->l('Invalid phone number');
-        }
-
+        PayshopLog::generate($message, 'error');
+        $this->module->context->cookie->__set('redirect_message', $message);
         throw new Exception($message);
     }
 }

@@ -139,7 +139,25 @@ class AbstractSettings
                         PayshopLog::generate('Invalid ' . $input . ' submitted', 'warning');
                         return false;
                     }
-                    break;                                                        
+                    break;
+
+                case "multibancoReferenceExpirationDays":
+                    if ($value == '' || !preg_match('/^\d+$/', $value)) {
+                        Payshop::$form_alert = 'alert-danger';
+                        Payshop::$form_message = $this->module->l('Multibanco days to expire must be integer', 'AbstractSettings');
+                        PayshopLog::generate('Invalid ' . $input . ' submitted', 'warning');
+                        return false;
+                    }
+                    break;
+
+                case "payshopReferenceExpirationDays":
+                    if ($value == '' || !preg_match('/^\d+$/', $value)) {
+                        Payshop::$form_alert = 'alert-danger';
+                        Payshop::$form_message = $this->module->l('Payshop days to expire must be integer', 'AbstractSettings');
+                        PayshopLog::generate('Invalid ' . $input . ' submitted', 'warning');
+                        return false;
+                    }
+                    break;                 
 
                 default:
                     return true;
