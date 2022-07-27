@@ -85,12 +85,19 @@
         );
 
         $shopName = $this->module->context->shop->name;
+        $currecy = $this->module->context->currency->iso_code;
+
+        if ($currecy != 'EUR') {
+            //$total = $total * dd($this->module->context->currency->conversion_rate);
+            $message = $this->module->l('Product currency must be EUR');
+            PayshopLog::generate($message, 'error');
+            throw new Exception($message);
+        }
 
         $response = $this->payshopSDK->createCharge([
             'charge_type' => $paymentMethod,
             'amount' => (float) $total,
             'currency' => 'EUR',
-            //'currency' => $this->module->context->currency->iso_code,
             'description' => $shopName . $this->module->l(' order #') . $orderId,
             'events_url' => str_replace('http://127.0.0.1', 'https://eltonfonseca.dev', $webHookProcessURL),
             'instrument_params' => $this->getInstrumentParams($paymentMethod),

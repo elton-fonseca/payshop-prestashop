@@ -42,7 +42,7 @@ class PayshopConfigurationPage extends Payshop
                 'credentialsForm' => $credentialsForm,
                 'paymentsForm' => $paymentsForm,
                 //currencies
-                'currency' => $this->context->currency->iso_code,
+                'currency' => $this->context->currency->iso_code
             )
         )->fetch($this->local_path . 'views/templates/admin/configurations.tpl');
 
