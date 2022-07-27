@@ -31,6 +31,15 @@
     </div>
 {/if}
 
+{if $currency != 'EUR'}
+    <div class='alert alert-warning alert-dismissible'>
+        <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+        {l s='Your Default currency is ' mod='payshop'}
+        {$currency|escape:'html':'UTF-8'}.
+        {l s=' Payshop works only with EUR!' mod='payshop'}
+    </div>
+{/if}
+
 <!-- Nav tabs -->
 <ul class="nav nav-tabs" role="tablist">
     <li class="active"><a href="#template_1" role="tab" data-toggle="tab" id="a_template_1">{l s='Set Up Payshop' mod='payshop'}</a></li>

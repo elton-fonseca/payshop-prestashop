@@ -28,10 +28,10 @@
  * to avoid any conflicts with others containers.
  */
 
-require_once('PaymentSuccess.php');
-require_once('MBWayDeclined.php');
+require_once('PayshopPaymentSuccess.php');
+require_once('PayshopMBWayDeclined.php');
 
- class ProcessEvent
+ class PayshopProcessEvent
  {
     /**
      * @var Modulo
@@ -39,14 +39,14 @@ require_once('MBWayDeclined.php');
     private $module;
 
     /**
-     * @var PayshopSuccess
+     * @var PayshopPaymentSuccess
      */
-    private $paymentSuccess;
+    private $payshopPaymentSuccess;
 
     /**
-     * @var MBWayDeclined
+     * @var PayshopMbWayDeclined
      */
-    private $mbWayDeclined;
+    private $payshopMbWayDeclined;
 
     /**
      * Class constructor
@@ -56,8 +56,8 @@ require_once('MBWayDeclined.php');
     public function __construct($module)
     {
         $this->module = $module;
-        $this->paymentSuccess = new PaymentSuccess($module);
-        $this->mbWayDeclined = new MBWayDeclined($module);
+        $this->payshopPaymentSuccess = new PayshopPaymentSuccess($module);
+        $this->payshopMbWayDeclined = new PayshopMBWayDeclined($module);
     }
 
     /**
@@ -72,11 +72,11 @@ require_once('MBWayDeclined.php');
         $event = $eventReponse['response'];
 
         if ($event['type'] == 'payment.success') {
-            $this->paymentSuccess->process($event);
+            $this->payshopPaymentSuccess->process($event);
         }
 
         if ($this->isWBWay($event) || $this->isDeclined($event)) {
-            $this->mbWayDeclined->process($event);
+            $this->payshopMbWayDeclined->process($event);
         }
     }
 

@@ -27,9 +27,9 @@
 * to avoid any conflicts with others containers.
 */
 
-require_once('AbstractModel.php');
+require_once('PayshopAbstractModel.php');
 
-class PayshopEventModel extends AbstractModel
+class PayshopEventModel extends PayshopAbstractModel
 {
     public function __construct()
     {

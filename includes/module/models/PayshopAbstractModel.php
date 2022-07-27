@@ -28,7 +28,7 @@
  * to avoid any conflicts with others containers.
  */
 
-abstract class AbstractModel
+abstract class PayshopAbstractModel
 {
     protected $table;
     protected $where;

@@ -1,5 +1,4 @@
-<?php
-/**
+{*
 * 2007-2022 PrestaShop
 *
 * NOTICE OF LICENSE
@@ -18,22 +17,20 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2022 PrestaShop SA
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*
-* Don't forget to prefix your containers with your own identifier
-* to avoid any conflicts with others containers.
-*/
+* @author PrestaShop SA <contact@prestashop.com>
+* @copyright 2007-2022 PrestaShop SA
+* @license http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
+* International Registered Trademark & Property of PrestaShop SA
+*}
 
-require_once('PayshopAbstractModel.php');
+<div class="overlap" id="instrument-loading">
+    <div class="overlap-content">
+        <img width="250" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/img/loading.gif" />
+    </div>
+</div>
 
-class PayshopTransaction extends PayshopAbstractModel
-{
-    public function __construct()
-    {
-        parent::__construct();
-        $this->table = _DB_PREFIX_ . "payshop_transactions";
+<style>
+    #instrument-loading div {
+        height: 293px;
     }
-}
+</style>

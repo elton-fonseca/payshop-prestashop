@@ -1,6 +1,6 @@
 <?php
 
-class Paid
+class PayshopPaid
 {
     /**
      * Register Paid order status
@@ -26,14 +26,16 @@ class Paid
             }
         }
 
-        $order_state->send_email = false;
+        $order_state->send_email = true;
         $order_state->color = '#ccfbff';
         $order_state->hidden = false;
         $order_state->delivery = false;
         $order_state->logable = false;
-        $order_state->invoice = false;
+        $order_state->invoice = true;
         $order_state->module_name = 'payshop';
         $order_state->paid = true;
+
+        $order_state->template = 'authorized';
 
         if ($order_state->add()) {
             $source = _PS_MODULE_DIR_ . 'payshop/logo.png';

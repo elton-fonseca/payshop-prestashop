@@ -28,7 +28,7 @@
  * to avoid any conflicts with others containers.
  */
 
- class CreateCharge
+ class PayshopCreateCharge
  {
     /**
      * @var Modulo
@@ -79,6 +79,11 @@
             'ProcessEvent'
         );
 
+        $processInstrumentURL = $this->module->context->link->getModuleLink(
+            $this->module->name,
+            'ProcessInstrument'
+        );
+
         $shopName = $this->module->context->shop->name;
 
         $response = $this->payshopSDK->createCharge([
@@ -87,12 +92,10 @@
             'currency' => 'EUR',
             //'currency' => $this->module->context->currency->iso_code,
             'description' => $shopName . $this->module->l(' order #') . $orderId,
-            'events_url' => str_replace('http://127.0.0.1', 'https://teste.com', $webHookProcessURL),
+            'events_url' => str_replace('http://127.0.0.1', 'https://eltonfonseca.dev', $webHookProcessURL),
             'instrument_params' => $this->getInstrumentParams($paymentMethod),
-            'redirect_url' => 'https://eltonfonseca.dev?fc=module&module=payshop&controller=ProcessInstrument'
+            'redirect_url' => str_replace('http://127.0.0.1', 'https://eltonfonseca.dev', $processInstrumentURL)
         ]);
-
-        dd($response);
 
         $this->checkResponse($response, 'charge');
 
@@ -107,7 +110,7 @@
      */
     private function getInstrumentParams($paymentMethod)
     {
-        if ($paymentMethod == 'card') {
+        if ($paymentMethod != 'multibanco' && $paymentMethod != 'payshop_reference') {
             return ['enable3ds' => true];
         }
 

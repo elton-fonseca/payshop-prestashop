@@ -1,6 +1,6 @@
 <?php
 
-class ConfigurationPage extends Payshop
+class PayshopConfigurationPage extends Payshop
 {
     /**
      * Generate the form for the configuration page
@@ -41,6 +41,8 @@ class ConfigurationPage extends Payshop
                 //forms
                 'credentialsForm' => $credentialsForm,
                 'paymentsForm' => $paymentsForm,
+                //currencies
+                'currency' => $this->context->currency->iso_code,
             )
         )->fetch($this->local_path . 'views/templates/admin/configurations.tpl');
 
@@ -54,8 +56,8 @@ class ConfigurationPage extends Payshop
      */
     private function loadSettingsFiles()
     {
-        include_once PAYSHOP_ROOT_URL . '/includes/module/settings/CredentialsSettings.php';
-        include_once PAYSHOP_ROOT_URL . '/includes/module/settings/PaymentsSettings.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/settings/PayshopCredentialsSettings.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/settings/PayshopPaymentsSettings.php';
     }
 
     /**

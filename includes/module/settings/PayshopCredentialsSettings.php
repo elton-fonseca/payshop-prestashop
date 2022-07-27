@@ -27,9 +27,9 @@
  * to avoid any conflicts with others containers.
  */
 
-require_once PAYSHOP_ROOT_URL . '/includes/module/settings/AbstractSettings.php';
+require_once PAYSHOP_ROOT_URL . '/includes/module/settings/PayshopAbstractSettings.php';
 
-class CredentialsSettings extends AbstractSettings
+class CredentialsSettings extends PayshopAbstractSettings
 {
     public function __construct()
     {

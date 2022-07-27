@@ -27,8 +27,9 @@ class PayshopDynamicForm
             'publicKey' => PayshopClientFactory::getPublicKey(),
             'enablePaymentMethods' => $this->enablePaymentMethods(),
 
-            'mbwayView' => 'C:/xampp/htdocs/loja/modules/payshop/views/templates/hook/payments/_mbway.tpl',
-            'referencesView' => 'C:/xampp/htdocs/loja/modules/payshop/views/templates/hook/payments/_references.tpl'
+            'mbwayView' => $this->module->pathDir . '/views/templates/hook/payments/_mbway.tpl',
+            'referencesView' => $this->module->pathDir . '/views/templates/hook/payments/_references.tpl',
+            'loadingView' => $this->module->pathDir . '/views/templates/hook/payments/_loading.tpl'
         ])
           ->fetch('module:payshop/views/templates/hook/payments/dynamic-form.tpl');
 

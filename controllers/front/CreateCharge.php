@@ -30,9 +30,9 @@
 class PayshopCreateChargeModuleFrontController extends ModuleFrontController
 {
     /**
-     * @var CreateOrder
+     * @var PayshopCreateCharge
      */
-    private $createCharge;
+    private $payshopCreateCharge;
 
     /**
      * Class constructor
@@ -41,7 +41,7 @@ class PayshopCreateChargeModuleFrontController extends ModuleFrontController
     {
         parent::__construct();
         $this->ajax = true;
-        $this->createCharge = new CreateCharge($this->module);
+        $this->payshopCreateCharge = new PayshopCreateCharge($this->module);
     }
 
     /**
@@ -58,7 +58,7 @@ class PayshopCreateChargeModuleFrontController extends ModuleFrontController
                 file_get_contents('php://input')
             );
 
-            $chargeId = $this->createCharge->execute(
+            $chargeId = $this->payshopCreateCharge->execute(
                 $formInformation->chargeType
             );
 

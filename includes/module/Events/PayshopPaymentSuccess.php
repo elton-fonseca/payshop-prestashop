@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 2007-2022 PrestaShop
  *
@@ -28,17 +27,17 @@
  * to avoid any conflicts with others containers.
  */
 
-class MBWayDeclined
-{
+ class PayshopPaymentSuccess
+ {
     /**
      * @var Modulo
      */
     private $module;
 
     /**
-     * @var UpdateOrder
+     * @var PayshopUpdateOrder
      */
-    private $updateOrder;
+    private $payshopUpdateOrder;
 
     /**
      * Class constructor
@@ -48,29 +47,34 @@ class MBWayDeclined
     public function __construct($module)
     {
         $this->module = $module;
-        $this->updateOrder = new UpdateOrder($this->module);
+        $this->payshopUpdateOrder = new PayshopUpdateOrder($this->module);
     }
 
     /**
-     * Process MBWay payment declined event
+     * Process payment success event
      *
      * @param array $event
      * @return void
      */
     public function process($event)
     {
-        $transaction = PayshopHelpers::getTransacion('charge_id', $event['charge']['id']);
-
-        if ($transaction['payment_status'] !== 'PAYSHOP_ORDER_STATUS_WAITING_PAYMENT') {
+        if ($event['payment']['success'] == false) {
             return;
         }
 
-        $this->updateOrder->execute(
+        $transaction = PayshopHelpers::getTransacion('charge_id', $event['charge']['id']);
+
+        if ($transaction['payment_status'] == 'PAYSHOP_ORDER_STATUS_PAID') {
+            return;
+        }
+
+        $this->payshopUpdateOrder->execute(
             $transaction['payment_method'],
             $transaction['order_id'],
-            'PAYSHOP_ORDER_STATUS_PAYMENT_ERROR',
+            'PAYSHOP_ORDER_STATUS_PAID',
             $transaction['charge_id'],
-            $transaction['instrument_id']
+            $transaction['instrument_id'],
+            $event['payment']['id']
         );
 
         PayshopHelpers::createEvent(
@@ -79,6 +83,4 @@ class MBWayDeclined
             $transaction['id']
         );
     }
-
-
-}
+ }

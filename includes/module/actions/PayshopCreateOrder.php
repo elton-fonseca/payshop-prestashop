@@ -28,7 +28,7 @@
  * to avoid any conflicts with others containers.
  */
 
- class CreateOrder
+ class PayshopCreateOrder
  {
     /**
      * @var Modulo
@@ -57,7 +57,7 @@
         $this->checkoutIsFilled();
         $this->moduleIsAuthorized();
 
-        $orderId = $this->createPrestashopOrder();
+        $orderId = $this->createPrestashopOrder($paymentMethod);
 
         $this->createPayshopTransaction($orderId, $paymentMethod);
 
@@ -115,7 +115,7 @@
      * @return int
      * @throws Exception
      */
-    private function createPrestashopOrder()
+    private function createPrestashopOrder($paymentMethod)
     {
         $waitingPaymentOrderStatusID = Configuration::get('PAYSHOP_ORDER_STATUS_WAITING_PAYMENT');
 
@@ -126,7 +126,7 @@
             (int) $this->module->context->cart->id,
             $waitingPaymentOrderStatusID,
             (float) $this->module->context->cart->getOrderTotal(true, Cart::BOTH),
-            $this->module->displayName,
+            $this->formatedPaymentMethodName($paymentMethod),
             null,
             null,
             (int)$this->module->context->currency->id,
@@ -179,5 +179,17 @@
         }
 
         return $isCreated;
+     }
+
+     public function formatedPaymentMethodName($paymentMethod)
+     {
+        $payments = [
+            'multibanco' => $this->module->l('Payshop (Multibanco)'),
+            'payshop_reference' => $this->module->l('Payshop (Payshop Reference)'),
+            'card' => $this->module->l('Payshop (Card)'),
+            'mbway' => $this->module->l('Payshop (MBWay)')
+        ];
+
+        return $payments[$paymentMethod];
      }
  }

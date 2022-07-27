@@ -27,7 +27,7 @@
 * to avoid any conflicts with others containers.
 */
 
-class AbstractSettings
+class PayshopAbstractSettings
 {
     public $form;
     public $module;

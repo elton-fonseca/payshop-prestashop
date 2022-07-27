@@ -31,14 +31,14 @@
 class PayshopProcessInstrumentModuleFrontController extends ModuleFrontController
 {
     /**
-     * @var CreateOrder
+     * @var PayshopCreateOrder
      */
-    private $createOrder;
+    private $payshopCreateOrder;
 
     /**
-     * @var UpdateOrder
+     * @var PayshopUpdateOrder
      */
-    private $updateOrder;
+    private $payshopUpdateOrder;
 
     /**
      * @var PayshopClient
@@ -57,8 +57,8 @@ class PayshopProcessInstrumentModuleFrontController extends ModuleFrontControlle
     {
         parent::__construct();
         $this->ajax = true;
-        $this->createOrder = new CreateOrder($this->module);
-        $this->updateOrder = new UpdateOrder($this->module);
+        $this->payshopCreateOrder = new PayshopCreateOrder($this->module);
+        $this->payshopUpdateOrder = new PayshopUpdateOrder($this->module);
         $this->payshopSDK = PayshopClientFactory::getInstance();
     }
 
@@ -77,9 +77,9 @@ class PayshopProcessInstrumentModuleFrontController extends ModuleFrontControlle
             $orderStatus = $this->getOrderStatus($instrument);
             $paymentMethod = $instrument['charge']['charge_type'];
 
-            $prestashopOrderId = $this->createOrder->execute($paymentMethod);
+            $prestashopOrderId = $this->payshopCreateOrder->execute($paymentMethod);
 
-            $this->updateOrder->execute(
+            $this->payshopUpdateOrder->execute(
                 $paymentMethod,
                 $prestashopOrderId,
                 $orderStatus,
@@ -90,7 +90,6 @@ class PayshopProcessInstrumentModuleFrontController extends ModuleFrontControlle
 
             $this->successResponse($instrument, $prestashopOrderId);
         } catch (\Exception $e) {
-            dd($e);
             $this->errorResponse($e);
         }
     }

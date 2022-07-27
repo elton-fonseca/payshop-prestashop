@@ -22,18 +22,13 @@
 *  @copyright 2007-2022 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
-*
-* Don't forget to prefix your containers with your own identifier
-* to avoid any conflicts with others containers.
 */
+header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 
-require_once('PayshopAbstractModel.php');
+header('Cache-Control: no-store, no-cache, must-revalidate');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
 
-class PayshopTransaction extends PayshopAbstractModel
-{
-    public function __construct()
-    {
-        parent::__construct();
-        $this->table = _DB_PREFIX_ . "payshop_transactions";
-    }
-}
+header('Location: ../');
+exit;

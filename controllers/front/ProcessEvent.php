@@ -30,9 +30,9 @@
 class PayshopProcessEventModuleFrontController extends ModuleFrontController
 {
     /**
-     * @var ProcessEvent
+     * @var PayshopProcessEvent
      */
-    private $processEvent;
+    private $payshopProcessEvent;
 
     /**
      * Class constructor
@@ -41,7 +41,7 @@ class PayshopProcessEventModuleFrontController extends ModuleFrontController
     {
         parent::__construct();
         $this->ajax = true;
-        $this->processEvent = new ProcessEvent($this->module);
+        $this->payshopProcessEvent = new PayshopProcessEvent($this->module);
     }
 
     /**
@@ -57,7 +57,7 @@ class PayshopProcessEventModuleFrontController extends ModuleFrontController
             return;
         }
 
-        $this->processEvent->execute($eventBasicInformation);
+        $this->payshopProcessEvent->execute($eventBasicInformation);
     }
 
     /**

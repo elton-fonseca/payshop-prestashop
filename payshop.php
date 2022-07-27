@@ -49,13 +49,12 @@ class Payshop extends PaymentModule
     public $customCheckout;
     public $ticketCheckout;
     public $standardCheckout;
-    public $pixCheckout;
     public $confirmUninstall;
     public $ps_versions_compliancy;
     public $ps_version;
 
-    public $paymentMethods;
-    public $orderStatus;
+    public $payshopPaymentMethods;
+    public $payshopOrderStatuses;
 
 
     public static $form_alert;
@@ -83,11 +82,11 @@ class Payshop extends PaymentModule
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall the module?');
 
         $this->ps_version = _PS_VERSION_;
-        $this->assets_ext_min = !_PS_MODE_DEV_ ? '.min' : '';
         $this->path = $this->_path;
+        $this->pathDir = str_replace('\\', '/', __DIR__);
 
-        $this->paymentMethods = new PaymentMethods($this);
-        $this->orderStatus = new OrderStatus();
+        $this->payshopPaymentMethods = new PayshopPaymentMethods($this);
+        $this->payshopOrderStatuses = new PayshopOrderStatuses();
     }
 
     /**
@@ -100,27 +99,28 @@ class Payshop extends PaymentModule
         include_once PAYSHOP_ROOT_URL . '/includes/PayshopLog.php';
         include_once PAYSHOP_ROOT_URL . '/includes/PayshopHelpers.php';
 
-        include_once PAYSHOP_ROOT_URL . '/includes/module/settings/ConfigurationPage.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/settings/PayshopConfigurationPage.php';
 
-        include_once PAYSHOP_ROOT_URL . '/includes/module/alerts/UpdateAlert.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/alerts/PayshopUpdateAlert.php';
         include_once PAYSHOP_ROOT_URL . '/controllers/admin/PayshopUpdateAlertClose.php';
 
-        include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PaymentMethods.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopPaymentMethods.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopDynamicForm.php';
 
-        include_once PAYSHOP_ROOT_URL . '/includes/module/status/OrderStatus.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/statuses/PayshopOrderStatuses.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/models/PayshopTransaction.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/models/PayshopEventModel.php';
-        include_once PAYSHOP_ROOT_URL . '/includes/module/actions/CreateCharge.php';
-        include_once PAYSHOP_ROOT_URL . '/includes/module/actions/CreateOrder.php';
-        include_once PAYSHOP_ROOT_URL . '/includes/module/actions/UpdateOrder.php';
+
+        include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopCreateCharge.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopCreateOrder.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopUpdateOrder.php';
 
 
         include_once PAYSHOP_ROOT_URL . '/includes/sdk/PayshopClientFactory.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/sdk/PayshopEvent.php';
-        include_once PAYSHOP_ROOT_URL . '/includes/module/Events/ProcessEvent.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/Events/PayshopProcessEvent.php';
     }
 
     /**
@@ -139,7 +139,7 @@ class Payshop extends PaymentModule
 
         include PAYSHOP_ROOT_URL . '/database/install.php';
         $this->registerAdminControllers();
-        $this->orderStatus->register();
+        $this->payshopOrderStatuses->register();
 
 
         //install hooks and dependencies
@@ -168,7 +168,7 @@ class Payshop extends PaymentModule
      */
     public function getContent()
     {
-        $configurationPage = new ConfigurationPage();
+        $configurationPage = new PayshopConfigurationPage();
 
         return $configurationPage->getContent();
     }
@@ -180,7 +180,7 @@ class Payshop extends PaymentModule
      */
     public function hookDisplayAdminAfterHeader()
     {
-        $updateAlert = new UpdateAlert($this, $this->local_path);
+        $updateAlert = new PayshopUpdateAlert($this, $this->local_path);
 
         return $updateAlert->execute();
     }
@@ -193,7 +193,7 @@ class Payshop extends PaymentModule
      */
     public function hookPaymentOptions($params)
     {
-        return $this->paymentMethods->getPaymentOptions($params);
+        return $this->payshopPaymentMethods->getPaymentOptions($params);
     }
 
     /**

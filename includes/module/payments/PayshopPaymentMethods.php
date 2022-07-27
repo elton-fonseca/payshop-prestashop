@@ -1,14 +1,17 @@
 <?php
 
-class PaymentMethods
+class PayshopPaymentMethods
 {
-    private $module;
-
+    /**
+     * @var PayshopDynamicForm
+     */
     private $payshopDynamicForm;
 
+    /**
+     * Class constructor
+     */
     public function __construct($module)
     {
-        $this->module = $module;
         $this->payshopDynamicForm = new PayshopDynamicForm($module);
     }
 

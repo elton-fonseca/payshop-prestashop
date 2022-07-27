@@ -33,16 +33,31 @@
  * Handle submit from form
  */
 jQuery(function () {
+  let placeOrderClicked = false;
+
   if (document.forms.payshop_dynamic_forms !== undefined) {
     document.forms.payshop_dynamic_forms.onsubmit = function () {
+      if (placeOrderClicked) {
+        placeOrderClicked = false;
         alert(buttonError);
+      }  
 
-        return false;
+      return false;
     };
   }
+
+    $('#payment-confirmation button[type=submit]').on('click', function () {
+      placeOrderClicked = true;
+    });
 });
 
 form.on('instrument-pending', (instrument) => {
+  if (instrument.charge.charge_type === 'card') {
+    return;
+  }
+
+  displayById('instrument-loading');
+
   let processInstrumentUrl = baseUrl.replace('ControlerName', 'ProcessInstrument');
 
   $.ajax({
@@ -50,6 +65,8 @@ form.on('instrument-pending', (instrument) => {
     type: 'POST',
     data: JSON.stringify(instrument),
     success: function (data) {
+      displayById('instrument-loading', 'none');
+
       processMBWay(instrument, data);
       processPaymentWithRecerence(instrument, data);
     },
@@ -60,7 +77,7 @@ form.on('instrument-pending', (instrument) => {
 
   function processMBWay(instrument, data) {
     if (instrument.charge.charge_type === 'mbway') {
-      waitingPayment();
+      displayById('waiting-mbway');
 
       checkPayment(data.prestashopOrderId, data.successRedirectUrl);
     }
@@ -84,24 +101,20 @@ form.on('instrument-pending', (instrument) => {
           }
 
           if (data.status == 'declined') {
-            waitingPayment('none');
+            displayById('waiting-mbway', 'none');
             
-            let declinedMBWay = document.getElementById('declined-mbway');
-            declinedMBWay.style.display = 'block';
+            displayById('declined-mbway');
           }
         }
       });
     }, 3000);
   }
 
-  function waitingPayment(display = 'block') {
-    let waitingPaymentPopup = document.getElementById('waiting-mbway');
-    waitingPaymentPopup.style.display = display;
-  }
+
 
   function processPaymentWithRecerence(instrument, data) {
     if (instrument.charge.charge_type === 'multibanco') {
-      document.getElementById('multibanco-entity').style.display = 'block';
+      displayById('multibanco-entity');
       document.getElementById('payshop-reference-entity').innerHTML = data.entity;
     }
 
@@ -114,17 +127,16 @@ form.on('instrument-pending', (instrument) => {
           window.location.href = data.successRedirectUrl;
       });
 
-      let PayshopReferencePopup = document.getElementById('payshop-reference');
-      PayshopReferencePopup.style.display = 'block';
+      displayById('payshop-reference');
     }
   }
 });
 
 form.on('instrument-invalid', (instrument) => {
-  document.getElementById('payment-information-error').style.display = 'block';
+  displayById('payment-information-error');
 
   setTimeout(() => {
-    document.getElementById('payment-information-error').style.display = 'none';
+    displayById('payment-information-error', 'none');
   }, 10000);
 });
 
@@ -132,8 +144,12 @@ form.on('submit', (e) => {
   let acepted = document.getElementById('conditions_to_approve[terms-and-conditions]').checked;
 
   if (!acepted) {
-    alert('You must accept the terms and conditions');
+    //alert('You must accept the terms and conditions');
     //preciso parar o evento de submit
   }
 });
 
+function displayById(elementId, display = 'block') {
+  let waitingPaymentPopup = document.getElementById(elementId);
+  waitingPaymentPopup.style.display = display;
+}

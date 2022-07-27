@@ -25,13 +25,14 @@
 
 <form id="payshop_dynamic_forms" method="post" action="{$formAction|escape:'htmlall':'UTF-8'}">
     <div class="alert alert-danger" style="display: none" id="payment-information-error">
-        {l s='Payment information error' mod='payshop'}
+        {l s='Oops! There was an error in payment, attempted ...' mod='payshop'}
     </div>
     <div id="dynamic-forms-container"></div>
 </form>
 <div>
-{include file=$mbwayView}
-{include file=$referencesView}
+    {include file=$mbwayView}
+    {include file=$referencesView}
+    {include file=$loadingView}
 </div>
 
 <script src="https://cdn.switchpayments.com/libs/switch-5.stable.min.js"></script>

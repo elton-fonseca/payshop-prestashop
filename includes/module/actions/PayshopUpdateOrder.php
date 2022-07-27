@@ -28,7 +28,7 @@
  * to avoid any conflicts with others containers.
  */
 
- class UpdateOrder
+ class PayshopUpdateOrder
  {
     /**
      * @var Modulo
