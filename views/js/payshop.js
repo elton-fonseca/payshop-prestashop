@@ -46,9 +46,15 @@ jQuery(function () {
     };
   }
 
-    $('#payment-confirmation button[type=submit]').on('click', function () {
-      placeOrderClicked = true;
-    });
+  $('#payment-confirmation button[type=submit]').on('click', function () {
+    placeOrderClicked = true;
+  });
+
+  $('.eZvWLg').live('click', function () {
+    if (!$('#checkout-payment-step').is(".-current")) {
+      $('#checkout-payment-step').addClass('-current');
+    }
+  });
 });
 
 form.on('instrument-pending', (instrument) => {

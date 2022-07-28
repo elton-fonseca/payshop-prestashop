@@ -36,7 +36,9 @@ class PayshopDynamicForm
         $payshopCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
 
         $payshopCheckout->setForm($paymentForm)
-            ->setCallToActionText(' Pay with Credit/Debit Card, MBWay, Multibanco or Payshop')
+            ->setCallToActionText(
+                $this->module->l('Pay with: ') . $this->paymentsDescription()
+            )
             ->setLogo(_MODULE_DIR_ . 'payshop/views/img/payshop-icon.png');
 
         return $payshopCheckout;
@@ -59,5 +61,31 @@ class PayshopDynamicForm
         $jsArray .= ']';
 
         return $jsArray;
+    }
+
+    /**
+     * Get payment description
+     * 
+     * @return string 
+     */
+    public function paymentsDescription()
+    {
+        $payments = [
+            'PAYSHOP_CREDIT_CARD' => $this->module->l('Credit/Debit Card'),
+            'PAYSHOP_MULTIBANCO_REFERENCE' => $this->module->l('Multibanco'),
+            'PAYSHOP_PAYSHOP_REFERENCE' => $this->module->l('Payshop Reference'),
+            'PAYSHOP_CREDIT_MBWAY' => $this->module->l('MBWay')
+        ];
+
+        $paymentsDescription = [];
+        foreach ($payments as $configKey => $description) {
+            if (!Configuration::get($configKey)) {
+                continue;
+            }
+
+            $paymentsDescription[] = $description;
+        }
+
+        return implode(', ', $paymentsDescription);
     }
 }
