@@ -117,14 +117,12 @@
      */
     private function createPrestashopOrder($paymentMethod)
     {
-        $waitingPaymentOrderStatusID = Configuration::get('PAYSHOP_ORDER_STATUS_WAITING_PAYMENT');
-
         $cart = $this->module->context->cart;
         $customer = new Customer($cart->id_customer);
         
         $this->module->validateOrder(
             (int) $this->module->context->cart->id,
-            $waitingPaymentOrderStatusID,
+            (int) $this->getInitialOrderStatusId(),
             (float) $this->module->context->cart->getOrderTotal(true, Cart::BOTH),
             $this->formatedPaymentMethodName($paymentMethod),
             null,
@@ -181,7 +179,24 @@
         return $isCreated;
      }
 
-     public function formatedPaymentMethodName($paymentMethod)
+    /**
+     * Get initial order status id
+     * 
+     * @param string $paymentMethod
+     * @return int
+     */
+     private function getInitialOrderStatusId()
+     {
+        return Configuration::get('PAYSHOP_ORDER_STATUS_WAITING_PAYMENT');
+     }
+
+    /**
+     * Formate payment method name
+     * 
+     * @param string $paymentMethod
+     * @return string
+     */
+     private function formatedPaymentMethodName($paymentMethod)
      {
         $payments = [
             'multibanco' => $this->module->l('Payshop (Multibanco)'),

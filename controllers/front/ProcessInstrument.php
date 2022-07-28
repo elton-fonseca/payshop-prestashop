@@ -128,6 +128,16 @@ class PayshopProcessInstrumentModuleFrontController extends ModuleFrontControlle
      */
     public function getOrderStatus($instrument)
     {
+        $paymentMethod = $instrument['charge']['charge_type'];
+
+        if ($paymentMethod == 'payshop_reference') {
+            return 'PAYSHOP_ORDER_STATUS_WAITING_PAYSHOP';
+        }
+
+        if ($paymentMethod == 'multibanco') {
+            return 'PAYSHOP_ORDER_STATUS_WAITING_MULTIBANCO';
+        }
+
         if ($instrument['status'] === 'pending') {
             return 'PAYSHOP_ORDER_STATUS_WAITING_PAYMENT';
         }

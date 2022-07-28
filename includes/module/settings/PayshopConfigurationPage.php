@@ -42,7 +42,9 @@ class PayshopConfigurationPage extends Payshop
                 'credentialsForm' => $credentialsForm,
                 'paymentsForm' => $paymentsForm,
                 //currencies
-                'currency' => $this->context->currency->iso_code
+                'currency' => $this->context->currency->iso_code,
+
+                'mailTemplatesCopied' => $this->mailTemplatesCopied()
             )
         )->fetch($this->local_path . 'views/templates/admin/configurations.tpl');
 
@@ -91,5 +93,26 @@ class PayshopConfigurationPage extends Payshop
         );
 
         return $helper->generateForm(array($form));
+    }
+
+    /**
+     * Check if the mail templates are copied
+     *
+     * @return bool
+     */
+    private function mailTemplatesCopied()
+    {
+        $allCopied = true;
+
+        foreach ($this->mailsTemplate as $template) {
+            $path = $this->pathDir . '/../../mails/en/' . $template;
+
+            if (!file_exists($path)) {
+                $allCopied = false;
+                break;
+            }
+        }
+
+        return $allCopied;
     }
 }

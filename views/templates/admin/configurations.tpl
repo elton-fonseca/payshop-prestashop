@@ -40,6 +40,16 @@
     </div>
 {/if}
 
+{if $mailTemplatesCopied == false}
+    <div class='alert alert-danger alert-dismissible'>
+        <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+        {l s='You need copy files from: ' mod='payshop'}
+        /prestashop_install_dir/modules/payshop/mails
+        {l s=' to: ' mod='payshop'}
+        /prestashop_install_dir/mails/
+    </div>
+{/if}
+
 <!-- Nav tabs -->
 <ul class="nav nav-tabs" role="tablist">
     <li class="active"><a href="#template_1" role="tab" data-toggle="tab" id="a_template_1">{l s='Set Up Payshop' mod='payshop'}</a></li>

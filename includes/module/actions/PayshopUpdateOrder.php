@@ -61,8 +61,6 @@
         $payshopPaymentId = null
     )
     {
-        $this->updatePrestashopOrder($prestashopOrderId, $newOrderStatus);
-
         $this->addPrestashopOrderPayment(
             $paymentMethod,
             $prestashopOrderId, 
@@ -77,6 +75,8 @@
             $payshopInstrumentId,
             $payshopPaymentId
         );
+
+        $this->updatePrestashopOrder($prestashopOrderId, $newOrderStatus);
     }
 
     /**
