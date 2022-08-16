@@ -29,9 +29,10 @@ class PayshopDynamicForm
 
             'mbwayView' => $this->module->pathDir . '/views/templates/hook/payments/_mbway.tpl',
             'referencesView' => $this->module->pathDir . '/views/templates/hook/payments/_references.tpl',
-            'loadingView' => $this->module->pathDir . '/views/templates/hook/payments/_loading.tpl'
+            'loadingView' => $this->module->pathDir . '/views/templates/hook/payments/_loading.tpl',
+            'dynamicFormView' => $this->module->pathDir . '/views/templates/hook/payments/_dynamic-forms.tpl'
         ])
-          ->fetch('module:payshop/views/templates/hook/payments/dynamic-form.tpl');
+          ->fetch('module:payshop/views/templates/hook/payments/payshop.tpl');
 
         $payshopCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
 

@@ -33,22 +33,13 @@
  * Handle submit from form
  */
 jQuery(function () {
-  let placeOrderClicked = false;
-
   if (document.forms.payshop_dynamic_forms !== undefined) {
     document.forms.payshop_dynamic_forms.onsubmit = function () {
-      if (placeOrderClicked) {
-        placeOrderClicked = false;
-        alert(buttonError);
-      }  
+      document.getElementById('payshop-df').style.display = 'block';
 
       return false;
     };
   }
-
-  $('#payment-confirmation button[type=submit]').on('click', function () {
-    placeOrderClicked = true;
-  });
 
   $('.eZvWLg').live('click', function () {
     if (!$('#checkout-payment-step').is(".-current")) {
@@ -62,6 +53,7 @@ form.on('instrument-pending', (instrument) => {
     return;
   }
 
+  displayById('payshop-df', 'none');
   displayById('instrument-loading');
 
   let processInstrumentUrl = baseUrl.replace('ControlerName', 'ProcessInstrument');

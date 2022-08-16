@@ -24,18 +24,16 @@
 *}
 
 <form id="payshop_dynamic_forms" method="post" action="{$formAction|escape:'htmlall':'UTF-8'}">
-    <div class="alert alert-danger" style="display: none" id="payment-information-error">
-        {l s='Oops! There was an error in payment, attempted ...' mod='payshop'}
-    </div>
-    <div id="dynamic-forms-container"></div>
+    <p>{l s='After click on place order button you can define payment details.' mod='payshop'}</p>
 </form>
 <div>
     {include file=$mbwayView}
     {include file=$referencesView}
     {include file=$loadingView}
+    {include file=$dynamicFormView}
 </div>
 
-<script src="https://cdn.switchpayments.com/libs/switch-5.stable.min.js"></script>
+<script src="https://cdn.switchpayments.com/libs/switch-5.0.9.min.js"></script>
 
 <script>
     let baseUrl = document.getElementById('payshop_dynamic_forms').action;
