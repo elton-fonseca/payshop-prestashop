@@ -22,24 +22,14 @@
 * @license http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
 * International Registered Trademark & Property of PrestaShop SA
 *}
-<div class="overlap" id="payshop-df">
-    <div class="overlap-content">
-        <div class="alert alert-danger" style="display: none" id="payment-information-error">
-            {l s='Oops! There was an error in payment, attempted ...' mod='payshop'}
+
+<form id="payshop_multibanco_reference" class="payshop-checkout-form" method="post" action="{$formAction|escape:'htmlall':'UTF-8'}">
+    <div class="row payshop-frame-checkout-custom-seven">
+        <div id="payshop-form" class="col-xs-12 col-md-12 col-12">
+            <p>{l s='After click on confirmation button. You will see reference code for payment' mod='payshop'}</p>
         </div>
-        <div id="dynamic-forms-container"></div>
     </div>
-</div>
+</form>
 
-<style>
-    #payshop-df {
-        display: none;
-    }
-
-    #payshop-df .overlap-content {
-        width: 80%;
-        min-width: 320px;
-        justify-content: center;
-        height: auto;
-    }
-</style>
+<script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/payshop.js?v=1"></script>

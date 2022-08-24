@@ -231,12 +231,6 @@ class PayshopProcessInstrumentModuleFrontController extends ModuleFrontControlle
         $referenceData = [];
 
         foreach ($instrument['reference']['fields'] as $key => $item) {
-            // if ($item->field == 'end_date') {
-            //     $date = new DateTime($item->value);
-            //     $referenceData[$item->field] = $date->format('d/m/Y');
-            //     continue;
-            // }
-
             $referenceData[$item['field']] = $item['value'];
         }
 

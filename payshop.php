@@ -113,7 +113,10 @@ class Payshop extends PaymentModule
         include_once PAYSHOP_ROOT_URL . '/controllers/admin/PayshopUpdateAlertClose.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopPaymentMethods.php';
-        include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopDynamicForm.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopCreditCard.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopMBWay.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopReference.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopMultibanco.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/statuses/PayshopOrderStatuses.php';
 
@@ -121,14 +124,14 @@ class Payshop extends PaymentModule
         include_once PAYSHOP_ROOT_URL . '/includes/module/models/PayshopEventModel.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopCreateCharge.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopCreateInstrument.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopCreateOrder.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopUpdateOrder.php';
-
 
         include_once PAYSHOP_ROOT_URL . '/includes/sdk/PayshopClientFactory.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/sdk/PayshopEvent.php';
-        include_once PAYSHOP_ROOT_URL . '/includes/module/Events/PayshopProcessEvent.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/events/PayshopProcessEvent.php';
     }
 
     /**
@@ -158,6 +161,7 @@ class Payshop extends PaymentModule
             $this->registerHook('displayAdminAfterHeader') &&
             $this->registerHook('displayWrapperTop') &&
             $this->registerHook('paymentOptions') &&
+            $this->registerHook('ActionFrontControllerSetMedia') &&
             $this->registerHook('sendMailAlterTemplateVars');
     }
 
@@ -207,21 +211,56 @@ class Payshop extends PaymentModule
     }
 
     /**
+     * Register js mask used in credit card and MBWay forms
+     *
+     * @return void
+     */
+    public function hookActionFrontControllerSetMedia()
+    {
+        if ('order' === $this->context->controller->php_self) {
+            $this->context->controller->registerJavascript(
+                'mask_payshop_js',
+                $this->_path . 'views/js/mask.js',
+                [
+                    'position' => 'head',
+                    'inline' => false,
+                    'priority' => 10,
+                ]
+            );
+
+            $this->context->controller->addJS(
+                $this->_path . 'views/js/mask.js',
+                false
+            );
+        }
+    }
+
+    /**
      * Display payment failure
      *
      * @return string
      */
     public function hookDisplayWrapperTop()
     {
-        if (Tools::getValue('typeReturn') == 'failure') {
-            $cookie = $this->context->cookie;
-            if ($cookie->__isset('redirect_message')) {
-                $this->context->smarty->assign(array('redirect_message' => $cookie->__get('redirect_message')));
-                $cookie->__unset('redirect_message');
-            }
-
-            return $this->display(__FILE__, 'views/templates/hook/failure.tpl');
+        if ('order' !== $this->context->controller->php_self) {
+            return;
         }
+
+        $messageError = '';
+
+        $cookie = $this->context->cookie;
+        if ($cookie->__isset('redirect_message')) {
+            $messageError = $cookie->__get('redirect_message');
+            $cookie->__unset('redirect_message');
+        }
+
+        $this->context->smarty->assign([
+            'hasMessage' => Tools::getValue('typeReturn') == 'failure',
+            'message' => $messageError,
+            'moduleUrl' => $this->path,
+        ]);
+
+        return $this->display(__FILE__, 'views/templates/hook/order-wrapper-top.tpl');
     }
 
     /**

@@ -3,16 +3,32 @@
 class PayshopPaymentMethods
 {
     /**
-     * @var PayshopDynamicForm
+     * @var PayshopCreditCard
      */
-    private $payshopDynamicForm;
+    private $creditCard;
 
     /**
-     * Class constructor
+     * @var PayshopMBWay
      */
+    private $mbWay;
+
+    /**
+     * @var PayshopReference
+     */
+    private $payshopReference;
+
+    /**
+     * @var PayshopMultibanco
+     */
+    private $payshopMultibanco;
+
     public function __construct($module)
     {
-        $this->payshopDynamicForm = new PayshopDynamicForm($module);
+        $this->module = $module;
+        $this->creditCard = new PayshopCreditCard($module);
+        $this->mbWay = new PayshopMBWay($module);
+        $this->payshopReference = new PayshopReference($module);
+        $this->payshopMultibanco = new PayshopMultibanco($module);
     }
 
     /**
@@ -22,27 +38,26 @@ class PayshopPaymentMethods
      */
     public function getPaymentOptions($params)
     {
-        if ($this->notHasPaymentEnabled()) {
-            return [];
-        }
-
         $paymentOptions = [];
 
-        $paymentOptions[] =  $this->payshopDynamicForm->register();
+        if (Configuration::get('PAYSHOP_CREDIT_CARD') == true) {
+            $paymentOptions[] =  $this->creditCard->register();
+        }
+
+        if (Configuration::get('PAYSHOP_CREDIT_MBWAY') == true) {
+            $paymentOptions[] =  $this->mbWay->register();
+        }
+
+        if (Configuration::get('PAYSHOP_PAYSHOP_REFERENCE') == true) {
+            $paymentOptions[] =  $this->payshopReference->register();
+        }
+
+        if (Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE') == true) {
+            $paymentOptions[] =  $this->payshopMultibanco->register();
+        }
 
         return $paymentOptions;
     }
 
-    /**
-     * Check if has enabled payment methods
-     * 
-     * @return boolean
-     */
-    public function notHasPaymentEnabled()
-    {
-        return !Configuration::get('PAYSHOP_CREDIT_CARD') &&
-            !Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE') &&
-            !Configuration::get('PAYSHOP_PAYSHOP_REFERENCE') &&
-            !Configuration::get('PAYSHOP_CREDIT_MBWAY');
-    }
+
 }

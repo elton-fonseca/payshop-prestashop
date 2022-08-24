@@ -41,4 +41,83 @@ class PayshopHelpers
 
         return $isCreated;
     }
+
+    /**
+     * Check Payshop response
+     *
+     * @param module $module
+     * @param array $response
+     * @return void
+     * @throws Exception
+     */
+    public static function checkResponse($module, $response)
+    {
+        if ($response['status'] == 201) {
+            return true;
+        }
+
+        if ($response['status'] == 401 || $response['status'] == 403) {
+            throw new Exception(
+                $module->l('Invalid API credentials. Check your credentials in the module settings.')
+            );
+        }
+
+        $body = $response['response'];
+
+        if (isset($body['parameters']['number'])) {
+            throw new Exception($module->l('Invalid card number'));
+        }
+
+        $message = isset($body['message']) ? $body['message'] : $body;
+
+        throw new Exception($message);
+    }
+
+    /**
+     * Set error response
+     *
+     * @param module $module
+     * @param string $message
+     * @return void
+     */
+    public static function errorResponse($module, $message)
+    {
+        $module->context->cookie->__set('redirect_message', $message);
+
+        $errorUrl = $module->context->link->getBaseLink() .
+            'index.php?controller=order&step=3&typeReturn=failure';
+
+        echo json_encode([
+            'errorRedirectUrl' => $errorUrl,
+            'error' => true,
+            'message' => $message
+        ]);
+
+        http_response_code(400);
+    }
+
+    /**
+     * Send email from prestashop
+     *
+     * @param string $message
+     * @return voi
+     */
+    public static function sendEmail($message)
+    {
+        Mail::Send(
+            (int)(Configuration::get('PS_LANG_DEFAULT')), // defaut language id
+            'waiting_payment_multibanco', // email template file to be use
+            'Payshop Error Warning', // email subject
+            [
+                '{email}' => Configuration::get('PS_SHOP_EMAIL'), // sender email address
+                '{message}' => 'Hello world' // email content
+            ],
+            'elton869@gmail.com', // receiver email address
+            NULL, //receiver name
+            NULL, //from email address
+            NULL,  //from name
+            NULL, //file attachment
+            NULL //mode smtp
+        );
+    }
 }

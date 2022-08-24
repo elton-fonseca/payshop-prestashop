@@ -104,7 +104,7 @@
             'redirect_url' => str_replace('http://127.0.0.1', 'https://eltonfonseca.dev', $processInstrumentURL)
         ]);
 
-        $this->checkResponse($response, 'charge');
+        PayshopHelpers::checkResponse($this->module, $response);
 
         return $response['response']['id'];
     }
@@ -130,36 +130,5 @@
         }
 
         return ['end_date' => date('Y-m-d', strtotime('+' . $qtdDaysToExpire . ' days'))];
-    }
-
-    /**
-     * Check Payshop response
-     *
-     * @param array $response
-     * @param string $type
-     * @return void
-     * @throws Exception
-     */
-    private function checkResponse($response, $type)
-    {
-        if ($response['status'] == 201) {
-            return true;
-        }
-
-        if ($response['status'] == 401 || $response['status'] == 403) {
-            $message = $this->module->l('Invalid API credentials. Check your credentials in the module settings.');
-        } else {
-            $responseMessage = isset($response['response']['message']) ?
-                $response['response']['message'] :
-                $response['response'];
-
-            $message = $this->module->l('Error creating ' . $type .
-                ': Status Code:' . $response['status'] .
-                ' Message: ' . $responseMessage);
-        }
-
-        PayshopLog::generate($message, 'error');
-        $this->module->context->cookie->__set('redirect_message', $message);
-        throw new Exception($message);
     }
 }

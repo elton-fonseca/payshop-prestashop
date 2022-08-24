@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 2007-2022 PrestaShop
  *
@@ -27,46 +28,42 @@
  * to avoid any conflicts with others containers.
  */
 
-class PayshopCreateChargeModuleFrontController extends ModuleFrontController
-{
+ class PayshopCreateInstrument
+ {
     /**
-     * @var PayshopCreateCharge
+     * @var Modulo
      */
-    private $payshopCreateCharge;
+    private $module;
+
+    /**
+     * @var PayshopClient
+     */
+    private $payshopSDK;
 
     /**
      * Class constructor
+     *
+     * @param Module $module
      */
-    public function __construct()
+    public function __construct($module)
     {
-        parent::__construct();
-        $this->ajax = true;
-        $this->payshopCreateCharge = new PayshopCreateCharge($this->module);
+        $this->module = $module;
+        $this->payshopSDK = PayshopClientFactory::getInstance();
     }
 
     /**
-     * Payment process with credit card
+     * Send instrument to payshop
      *
-     * @return void
+     * @param string $instrumentData
+     * @return int
+     * @throws Exception
      */
-    public function postProcess()
+    public function execute($instrumentData)
     {
-        header('Content-Type: application/json');
+        $response = $this->payshopSDK->createInstrument($instrumentData);
 
-        try {
-            $formInformation = json_decode(
-                file_get_contents('php://input')
-            );
+        PayshopHelpers::checkResponse($this->module, $response);
 
-            $chargeId = $this->payshopCreateCharge->execute(
-                $formInformation->chargeType
-            );
-
-            echo json_encode([
-                'id' => $chargeId
-            ]);
-        } catch (\Exception $e) {
-            PayshopHelpers::errorResponse($this->module, $e->getMessage());
-        }
+        return $response['response'];
     }
 }
