@@ -39,16 +39,11 @@ class Payshop extends PaymentModule
     public $author;
     public $version;
     public $context;
-    public $mpuseful;
     public $bootstrap;
-    public $module_key;
     public $displayName;
     public $description;
     public $need_instance;
     public $assets_ext_min;
-    public $customCheckout;
-    public $ticketCheckout;
-    public $standardCheckout;
     public $confirmUninstall;
     public $ps_versions_compliancy;
     public $ps_version;
@@ -61,8 +56,6 @@ class Payshop extends PaymentModule
     public static $form_alert;
     public static $form_message;
 
-    const PRESTA17 = "1.7";
-
     public function __construct()
     {
         $this->loadFiles();
@@ -73,7 +66,7 @@ class Payshop extends PaymentModule
         $this->need_instance = 1;
         $this->bootstrap = true;
 
-        $this->version = '0.0.1';
+        $this->version = PAYSHOP_VERSION;
         $this->ps_versions_compliancy = array('min' => '1.7.0', 'max' => _PS_VERSION_);
 
         parent::__construct();
@@ -87,8 +80,6 @@ class Payshop extends PaymentModule
         $this->pathDir = str_replace('\\', '/', __DIR__);
 
         $this->mailsTemplate = [
-            'waiting_payment_multibanco.html',
-            'waiting_payment_multibanco.txt',
             'waiting_payment_payshop.html',
             'waiting_payment_payshop.txt'
         ];
@@ -230,6 +221,11 @@ class Payshop extends PaymentModule
 
             $this->context->controller->addJS(
                 $this->_path . 'views/js/mask.js',
+                false
+            );
+
+            $this->context->controller->addCSS(
+                $this->_path . 'views/css/form-styles.css',
                 false
             );
         }

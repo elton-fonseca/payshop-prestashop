@@ -28,11 +28,11 @@
 
         <!-- Title enter your MBWay details -->
         <div id="payshop-form" class="col-xs-12 col-md-12 col-12">
-            <h3 class="payshop-title-custom-checkout payshop-pt-20">{l s='Enter your MBWay account details' mod='payshop'}</h3>
+            <h3 class="payshop-title-custom-checkout payshop-pt-10">{l s='Enter your MBWay account details' mod='payshop'}</h3>
 
             <!-- Input MBWay Phone Number -->
             <div class="form-group">
-                <div class="col-md-12 col-12 mb-1">
+                <div class="col-md-12 col-12 payshop-pb-10 payshop-px-0 payshop-m-col">
                     <label for="id-phone-number" class="payshop-pb-5">
                         {l s='Phone number' mod='payshop'}
                         <em class="payshop-required">*</em>

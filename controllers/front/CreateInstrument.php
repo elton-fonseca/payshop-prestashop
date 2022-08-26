@@ -51,6 +51,7 @@ class PayshopCreateInstrumentModuleFrontController extends ModuleFrontController
      */
     public function postProcess()
     {
+        
         header('Content-Type: application/json');
 
         try {
@@ -66,7 +67,7 @@ class PayshopCreateInstrumentModuleFrontController extends ModuleFrontController
             $instrument = $this->payshopCreateInstrument->execute($instrumentData);
 
             echo json_encode($instrument);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             PayshopHelpers::errorResponse($this->module, $e->getMessage());
         }
     }

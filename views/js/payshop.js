@@ -38,6 +38,20 @@
   }
 
   /**
+   * Redirect to error page or show error message
+   */
+  function handleError(error) {
+    let errorUrlRedirect = error?.responseJSON?.errorRedirectUrl ?? false;
+
+    if (errorUrlRedirect) {
+      window.location.href = errorUrlRedirect;
+      return;
+    }
+
+    alert('An error occurred, please try again later');
+  }
+
+  /**
    * create charge and show loading popup
    * function is called when the user submit the payment form
    */
@@ -52,6 +66,9 @@
       data: JSON.stringify(paymentType),
       success: function (charge) {
         createInstrument(charge.id, paymentType.chargeType);
+      },
+      error: function (error) {
+        handleError(error);
       }
     });
   }
@@ -76,7 +93,7 @@
         processInstrument(instrument);
       }, 
       error: function (error) {
-        window.location.href = error.responseJSON.errorRedirectUrl;
+        handleError(error);
       }
     });
 
@@ -136,7 +153,7 @@
         processPaymentWithRecerence(instrument, data);
       },
       error: function (error) {
-        window.location.href = error.responseJSON.errorRedirectUrl;
+        handleError(error);
       }
     });
 
@@ -175,14 +192,14 @@
       if (instrument.charge.charge_type === 'mbway') {
         displayById('waiting-mbway');
 
-        checkPayment(data.prestashopOrderId, data.successRedirectUrl);
+        checkMBWayPayment(data.prestashopOrderId, data.successRedirectUrl);
       }
     }
 
     /**
      * Check MBWay payment status on backend
      */
-    function checkPayment(prestashopOrderId, sucessRedirectUrl) {
+    function checkMBWayPayment(prestashopOrderId, sucessRedirectUrl) {
       let MBWayPaidCheckUrl = baseUrl.replace('ControlerName', 'MBWayPaidCheck');
 
       var interval = setInterval(function () {
@@ -203,6 +220,9 @@
               
               displayById('declined-mbway');
             }
+          },
+          error: function (error) {
+            handleError(error);
           }
         });
       }, 3000);

@@ -49,65 +49,20 @@
      * Create prestashop order and payshop transaction
      *
      * @param string $paymentMethod
+     * @param int $chargeId
      * @return int
      * @throws Exception
      */
-    public function execute($paymentMethod)
+    public function execute($paymentMethod, $chargeId)
     {
-        $this->checkoutIsFilled();
-        $this->moduleIsAuthorized();
+        $orderId = $this->createPrestashopOrder($paymentMethod, $chargeId);
 
-        $orderId = $this->createPrestashopOrder($paymentMethod);
-
-        $this->createPayshopTransaction($orderId, $paymentMethod);
+        $this->createPayshopTransaction($orderId, $paymentMethod, $chargeId);
 
         return $orderId;
     }
 
-    /**
-     * Checkout if all informations are filled on checkout page
-     *
-     * return void
-     */
-    private function checkoutIsFilled()
-    {
-        $cart = $this->module->context->cart;
 
-        $moduleDisabed = !$this->module->active;
-        $cartIsEmpty = !$cart->id;
-        $clientNotFilled = $cart->id_customer == 0;
-        $deliveryAddressNotFilled = $cart->id_address_delivery == 0;
-        $invoiceAddressNotFilled = $cart->id_address_invoice == 0;
-
-        if (
-            $moduleDisabed || $cartIsEmpty || $clientNotFilled || 
-            $deliveryAddressNotFilled || $invoiceAddressNotFilled
-        ) {
-            throw new Exception($this->module->l('Checkout fields are not filled'));
-        }
-    }
-
-    /**
-     * Check if module is authorized
-     *
-     * return void
-     * @throws Exception
-     */
-    private function moduleIsAuthorized()
-    {
-        $authorized = false;
-
-        foreach (Module::getPaymentModules() as $module) {
-            if ($module['name'] == 'payshop') {
-                $authorized = true;
-                break;
-            }
-        }
-
-        if (!$authorized) {
-            throw new Exception($this->module->l('This payment method is not available.'));
-        }
-    }
 
     /**
      * Create prestashop order
@@ -115,7 +70,7 @@
      * @return int
      * @throws Exception
      */
-    private function createPrestashopOrder($paymentMethod)
+    private function createPrestashopOrder($paymentMethod, $chargeId)
     {
         $cart = $this->module->context->cart;
         $customer = new Customer($cart->id_customer);
@@ -135,11 +90,13 @@
         $orderId = (int) $this->module->currentOrder;
 
         if (!$orderId) {
-            PayshopLog::generate(
-                $this->module->l('Error while creating order prestashop order.')
+            throw new Exception(
+                PayshopHelpers::errorMessageProcessTransation(
+                    $this->module,
+                    $this->module->l('not created'),
+                    $chargeId
+                )
             );
-
-            throw new Exception($this->module->l('Error creating order'));
         }
 
         return $orderId;
@@ -153,7 +110,7 @@
      * @return bool
      * @throws Exception
      */
-     private function createPayshopTransaction($orderId, $paymentMethod)
+     private function createPayshopTransaction($orderId, $paymentMethod, $chargeId)
      {
         $isPaymentTest = !Configuration::get('PAYSHOP_PROD_STATUS');
 
@@ -169,11 +126,13 @@
         ]);
 
         if (!$isCreated) {
-            PayshopLog::generate(
-                $this->module->l('Error while creating payshop transaction in database.')
+            throw new Exception(
+                PayshopHelpers::errorMessageProcessTransation(
+                    $this->module,
+                    $orderId,
+                    $chargeId
+                )
             );
-
-            throw new Exception($this->module->l('Error creating transaction'));
         }
 
         return $isCreated;

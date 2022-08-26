@@ -49,8 +49,12 @@
      * Update order and payshop transaction with new status
      *
      * @param string $paymentMethod
-     * @return int
-     * @throws Exception
+     * @param int $prestashopOrderId
+     * @param string $newOrderStatus
+     * @param int $payshopChargeId
+     * @param int $payshopInstrumentId
+     * @param int $payshopPaymentId
+     * @return void
      */
     public function execute(
         $paymentMethod,
@@ -76,34 +80,16 @@
             $payshopPaymentId
         );
 
-        $this->updatePrestashopOrder($prestashopOrderId, $newOrderStatus);
-    }
-
-    /**
-     * Update Prestashop order status
-     *
-     * @param string $paymentMethod
-     * @return int
-     * @throws Exception
-     */
-    private function updatePrestashopOrder($prestashopOrderId, $newOrderStatus)
-    {
-        if ('PAYSHOP_ORDER_STATUS_WAITING_PAYMENT' == $newOrderStatus) {
-            return;
-        }
-
-        $newOrderStatusID = Configuration::get($newOrderStatus);
-
-        $history = new OrderHistory();
-        $history->id_order = (int) $prestashopOrderId;
-        $history->changeIdOrderState($newOrderStatusID, $prestashopOrderId);
-        $history->addWithemail();
+        $this->updatePrestashopOrder($prestashopOrderId, $newOrderStatus, $payshopChargeId);
     }
 
     /**
      * Add Prestashop order payment and invoice
      *
      * @param string $paymentMethod
+     * @param int $prestashopOrderId
+     * @param string $newOrderStatus
+     * @param int $payshopChargeId
      * @return int
      * @throws Exception
      */
@@ -123,7 +109,18 @@
         $baseOrder = new Order($prestashopOrderId);
 
         $amount = (float) $transaction['total'];
-        $baseOrder->addOrderPayment($amount, $paymentMethod, $payshopChargeId);
+        $paymentAdicioned = $baseOrder->addOrderPayment($amount, $paymentMethod, $payshopChargeId);
+
+        if (!$paymentAdicioned) {
+            throw new Exception(
+                PayshopHelpers::errorMessageProcessTransation(
+                    $this->module,
+                    $prestashopOrderId,
+                    $payshopChargeId
+                )
+            );
+        }
+
         $baseOrder->setInvoice(true);
     }
 
@@ -131,11 +128,11 @@
     /**
      * Update Payshop transaction status
      * 
-     * @param string $prestashopOrderId
+     * @param int $prestashopOrderId
      * @param string $newOrderStatus
-     * @param string $payshopChargeId
-     * @param string $payshopInstrumentId
-     * @param string $payshopPaymentId
+     * @param int $payshopChargeId
+     * @param int $payshopInstrumentId
+     * @param int $payshopPaymentId
      * @return bool
      * @throws Exception
      */
@@ -158,13 +155,48 @@
         ]);
 
         if (!$isUpdated) {
-            PayshopLog::generate(
-                $this->module->l('Error while creating payshop transaction in database.')
+            throw new Exception(
+                PayshopHelpers::errorMessageProcessTransation(
+                    $this->module,
+                    $prestashopOrderId,
+                    $payshopChargeId
+                )
             );
-
-            throw new Exception($this->module->l('Error updating transaction'));
         }
 
         return $isUpdated;
+    }
+
+    /**
+     * Update Prestashop order status
+     *
+     * @param int $prestashopOrderId
+     * @param string $newOrderStatus
+     * @param int $payshopChargeId
+     * @return int
+     * @throws Exception
+     */
+    private function updatePrestashopOrder($prestashopOrderId, $newOrderStatus, $payshopChargeId)
+    {
+        if ('PAYSHOP_ORDER_STATUS_WAITING_PAYMENT' == $newOrderStatus) {
+            return;
+        }
+
+        $newOrderStatusID = Configuration::get($newOrderStatus);
+
+        $history = new OrderHistory();
+        $history->id_order = (int) $prestashopOrderId;
+        $history->changeIdOrderState($newOrderStatusID, $prestashopOrderId);
+        $orderUpdated = $history->addWithemail();
+
+        if (!$orderUpdated) {
+            throw new Exception(
+                PayshopHelpers::errorMessageProcessTransation(
+                    $this->module,
+                    $prestashopOrderId,
+                    $payshopChargeId
+                )
+            );
+        }
     }
  }

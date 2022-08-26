@@ -42,7 +42,7 @@ class PayshopUpdateAlert
     /**
      * @var string
      */
-    const ONLINE_VERSION_URL = 'https://payshop.eltonfonseca.dev/prestashop-version.json';
+    const ONLINE_VERSION_URL = 'https://apps.coolsis.pt/payshop/prestashop/version.json';
 
     /**
      * class constructor
@@ -67,13 +67,16 @@ class PayshopUpdateAlert
             return '';
         }
 
-        if ($this->isUpdated()) {
+        $onlineVersionInformations = $this->getOnlineVersion();
+
+        if ($this->isUpdated($onlineVersionInformations['version'])) {
             return '';
         }
 
         $smart = $this->module->context->smarty;
         $smart->assign([
-            'updateAlertCloseLink' => $this->getUpdateAlertCloseControllerLink()
+            'updateAlertCloseLink' => $this->getUpdateAlertCloseControllerLink(),
+            'downloadUrl' => $onlineVersionInformations['url']
         ]);
 
         return $smart->fetch($this->local_path . 'views/templates/admin/update-alert.tpl');
@@ -84,11 +87,11 @@ class PayshopUpdateAlert
      *
      * @return boolean
      */
-    private function isUpdated()
+    private function isUpdated($onlineVersion)
     {
         return version_compare(
             $this->module->version,
-            $this->getOnlineVersion(),
+            $onlineVersion,
             '=='
         );
     }
@@ -104,7 +107,7 @@ class PayshopUpdateAlert
 
         $versionInformation = json_decode($current_version, true);
 
-        return $versionInformation['version'];
+        return $versionInformation;
     }
 
     /**

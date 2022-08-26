@@ -63,13 +63,8 @@ class PayshopMBWayPaidCheckModuleFrontController extends ModuleFrontController
             }
 
             echo json_encode(["status" => "not-paid"]);
-        } catch (\Exception $e) {
-            if ($e->getCode() == 404) {
-                http_response_code(404);
-                return;
-            } 
-
-            http_response_code(500);
+        } catch (\Throwable $e) {
+            PayshopHelpers::errorResponse($this->module, $e->getMessage());
         }
     }
 }

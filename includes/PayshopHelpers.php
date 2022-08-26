@@ -57,9 +57,11 @@ class PayshopHelpers
         }
 
         if ($response['status'] == 401 || $response['status'] == 403) {
-            throw new Exception(
-                $module->l('Invalid API credentials. Check your credentials in the module settings.')
-            );
+            $message = $module->l('Invalid API credentials. Check your credentials in the module settings.');
+
+            PayshopLog::generate($message, 'error');
+
+            throw new Exception($message);
         }
 
         $body = $response['response'];
@@ -69,6 +71,7 @@ class PayshopHelpers
         }
 
         $message = isset($body['message']) ? $body['message'] : $body;
+        $message = $message == 'Transaction Error' ? 'Transaction error, check your payment informations' : $message;
 
         throw new Exception($message);
     }
@@ -80,12 +83,16 @@ class PayshopHelpers
      * @param string $message
      * @return void
      */
-    public static function errorResponse($module, $message)
+    public static function errorResponse($module, $message, $directRedirect = false)
     {
         $module->context->cookie->__set('redirect_message', $message);
 
         $errorUrl = $module->context->link->getBaseLink() .
             'index.php?controller=order&step=3&typeReturn=failure';
+
+        if ($directRedirect) {
+            Tools::redirect($errorUrl);
+        }
 
         echo json_encode([
             'errorRedirectUrl' => $errorUrl,
@@ -93,31 +100,50 @@ class PayshopHelpers
             'message' => $message
         ]);
 
+        
         http_response_code(400);
     }
 
     /**
      * Send email from prestashop
      *
+     * @param module $module
      * @param string $message
-     * @return voi
+     * @return void
      */
-    public static function sendEmail($message)
+    public static function sendErrorWarningByEmail($module, $message)
     {
         Mail::Send(
             (int)(Configuration::get('PS_LANG_DEFAULT')), // defaut language id
-            'waiting_payment_multibanco', // email template file to be use
-            'Payshop Error Warning', // email subject
+            'error_warning', // email template file to be use
+            $module->l('Payshop Error Warning'), // email subject
             [
-                '{email}' => Configuration::get('PS_SHOP_EMAIL'), // sender email address
-                '{message}' => 'Hello world' // email content
+                '{message}' => $message // email content
             ],
-            'elton869@gmail.com', // receiver email address
+            Configuration::get('PS_SHOP_EMAIL'), // receiver email address
             NULL, //receiver name
             NULL, //from email address
             NULL,  //from name
             NULL, //file attachment
             NULL //mode smtp
+        );
+    }
+
+    /**
+     * Get formated exception message
+     * 
+     * @param module $module
+     * @param string $prestashopOrderId
+     * @param string $payshopChargeId
+     * @return string
+     */
+    public static function errorMessageProcessTransation(
+        $module, $prestashopOrderId, $payshopChargeId
+    )
+    {
+        return vsprintf(
+            $module->l('Error processing transaction. Client order id on your store: %s, Payshop charge id: %s'),
+            [$prestashopOrderId, $payshopChargeId]
         );
     }
 }

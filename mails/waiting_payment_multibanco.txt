@@ -12,7 +12,7 @@ Your order with the reference {order_name} has been placed successfully. You can
 
 Payment method: Multibanco
 
-You have decided to pay by bank Multibanco. Here is the information you need for your payment:
+You have decided to pay by Multibanco. Here is the information you need for your payment:
 
 Amount:  {total_paid}
 

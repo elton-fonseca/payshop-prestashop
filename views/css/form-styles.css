@@ -1,0 +1,157 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body#checkout section.checkout-step .payment-options label {
+    text-align: left !important;
+}
+
+.payshop-pl-0 {
+    padding-left: 0 !important;
+}
+
+.payshop-pr-0 {
+    padding-right: 0 !important;
+}
+
+.payshop-px-0 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.payshop-pb-5 {
+    padding-bottom: 5px !important;
+}
+
+.payshop-pt-5 {
+    padding-top: 5px !important;
+}
+
+.payshop-pb-10 {
+    padding-bottom: 10px !important;
+}
+
+.payshop-pt-10 {
+    padding-top: 10px !important;
+}
+
+.payshop-pt-20 {
+    padding-top: 20px !important;
+}
+
+.payshop-pb-20 {
+    padding-bottom: 20px !important;
+}
+
+.payshop-small {
+    padding-left: 2px;
+}
+
+.payshop-frame-checkout-custom-seven {
+    padding: 10px 0 10px;
+}
+
+.payshop-title-custom-checkout {
+    padding: 0 0 10px;
+}
+
+.payshop-checkout-form {
+    padding: 0 40px;
+}
+
+.payshop-form-control {
+    padding: 0.5rem 0.5rem;
+    background-color: #ffffff !important;
+}
+
+.payshop-erro-form {
+    font-family: sans-serif !important;
+    font-weight: normal !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.29;
+    letter-spacing: normal;
+    color: #f04449 !important;
+    padding-top: 5px;
+    padding-left: 2px;
+    display: none;
+}
+
+.payshop-required {
+    color: #f04449 !important;
+    font-size: 18px !important;
+    font-weight: bold;
+    font-family: 'Merriweather, Georgia';
+}
+
+.payshop-all-required {
+    color: #f04449 !important;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+@media (max-width: 767.98px) {
+    .payshop-m-col {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .payshop-checkout-form {
+            padding: 0 25px 0 10px !important;
+    }
+
+    .payshop-m-pb-20 {
+        padding-bottom: 20px !important;
+    }
+}
+
+/* Payshop dialog for (loading, mbway, payshop and multibanco reference */
+#payshop-loading div {
+    height: 293px;
+}
+
+.payshop-form-control-error {
+    border: 2px solid #eb5a5a !important;
+}
+
+.payshop-error-color {
+    color: #eb5a5a;
+}
+
+.overlap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99999;
+    display: none;
+}
+
+.overlap-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    background: #fff;
+    z-index: 999999;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 32px;
+}
+
+.overlap-content p {
+    margin-bottom: 0;
+    margin-top: 10px;
+}
+
+#multibanco-entity {
+    display: none;
+}

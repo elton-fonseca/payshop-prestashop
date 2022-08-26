@@ -65,7 +65,7 @@ class PayshopCreateChargeModuleFrontController extends ModuleFrontController
             echo json_encode([
                 'id' => $chargeId
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             PayshopHelpers::errorResponse($this->module, $e->getMessage());
         }
     }

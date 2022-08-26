@@ -28,11 +28,11 @@
 
         <!-- Title enter your card details -->
         <div id="payshop-form" class="col-xs-12 col-md-12 col-12">
-            <h3 class="payshop-title-custom-checkout payshop-pt-20">{l s='Enter your card details' mod='payshop'}</h3>
+            <h3 class="payshop-title-custom-checkout payshop-pt-10">{l s='Enter your card details' mod='payshop'}</h3>
 
             <!-- Input Card number -->
             <div class="form-group">
-                <div class="col-md-12 col-12 mb-1">
+                <div class="col-md-12 col-12 payshop-pb-10 payshop-px-0 payshop-m-col">
                     <label for="id-card-number" class="payshop-pb-5">
                         {l s='Card number' mod='payshop'}
                         <em class="payshop-required">*</em>
@@ -56,7 +56,7 @@
 
             <!-- Input Name and Surname -->
             <div id="payshop-card-holder-div" class="form-group">
-                <div class="col-md-12 col-12 mb-1">
+                <div class="col-md-12 col-12 payshop-pb-10 payshop-px-0 payshop-m-col">
                     <label for="id-card-holder-name" class="payshop-pb-5">
                         {l s='Name and surname of the cardholder' mod='payshop'}
                         <em class="payshop-required">*</em>
@@ -78,7 +78,7 @@
 
             <div class="form-group">
                 <!-- Input expiration date -->
-                <div class="col-md-6 col-6 payshop-pb-20 payshop-pl-0 payshop-m-col">
+                <div class="col-md-6 col-6 payshop-m-pb-20 payshop-pl-0 payshop-m-col">
                     <label for="id-card-expiration" class="payshop-pb-5">
                         {l s='Expiration date' mod='payshop'}
                         <em class="payshop-required">*</em>
@@ -102,7 +102,7 @@
                 </div>
 
                 <!-- Input Security Code -->
-                <div class="col-md-6 col-6 payshop-pb-20 payshop-pr-0 payshop-m-col">
+                <div class="col-md-6 col-6 payshop-m-pb-20 payshop-pr-0 payshop-m-col">
                     <label for="id-security-code" class="payshop-pb-5">
                         {l s='Security code' mod='payshop'}
                         <em class="payshop-required">*</em>

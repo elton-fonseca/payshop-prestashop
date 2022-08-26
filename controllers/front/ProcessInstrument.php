@@ -77,7 +77,10 @@ class PayshopProcessInstrumentModuleFrontController extends ModuleFrontControlle
             $orderStatus = $this->getOrderStatus($instrument);
             $paymentMethod = $instrument['charge']['charge_type'];
 
-            $prestashopOrderId = $this->payshopCreateOrder->execute($paymentMethod);
+            $prestashopOrderId = $this->payshopCreateOrder->execute(
+                $paymentMethod,
+                $instrument['charge']['id']
+            );
 
             $this->payshopUpdateOrder->execute(
                 $paymentMethod,
@@ -89,8 +92,12 @@ class PayshopProcessInstrumentModuleFrontController extends ModuleFrontControlle
             );
 
             $this->successResponse($instrument, $prestashopOrderId);
-        } catch (\Exception $e) {
-            $this->errorResponse($e);
+        } catch (\Throwable $e) {
+            PayshopLog::generate($e->getMessage(), 'error');
+
+            PayshopHelpers::sendErrorWarningByEmail($this->module, $e->getMessage());
+
+            PayshopHelpers::errorResponse($this->module, $e->getMessage());
         }
     }
 
@@ -191,29 +198,6 @@ class PayshopProcessInstrumentModuleFrontController extends ModuleFrontControlle
         $reponse += $this->getFormatedReference($instrument);
 
         echo json_encode($reponse);
-    }
-
-    /**
-     * Get Error Response
-     *
-     * @param \Exception $e
-     * @return string
-     */
-    private function errorResponse(\Exception $e)
-    {
-        $errorUrl = $this->module->context->link->getBaseLink() .
-            'index.php?controller=order&step=3&typeReturn=failure';
-
-        if ($this->isCard) {
-            Tools::redirect($errorUrl);
-        }
-
-        http_response_code(400);
-        echo json_encode([
-            'status' => 'error',
-            'errorRedirectUrl' => $errorUrl,
-            'message' => $e->getMessage()
-        ]);
     }
 
     /**

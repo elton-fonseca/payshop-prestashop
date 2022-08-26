@@ -51,13 +51,21 @@ class PayshopProcessEventModuleFrontController extends ModuleFrontController
      */
     public function postProcess()
     {
-        $eventBasicInformation = PayshopEvent::getEvent(true);
+        try {
+            $eventBasicInformation = PayshopEvent::getEvent(true);
+    
+            if ($this->unprocessableEvent($eventBasicInformation)){
+                return;
+            }
+    
+            $this->payshopProcessEvent->execute($eventBasicInformation);
+        } catch (\Throwable $e) {
+            PayshopLog::generate($e->getMessage(), 'error');
 
-        if ($this->unprocessableEvent($eventBasicInformation)){
-            return;
+            PayshopHelpers::sendErrorWarningByEmail($this->module, $e->getMessage());
+
+            http_response_code(500);
         }
-
-        $this->payshopProcessEvent->execute($eventBasicInformation);
     }
 
     /**

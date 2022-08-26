@@ -12,7 +12,7 @@ Your order with the reference {order_name} has been placed successfully. You can
 
 Payment method: Payshop Reference
 
-You have decided to pay by bank Payshop Reference. Here is the information you need for your payment:
+You have decided to pay by Payshop Reference. Here is the information you need for your payment:
 
 Amount:  {total_paid}
 
