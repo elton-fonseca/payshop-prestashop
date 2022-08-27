@@ -51,6 +51,7 @@ class Payshop extends PaymentModule
     public $payshopPaymentMethods;
     public $payshopOrderStatuses;
 
+    public $mailsLangs;
     public $mailsTemplate;
 
     public static $form_alert;
@@ -80,8 +81,17 @@ class Payshop extends PaymentModule
         $this->pathDir = str_replace('\\', '/', __DIR__);
 
         $this->mailsTemplate = [
+            'waiting_payment_multibanco.html',
+            'waiting_payment_multibanco.txt',
             'waiting_payment_payshop.html',
-            'waiting_payment_payshop.txt'
+            'waiting_payment_payshop.txt',
+            'error_warning.html',
+            'error_warning.txt'
+        ];
+
+        $this->mailsLangs = [
+            'en',
+            'pt',
         ];
 
         $this->payshopPaymentMethods = new PayshopPaymentMethods($this);
@@ -283,17 +293,19 @@ class Payshop extends PaymentModule
      */
     private function copyMailTemplates()
     {
-        $mailsRootDir = $this->pathDir . '/../../mails/en/';
+        foreach ($this->mailsLangs as $lang) {
+            $mailsRootDir = $this->pathDir . "/../../mails/$lang/";
 
-        if (!is_dir($mailsRootDir)) {
-            mkdir($mailsRootDir);
-        }
+            if (!is_dir($mailsRootDir)) {
+                mkdir($mailsRootDir);
+            }
 
-        foreach ($this->mailsTemplate as $template) {
-            copy(
-                $this->pathDir . '/mails/' . $template,
-                $mailsRootDir . $template
-            );
+            foreach ($this->mailsTemplate as $template) {
+                copy(
+                    $this->pathDir . "/mails/$lang/" . $template,
+                    $mailsRootDir . $template
+                );
+            }
         }
     }
 

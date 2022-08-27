@@ -104,12 +104,14 @@ class PayshopConfigurationPage extends Payshop
     {
         $allCopied = true;
 
-        foreach ($this->mailsTemplate as $template) {
-            $path = $this->pathDir . '/../../mails/en/' . $template;
+        foreach ($this->mailsLangs as $lang) {
+            foreach ($this->mailsTemplate as $template) {
+                $path = $this->pathDir . "/../../mails/$lang/" . $template;
 
-            if (!file_exists($path)) {
-                $allCopied = false;
-                break;
+                if (!file_exists($path)) {
+                    $allCopied = false;
+                    break;
+                }
             }
         }
 

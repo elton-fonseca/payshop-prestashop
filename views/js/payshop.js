@@ -48,6 +48,7 @@
       return;
     }
 
+    displayById('payshop-loading', 'none');
     alert('An error occurred, please try again later');
   }
 

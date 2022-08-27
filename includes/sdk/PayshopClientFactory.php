@@ -55,8 +55,8 @@ class PayshopClientFactory
             } catch (\Exception $e) {
                 $message = 'API ' . $e->getMessage();
                 PayshopLog::generate($message, 'error');
-                echo "<h1>" . $message . "</h1>";
-                echo "<script>alert('" . $message . "')</script>";
+
+                http_response_code(401);
                 exit;
             }
         }

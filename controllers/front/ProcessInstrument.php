@@ -97,7 +97,7 @@ class PayshopProcessInstrumentModuleFrontController extends ModuleFrontControlle
 
             PayshopHelpers::sendErrorWarningByEmail($this->module, $e->getMessage());
 
-            PayshopHelpers::errorResponse($this->module, $e->getMessage());
+            PayshopHelpers::errorResponse($this->module, $e->getMessage(), $this->isCard);
         }
     }
 
