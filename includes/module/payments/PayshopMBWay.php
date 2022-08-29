@@ -26,7 +26,7 @@ class PayshopMBWay
         $mbWayCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
 
         $mbWayCheckout->setForm($paymentForm)
-            ->setCallToActionText(' Pay with MBWay')
+            ->setCallToActionText($this->module->l('Pay with MBWay', 'PayshopMBWay'))
             ->setLogo(_MODULE_DIR_ . 'payshop/views/img/mbway.png');
 
         return $mbWayCheckout;

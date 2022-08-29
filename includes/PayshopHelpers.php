@@ -57,7 +57,7 @@ class PayshopHelpers
         }
 
         if ($response['status'] == 401 || $response['status'] == 403) {
-            $message = $module->l('Invalid API credentials. Check your credentials in the module settings.');
+            $message = $module->l('Invalid API credentials. Check your credentials in the module settings.', 'PayshopHelpers');
 
             PayshopLog::generate($message, 'error');
 
@@ -67,11 +67,13 @@ class PayshopHelpers
         $body = $response['response'];
 
         if (isset($body['parameters']['number'])) {
-            throw new Exception($module->l('Invalid card number'));
+            throw new Exception($module->l('Invalid card number', 'PayshopHelpers'));
         }
 
         $message = isset($body['message']) ? $body['message'] : $body;
-        $message = $message == 'Transaction Error' ? 'Transaction error, check your payment informations' : $message;
+        $message = $message == 'Transaction Error' ? 
+                    $module->l('Transaction error, check your payment informations', 'PayshopHelpers') : 
+                    $message;
 
         throw new Exception($message);
     }
@@ -116,7 +118,7 @@ class PayshopHelpers
         Mail::Send(
             (int)(Configuration::get('PS_LANG_DEFAULT')), // defaut language id
             'error_warning', // email template file to be use
-            $module->l('Payshop Error Warning'), // email subject
+            $module->l('Payshop Error Warning', 'PayshopHelpers'), // email subject
             [
                 '{message}' => $message // email content
             ],
@@ -142,7 +144,10 @@ class PayshopHelpers
     )
     {
         return vsprintf(
-            $module->l('Error processing transaction. Client order id on your store: %s, Payshop charge id: %s'),
+            $module->l(
+                'Error processing transaction. Client order id on your store: %s, Payshop charge id: %s',
+                'PayshopHelpers'
+            ),
             [$prestashopOrderId, $payshopChargeId]
         );
     }

@@ -93,7 +93,7 @@
             throw new Exception(
                 PayshopHelpers::errorMessageProcessTransation(
                     $this->module,
-                    $this->module->l('not created'),
+                    $this->module->l('not created', 'PayshopCreateOrder'),
                     $chargeId
                 )
             );
@@ -158,10 +158,10 @@
      private function formatedPaymentMethodName($paymentMethod)
      {
         $payments = [
-            'multibanco' => $this->module->l('Payshop (Multibanco)'),
-            'payshop_reference' => $this->module->l('Payshop (Payshop Reference)'),
-            'card' => $this->module->l('Payshop (Card)'),
-            'mbway' => $this->module->l('Payshop (MBWay)')
+            'multibanco' => $this->module->l('Payshop (Multibanco)', 'PayshopCreateOrder'),
+            'payshop_reference' => $this->module->l('Payshop (Payshop Reference)', 'PayshopCreateOrder'),
+            'card' => $this->module->l('Payshop (Card)', 'PayshopCreateOrder'),
+            'mbway' => $this->module->l('Payshop (MBWay)', 'PayshopCreateOrder')
         ];
 
         return $payments[$paymentMethod];

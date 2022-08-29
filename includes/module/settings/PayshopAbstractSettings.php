@@ -57,7 +57,7 @@ class PayshopAbstractSettings
                 'class' => 'credentials',
                 'input' => $fields,
                 'submit' => array(
-                    'title' => $this->module->l('Save', 'AbstractSettings')
+                    'title' => $this->module->l('Save', 'PayshopAbstractSettings'),
                 ),
             ),
         );
@@ -98,7 +98,7 @@ class PayshopAbstractSettings
 
         if ($form_alert == false) {
             Payshop::$form_alert = 'alert-success';
-            Payshop::$form_message = $this->module->l('Settings saved successfully.', 'AbstractSettings');
+            Payshop::$form_message = $this->module->l('Settings saved successfully.', 'PayshopAbstractSettings');
         }
     }
 
@@ -115,7 +115,7 @@ class PayshopAbstractSettings
                 case "account_id":
                     if ($value == '') {
                         Payshop::$form_alert = 'alert-danger';
-                        Payshop::$form_message = $this->module->l('Account ID is not filled. ', 'AbstractSettings');
+                        Payshop::$form_message = $this->module->l('Account ID is not filled. ', 'PayshopAbstractSettings');
                         PayshopLog::generate('Invalid ' . $input . ' submitted', 'warning');
                         return false;
                     }
@@ -124,8 +124,8 @@ class PayshopAbstractSettings
                 case "public_key":
                     if ($value == '') {
                         Payshop::$form_alert = 'alert-danger';
-                        Payshop::$form_message = $this->module->l('Credentials can not be empty and must be valid. ', 'AbstractSettings') .
-                        $this->module->l('Please complete your credentials to enable the module.', 'AbstractSettings');
+                        Payshop::$form_message = $this->module->l('Credentials can not be empty and must be valid. ', 'PayshopAbstractSettings') .
+                        $this->module->l('Please complete your credentials to enable the module.', 'PayshopAbstractSettings');
                         PayshopLog::generate('Invalid ' . $input . ' submitted', 'warning');
                         return false;
                     }
@@ -134,8 +134,8 @@ class PayshopAbstractSettings
                 case "secret_key":
                     if ($value == '') {
                         Payshop::$form_alert = 'alert-danger';
-                        Payshop::$form_message = $this->module->l('Credentials can not be empty and must be valid. ', 'AbstractSettings') .
-                        $this->module->l('Please complete your credentials to enable the module.', 'AbstractSettings');
+                        Payshop::$form_message = $this->module->l('Credentials can not be empty and must be valid. ', 'PayshopAbstractSettings') .
+                        $this->module->l('Please complete your credentials to enable the module.', 'PayshopAbstractSettings');
                         PayshopLog::generate('Invalid ' . $input . ' submitted', 'warning');
                         return false;
                     }
@@ -144,7 +144,7 @@ class PayshopAbstractSettings
                 case "multibancoReferenceExpirationDays":
                     if ($value == '' || !preg_match('/^\d+$/', $value)) {
                         Payshop::$form_alert = 'alert-danger';
-                        Payshop::$form_message = $this->module->l('Multibanco days to expire must be integer', 'AbstractSettings');
+                        Payshop::$form_message = $this->module->l('Multibanco days to expire must be integer', 'PayshopAbstractSettings');
                         PayshopLog::generate('Invalid ' . $input . ' submitted', 'warning');
                         return false;
                     }
@@ -153,7 +153,7 @@ class PayshopAbstractSettings
                 case "payshopReferenceExpirationDays":
                     if ($value == '' || !preg_match('/^\d+$/', $value)) {
                         Payshop::$form_alert = 'alert-danger';
-                        Payshop::$form_message = $this->module->l('Payshop days to expire must be integer', 'AbstractSettings');
+                        Payshop::$form_message = $this->module->l('Payshop days to expire must be integer', 'PayshopAbstractSettings');
                         PayshopLog::generate('Invalid ' . $input . ' submitted', 'warning');
                         return false;
                     }

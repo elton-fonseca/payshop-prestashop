@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of Payshop
  */
 
-define('PAYSHOP_VERSION', '0.0.1');
+define('PAYSHOP_VERSION', '1.0.0');
 define('PAYSHOP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -72,9 +72,9 @@ class Payshop extends PaymentModule
 
         parent::__construct();
 
-        $this->displayName = $this->l('PayShop');
-        $this->description = $this->l('Customize the payment experience of your customers in your online store.');
-        $this->confirmUninstall = $this->l('Are you sure you want to uninstall the module?');
+        $this->displayName = $this->l('Payshop Online Payments', 'payshop');
+        $this->description = $this->l('Customize the payment experience of your customers in your online store.', 'payshop');
+        $this->confirmUninstall = $this->l('Are you sure you want to uninstall the module?', 'payshop');
 
         $this->ps_version = _PS_VERSION_;
         $this->path = $this->_path;

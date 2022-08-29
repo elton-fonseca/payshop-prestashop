@@ -29,7 +29,7 @@
 
 require_once PAYSHOP_ROOT_URL . '/includes/module/settings/PayshopAbstractSettings.php';
 
-class CredentialsSettings extends PayshopAbstractSettings
+class PayshopCredentialsSettings extends PayshopAbstractSettings
 {
     public function __construct()
     {
@@ -47,27 +47,27 @@ class CredentialsSettings extends PayshopAbstractSettings
      */
     public function generateForm()
     {
-        $title = $this->module->l('Credentials', 'CredentialsSettings');
+        $title = $this->module->l('Credentials', 'PayshopCredentialsSettings');
         $fields = array(
             array(
                 'col' => 4,
                 'type' => 'switch',
-                'label' => $this->module->l('Production', 'CredentialsSettings'),
+                'label' => $this->module->l('Production', 'PayshopCredentialsSettings'),
                 'name' => 'PAYSHOP_PROD_STATUS',
                 'is_bool' => true,
-                'desc' => $this->module->l('Select "YES" only when you are ready to sell. ', 'CredentialsSettings') .
-                    $this->module->l('Change to NO to activate the Sandbox ', 'CredentialsSettings') .
-                    $this->module->l('test environment.', 'CredentialsSettings'),
+                'desc' => $this->module->l('Select "YES" only when you are ready to sell. ', 'PayshopCredentialsSettings') .
+                    $this->module->l('Change to NO to activate the Sandbox ', 'PayshopCredentialsSettings') .
+                    $this->module->l('test environment.', 'PayshopCredentialsSettings'),
                 'values' => array(
                     array(
                         'id' => 'PAYSHOP_PROD_STATUS_ON',
                         'value' => true,
-                        'label' => $this->module->l('Yes', 'CredentialsSettings')
+                        'label' => $this->module->l('Yes', 'PayshopCredentialsSettings')
                     ),
                     array(
                         'id' => 'PAYSHOP_PROD_STATUS_OFF',
                         'value' => false,
-                        'label' => $this->module->l('No', 'CredentialsSettings')
+                        'label' => $this->module->l('No', 'PayshopCredentialsSettings')
                     )
                 ),
             ),
@@ -76,17 +76,17 @@ class CredentialsSettings extends PayshopAbstractSettings
                 'type' => 'html',
                 'name' => '',
                 'desc' => '',
-                'label' => $this->module->l('Load credentials', 'CredentialsSettings'),
+                'label' => $this->module->l('Load credentials', 'PayshopCredentialsSettings'),
                 'html_content' => '<a href="https://dashboard.switchpayments.com/"'. 
                 'target="_blank" class="btn btn-default mp-btn-credenciais">'
-                . $this->module->l('Search my credentials', 'CredentialsSettings') . '</a>'
+                . $this->module->l('Search my credentials', 'PayshopCredentialsSettings') . '</a>'
             ),
             array(
                 'col' => 8,
                 'type' => 'text',
                 'desc' => '',
                 'name' => 'PAYSHOP_ACCOUNT_ID',
-                'label' => $this->module->l('Account ID', 'CredentialsSettings'),
+                'label' => $this->module->l('Account ID', 'PayshopCredentialsSettings'),
                 'required' => true
             ),            
             array(
@@ -94,7 +94,7 @@ class CredentialsSettings extends PayshopAbstractSettings
                 'type' => 'text',
                 'desc' => '',
                 'name' => 'PAYSHOP_PUBLIC_KEY',
-                'label' => $this->module->l('Public Key', 'CredentialsSettings'),
+                'label' => $this->module->l('Public Key', 'PayshopCredentialsSettings'),
                 'required' => true
             ),
             array(
@@ -102,7 +102,7 @@ class CredentialsSettings extends PayshopAbstractSettings
                 'type' => 'text',
                 'desc' => ' ',
                 'name' => 'PAYSHOP_SECRET_KEY',
-                'label' => $this->module->l('Access token', 'CredentialsSettings'),
+                'label' => $this->module->l('Access token', 'PayshopCredentialsSettings'),
                 'required' => true
             ),
             array(
@@ -110,7 +110,7 @@ class CredentialsSettings extends PayshopAbstractSettings
                 'type' => 'text',
                 'desc' => '',
                 'name' => 'PAYSHOP_SANDBOX_PUBLIC_KEY',
-                'label' => $this->module->l('Public Key', 'CredentialsSettings'),
+                'label' => $this->module->l('Public Key', 'PayshopCredentialsSettings'),
                 'required' => true
             ),
             array(
@@ -118,7 +118,7 @@ class CredentialsSettings extends PayshopAbstractSettings
                 'type' => 'text',
                 'desc' => '',
                 'name' => 'PAYSHOP_SANDBOX_SECRET_KEY',
-                'label' => $this->module->l('Access token', 'CredentialsSettings'),
+                'label' => $this->module->l('Access token', 'PayshopCredentialsSettings'),
                 'required' => true
             )
         );
@@ -144,8 +144,9 @@ class CredentialsSettings extends PayshopAbstractSettings
         parent::postFormProcess();
 
         if (Payshop::$form_alert != 'alert-danger') {
-            Payshop::$form_message = $this->module->l('Settings saved successfully.', 'CredentialsSettings');
-            PayshopLog::generate('Credentials saved successfully');
+            $message = $this->module->l('Settings saved successfully.', 'PayshopCredentialsSettings');
+            Payshop::$form_message = $message;
+            PayshopLog::generate($message);
         }
     }
 

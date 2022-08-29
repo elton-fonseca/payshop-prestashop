@@ -25,7 +25,7 @@ class PayshopReference
         $payshopReferenceCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
 
         $payshopReferenceCheckout->setForm($paymentForm)
-            ->setCallToActionText('Pay with Payshop Reference')
+            ->setCallToActionText($this->module->l('Pay with Payshop Reference', 'PayshopReference'))
             ->setLogo(_MODULE_DIR_ . 'payshop/views/img/payshop-reference.png');
 
         return $payshopReferenceCheckout;

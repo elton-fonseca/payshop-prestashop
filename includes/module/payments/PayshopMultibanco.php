@@ -25,7 +25,7 @@ class PayshopMultibanco
         $payshopMultibancoCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
 
         $payshopMultibancoCheckout->setForm($paymentForm)
-            ->setCallToActionText('Pay with Multibanco Reference')
+            ->setCallToActionText($this->module->l('Pay with Multibanco Reference', 'PayshopMultibanco'))
             ->setLogo(_MODULE_DIR_ . 'payshop/views/img/multibanco.png');
 
         return $payshopMultibancoCheckout;

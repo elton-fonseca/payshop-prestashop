@@ -25,7 +25,7 @@ class PayshopCreditCard
         $creditCardCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
 
         $creditCardCheckout->setForm($paymentForm)
-            ->setCallToActionText(' Pay with credit and debit cards')
+            ->setCallToActionText($this->module->l('Pay with credit and debit cards', 'PayshopCreditCard'))
             ->setLogo(_MODULE_DIR_ . 'payshop/views/img/visa_mc.png');
 
         return $creditCardCheckout;

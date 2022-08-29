@@ -2,32 +2,28 @@
 
 {shop_url}
 
-Hi {firstname} {lastname},
+Olá {firstname} {lastname},
 
-Thank you for shopping with {shop_name}!
+Obrigado por comprar na {shop_name}!
 
-Order ID {order_name} - Awaiting payment by Multibanco
+Encomenda com ID {order_name} - A aguardar pagamento por referência MB
 
-Your order with the reference {order_name} has been placed successfully. You can expect delivery as soon as your payment is received.
+A sua encomenda com ID {order_name} foi realizada com sucesso. Será expedida assim que o pagamento for registado.
 
-Payment method: Multibanco
+Método de pagamento: Referência MB
 
-You have decided to pay by Multibanco. Here is the information you need for your payment:
+Escolheu pagar com referência MB. Os seus dados de pagamento são os seguintes:
 
-Amount:  {total_paid}
+Entidade:  {entity}
 
-Entity:  {entity}
+Referência:  {reference}
 
-Reference:  {reference}
+Montante:  {total_paid}
 
-Valur:  {value}
+Data de validade:  {end_date}
 
-End Date:  {end_date}
+Para acompanhar o estado da sua encomenda e descarregar a sua fatura, visite o seu perfil em [Histórico de encomendas e detalhes]({history_url}).
 
-Follow your order and download your invoice on our shop, go to the [Order history and details]({history_url}) section of your customer account.
-
-If you have a guest account, you can follow your order via the [Guest Tracking]({guest_tracking_url}) section on our shop.
+Se fez a encomenda como convidado, pode seguir a sua encomenda em [Acompanhamento para convidados]({guest_tracking_url}).
 
 [{shop_name}]({shop_url})
-
-Powered by [PrestaShop](https://www.prestashop.com/?utm_source=marchandprestashop&utm_medium=e-mail&utm_campaign=footer_1-7)

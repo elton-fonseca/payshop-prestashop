@@ -85,7 +85,7 @@
             $moduleDisabed || $cartIsEmpty || $clientNotFilled ||
             $deliveryAddressNotFilled || $invoiceAddressNotFilled
         ) {
-            throw new Exception($this->module->l('Checkout fields are not filled'));
+            throw new Exception($this->module->l('Checkout fields are not filled', 'PayshopCreateCharge'));
         }
     }
 
@@ -107,7 +107,7 @@
         }
 
         if (!$authorized) {
-            throw new Exception($this->module->l('This payment method is not available.'));
+            throw new Exception($this->module->l('This payment method is not available.', 'PayshopCreateCharge'));
         }
     }
 
@@ -137,7 +137,7 @@
 
         if ($currecy != 'EUR') {
             //$total = $total * dd($this->module->context->currency->conversion_rate);
-            $message = $this->module->l('Product currency must be EUR');
+            $message = $this->module->l('Product currency must be EUR', 'PayshopCreateCharge');
             PayshopLog::generate($message, 'error');
             throw new Exception($message);
         }
@@ -146,7 +146,7 @@
             'charge_type' => $paymentMethod,
             'amount' => (float) $total,
             'currency' => 'EUR',
-            'description' => $shopName . $this->module->l(' order #') . $orderId,
+            'description' => $shopName . $this->module->l(' order #', 'PayshopCreateCharge') . $orderId,
             'events_url' => str_replace('http://127.0.0.1', 'https://eltonfonseca.dev', $webHookProcessURL),
             'instrument_params' => $this->getInstrumentParams($paymentMethod),
             'redirect_url' => str_replace('http://127.0.0.1', 'https://eltonfonseca.dev', $processInstrumentURL)

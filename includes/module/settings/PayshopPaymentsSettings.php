@@ -29,7 +29,7 @@
 
 require_once PAYSHOP_ROOT_URL . '/includes/module/settings/PayshopAbstractSettings.php';
 
-class PaymentsSettings extends PayshopAbstractSettings
+class PayshopPaymentsSettings extends PayshopAbstractSettings
 {
     public function __construct()
     {
@@ -47,101 +47,102 @@ class PaymentsSettings extends PayshopAbstractSettings
      */
     public function generateForm()
     {
-        $title = $this->module->l('Payments', 'PaymentsSettings');
+
+        $title = $this->module->l('Payments', 'PayshopPaymentsSettings');
         $fields = array(
             array(
                 'col' => 4,
                 'type' => 'switch',
-                'label' => $this->module->l('Credit Card', 'PaymentsSettings'),
+                'label' => $this->module->l('Credit Card', 'PayshopPaymentsSettings'),
                 'name' => 'PAYSHOP_CREDIT_CARD',
                 'is_bool' => true,
-                'desc' => $this->module->l('Active de payment method on Checkout ', 'PaymentsSettings'),
+                'desc' => $this->module->l('Active de payment method on Checkout ', 'PayshopPaymentsSettings'),
                 'values' => array(
                     array(
                         'id' => 'PAYSHOP_CREDIT_CARD_ON',
                         'value' => true,
-                        'label' => $this->module->l('Enable', 'PaymentsSettings')
+                        'label' => $this->module->l('Enable', 'PayshopPaymentsSettings')
                     ),
                     array(
                         'id' => 'PAYSHOP_CREDIT_CARD_OFF',
                         'value' => false,
-                        'label' => $this->module->l('Disable', 'PaymentsSettings')
+                        'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
                     )
                 )
             ),
             array(
                 'col' => 4,
                 'type' => 'switch',
-                'label' => $this->module->l('Multibanco Reference', 'PaymentsSettings'),
+                'label' => $this->module->l('Multibanco Reference', 'PayshopPaymentsSettings'),
                 'name' => 'PAYSHOP_MULTIBANCO_REFERENCE',
                 'is_bool' => true,
-                'desc' => $this->module->l('Active de payment method on Checkout ', 'PaymentsSettings'),
+                'desc' => $this->module->l('Active de payment method on Checkout ', 'PayshopPaymentsSettings'),
                 'values' => array(
                     array(
                         'id' => 'PAYSHOP_MULTIBANCO_REFERENCE_ON',
                         'value' => true,
-                        'label' => $this->module->l('Enable', 'PaymentsSettings')
+                        'label' => $this->module->l('Enable', 'PayshopPaymentsSettings')
                     ),
                     array(
                         'id' => 'PAYSHOP_MULTIBANCO_REFERENCE_OFF',
                         'value' => false,
-                        'label' => $this->module->l('Disable', 'PaymentsSettings')
+                        'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
                     )
                 )
             ),
             array(
                 'col' => 8,
                 'type' => 'text',
-                'desc' => $this->module->l('Number of days for Multibanco reference to expire', 'PaymentsSettings'),
+                'desc' => $this->module->l('Number of days for Multibanco reference to expire', 'PayshopPaymentsSettings'),
                 'name' => 'PAYSHOP_MULTIBANCO_REFERENCE_EXPIRATION_DAYS',
-                'label' => $this->module->l('Multibanco Days to expire', 'PaymentsSettings'),
+                'label' => $this->module->l('Multibanco Days to expire', 'PayshopPaymentsSettings'),
                 'required' => true
             ),    
             array(
                 'col' => 4,
                 'type' => 'switch',
-                'label' => $this->module->l('Payshop Reference', 'PaymentsSettings'),
+                'label' => $this->module->l('Payshop Reference', 'PayshopPaymentsSettings'),
                 'name' => 'PAYSHOP_PAYSHOP_REFERENCE',
                 'is_bool' => true,
-                'desc' => $this->module->l('Active de payment method on Checkout ', 'PaymentsSettings'),
+                'desc' => $this->module->l('Active de payment method on Checkout ', 'PayshopPaymentsSettings'),
                 'values' => array(
                     array(
                         'id' => 'PAYSHOP_PAYSHOP_REFERENCE_ON',
                         'value' => true,
-                        'label' => $this->module->l('Enable', 'PaymentsSettings')
+                        'label' => $this->module->l('Enable', 'PayshopPaymentsSettings')
                     ),
                     array(
                         'id' => 'PAYSHOP_PAYSHOP_REFERENCE_OFF',
                         'value' => false,
-                        'label' => $this->module->l('Disable', 'PaymentsSettings')
+                        'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
                     )
                 )
             ),
             array(
                 'col' => 8,
                 'type' => 'text',
-                'desc' => $this->module->l('Number of days for Payshop reference to expire', 'PaymentsSettings'),
+                'desc' => $this->module->l('Number of days for Payshop reference to expire', 'PayshopPaymentsSettings'),
                 'name' => 'PAYSHOP_PAYSHOP_REFERENCE_EXPIRATION_DAYS',
-                'label' => $this->module->l('Payshop Days to expire', 'PaymentsSettings'), 
+                'label' => $this->module->l('Payshop Days to expire', 'PayshopPaymentsSettings'), 
                 'required' => true
             ),   
             array(
                 'col' => 4,
                 'type' => 'switch',
-                'label' => $this->module->l('MBWay', 'PaymentsSettings'),
+                'label' => $this->module->l('MBWay', 'PayshopPaymentsSettings'),
                 'name' => 'PAYSHOP_CREDIT_MBWAY',
                 'is_bool' => true,
-                'desc' => $this->module->l('Active de payment method on Checkout ', 'PaymentsSettings'),
+                'desc' => $this->module->l('Active de payment method on Checkout ', 'PayshopPaymentsSettings'),
                 'values' => array(
                     array(
                         'id' => 'PAYSHOP_CREDIT_MBWAY_ON',
                         'value' => true,
-                        'label' => $this->module->l('Enable', 'PaymentsSettings')
+                        'label' => $this->module->l('Enable', 'PayshopPaymentsSettings')
                     ),
                     array(
                         'id' => 'PAYSHOP_CREDIT_MBWAY_OFF',
                         'value' => false,
-                        'label' => $this->module->l('Disable', 'PaymentsSettings')
+                        'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
                     )
                 )
             )
@@ -166,7 +167,7 @@ class PaymentsSettings extends PayshopAbstractSettings
         parent::postFormProcess();
 
         if (Payshop::$form_alert != 'alert-danger') {
-            Payshop::$form_message = $this->module->l('Payment Methods saved successfully.', 'PaymentsSettings');
+            Payshop::$form_message = $this->module->l('Payment Methods saved successfully.', 'PayshopPaymentsSettings');
             PayshopLog::generate('Payment Methods saved successfully');
         }
     }

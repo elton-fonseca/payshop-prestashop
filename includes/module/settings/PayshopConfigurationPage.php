@@ -13,8 +13,8 @@ class PayshopConfigurationPage extends Payshop
 
         $this->loadSettingsFiles();
 
-        $credentials = new CredentialsSettings();
-        $payments = new PaymentsSettings();
+        $credentials = new PayshopCredentialsSettings();
+        $payments = new PayshopPaymentsSettings();
 
         $credentialsForm = $this->renderSettingsForm($credentials->submit, $credentials->values, $credentials->form);
         $paymentsForm = $this->renderSettingsForm($payments->submit, $payments->values, $payments->form);
