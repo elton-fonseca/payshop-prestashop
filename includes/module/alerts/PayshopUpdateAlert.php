@@ -76,7 +76,8 @@ class PayshopUpdateAlert
         $smart = $this->module->context->smarty;
         $smart->assign([
             'updateAlertCloseLink' => $this->getUpdateAlertCloseControllerLink(),
-            'downloadUrl' => $onlineVersionInformations['url']
+            'downloadUrl' => $onlineVersionInformations['url'],
+            'availableVersion' => $onlineVersionInformations['version'] . "777",
         ]);
 
         return $smart->fetch($this->local_path . 'views/templates/admin/update-alert.tpl');
@@ -103,7 +104,12 @@ class PayshopUpdateAlert
      */
     private function getOnlineVersion()
     {
-        $current_version = file_get_contents(self::ONLINE_VERSION_URL);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_URL, self::ONLINE_VERSION_URL);
+        $data = curl_exec($ch);
+        curl_close($ch);
+        $current_version = $data;
 
         $versionInformation = json_decode($current_version, true);
 

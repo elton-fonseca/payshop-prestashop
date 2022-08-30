@@ -27,7 +27,7 @@
     <button type='button' class='close' data-dismiss='alert' aria-label='Close' id="alert-update-close">
         <span aria-hidden='true'>&times;</span>
     </button>
-    {l s='A new version of the Payshop module is available. You can download the latest version from here:' mod='payshop'}
+    {l s='A new version of the Payshop module is available' mod='payshop'} ({$availableVersion}). {l s='You can download the latest version from here:' mod='payshop'} 
     <a href='{$downloadUrl}' class='alert-link' style="padding: 0" target="_blank">{l s='Download' mod='payshop'}</a>
 </div>
 
