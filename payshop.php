@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of Payshop
  */
 
-define('PAYSHOP_VERSION', '1.0.1');
+define('PAYSHOP_VERSION', '1.0.2');
 define('PAYSHOP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -111,7 +111,7 @@ class Payshop extends PaymentModule
         include_once PAYSHOP_ROOT_URL . '/includes/module/settings/PayshopConfigurationPage.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/alerts/PayshopUpdateAlert.php';
-        include_once PAYSHOP_ROOT_URL . '/controllers/admin/PayshopUpdateAlertClose.php';
+        include_once PAYSHOP_ROOT_URL . '/controllers/front/UpdateAlertClose.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopPaymentMethods.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopCreditCard.php';
@@ -150,7 +150,6 @@ class Payshop extends PaymentModule
         }
 
         include PAYSHOP_ROOT_URL . '/database/install.php';
-        $this->registerAdminControllers();
         $this->payshopOrderStatuses->register();
 
         $this->copyMailTemplates();
@@ -267,23 +266,6 @@ class Payshop extends PaymentModule
         ]);
 
         return $this->display(__FILE__, 'views/templates/hook/order-wrapper-top.tpl');
-    }
-
-    /**
-     * Register tabs for admin controllers
-     *
-     * @return void
-     */
-    public function registerAdminControllers()
-    {
-        $tab = new Tab();
-        $tab->class_name = 'PayshopUpdateAlertClose';
-        $tab->module = $this->name;
-        $tab->name[1] = $this->name;
-
-        if (!$tab->save()) {
-            return false;
-        }
     }
 
     /**

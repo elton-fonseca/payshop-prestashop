@@ -77,7 +77,7 @@ class PayshopUpdateAlert
         $smart->assign([
             'updateAlertCloseLink' => $this->getUpdateAlertCloseControllerLink(),
             'downloadUrl' => $onlineVersionInformations['url'],
-            'availableVersion' => $onlineVersionInformations['version'] . "777",
+            'availableVersion' => $onlineVersionInformations['version'],
         ]);
 
         return $smart->fetch($this->local_path . 'views/templates/admin/update-alert.tpl');
@@ -141,8 +141,9 @@ class PayshopUpdateAlert
      */
     private function getUpdateAlertCloseControllerLink()
     {
-        $link = new Link;
-
-        return $link->getAdminLink('PayshopUpdateAlertClose');
+        return $this->module->context->link->getModuleLink(
+            $this->module->name,
+            'UpdateAlertClose'
+        );
     }
 }

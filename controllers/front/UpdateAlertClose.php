@@ -27,7 +27,7 @@
  * to avoid any conflicts with others containers.
  */
 
-class PayshopUpdateAlertCloseController extends ModuleAdminController
+class PayshopUpdateAlertCloseModuleFrontController extends ModuleFrontController
 {
     /**
      * Class constructor
@@ -35,7 +35,6 @@ class PayshopUpdateAlertCloseController extends ModuleAdminController
     public function __construct()
     {
         parent::__construct();
-        $this->bootstrap = true;
         $this->ajax = true;
     }
 
@@ -44,7 +43,7 @@ class PayshopUpdateAlertCloseController extends ModuleAdminController
      *
      * @return void
      */
-    public function displayAjax()
+    public function postProcess()
     {
         Configuration::updateValue('PAYSHOP_LAST_CLOSED_ALERT_UPDATE_DATE', date('Y-m-d H:i'));
     }
