@@ -70,6 +70,12 @@ class PayshopHelpers
             throw new Exception($module->l('Invalid card number', 'PayshopHelpers'));
         }
 
+        if (!Configuration::get('PAYSHOP_PROD_STATUS')) {
+            $message = print_r($response, true);
+
+            throw new Exception($message);
+        }
+
         $message = isset($body['message']) ? $body['message'] : $body;
         $message = $message == 'Transaction Error' ? 
                     $module->l('Transaction error, check your payment informations', 'PayshopHelpers') : 
