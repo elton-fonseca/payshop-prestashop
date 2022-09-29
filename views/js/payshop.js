@@ -218,6 +218,10 @@
 
             if (data.status == 'declined') {
               displayById('waiting-mbway', 'none');
+
+              document.getElementById('payshop-mbway-view-order').addEventListener('click', function () {
+                window.location.href = sucessRedirectUrl;
+              });
               
               displayById('declined-mbway');
             }

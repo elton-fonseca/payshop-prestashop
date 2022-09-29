@@ -161,7 +161,7 @@
             'multibanco' => $this->module->l('Payshop (Multibanco)', 'PayshopCreateOrder'),
             'payshop_reference' => $this->module->l('Payshop (Payshop Reference)', 'PayshopCreateOrder'),
             'card' => $this->module->l('Payshop (Card)', 'PayshopCreateOrder'),
-            'mbway' => $this->module->l('Payshop (MBWay)', 'PayshopCreateOrder')
+            'mbway' => 'Payshop Online Payments (MBWay)'
         ];
 
         return $payments[$paymentMethod];

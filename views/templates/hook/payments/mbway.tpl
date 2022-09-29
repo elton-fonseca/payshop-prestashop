@@ -81,12 +81,12 @@
                 {l s='Declined Payment' mod='payshop'}
             </h4>
             <p>{l s='Payment Declined on MBWay' mod='payshop'}</p>
-            <button onclick="window.location.href = '{$shopUrl|escape:'htmlall':'UTF-8'}'">
-                {l s='Go to home' mod='payshop'}
+            <button id="payshop-mbway-view-order">
+                {l s='Check details' mod='payshop'}
             </button>
         </div>
     </div>
 </div>
 
 <script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/jquery-1.11.0.min.js"></script>
-<script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/payshop.js?v=1"></script>
+<script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/payshop.js?v=2"></script>

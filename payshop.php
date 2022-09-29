@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of Payshop
  */
 
-define('PAYSHOP_VERSION', '1.0.3');
+define('PAYSHOP_VERSION', '1.0.4');
 define('PAYSHOP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -160,6 +160,7 @@ class Payshop extends PaymentModule
             $this->registerHook('paymentReturn') &&
             $this->registerHook('displayAdminAfterHeader') &&
             $this->registerHook('displayWrapperTop') &&
+            $this->registerHook('orderConfirmation') &&
             $this->registerHook('paymentOptions') &&
             $this->registerHook('ActionFrontControllerSetMedia') &&
             $this->registerHook('sendMailAlterTemplateVars');
@@ -208,6 +209,37 @@ class Payshop extends PaymentModule
     public function hookPaymentOptions($params)
     {
         return $this->payshopPaymentMethods->getPaymentOptions($params);
+    }
+
+    /**
+     * Show order status on order confirmation page
+     *
+     * @param  $params
+     * @return array|string|void
+     */
+    public function hookOrderConfirmation($params)
+    {
+        $order = $params['order'];
+
+        if ($order->payment !== 'Payshop Online Payments (MBWay)') {
+            return;
+        }
+
+        $orderCurrentState = $order->getCurrentState();
+
+        if ($orderCurrentState == Configuration::get('PAYSHOP_ORDER_STATUS_PAID')) {
+            $this->context->smarty->assign([
+                'success' => true
+            ]);
+        }
+
+        if ($orderCurrentState == Configuration::get('PAYSHOP_ORDER_STATUS_PAYMENT_ERROR')) {
+            $this->context->smarty->assign([
+                'success' => false
+            ]);
+        }
+
+        return $this->display(__FILE__, 'views/templates/hook/order-confirmation.tpl');
     }
 
     /**
@@ -332,6 +364,8 @@ class Payshop extends PaymentModule
 
 function dd(...$asd)
 {
-    var_dump($asd);
+    echo "<pre>";
+    print_r($asd);
+    echo "</pre>";
     exit;
 }
