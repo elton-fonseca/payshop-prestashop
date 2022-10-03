@@ -63,30 +63,5 @@
     </div>
 </form>
 
-<div>
-    <div class="overlap" id="waiting-mbway">
-        <div class="overlap-content">
-            <h5>{l s='Waiting MBWay payment confirmation' mod='payshop'}</h5>
-            <img width="250" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/img/loading.gif" />
-            <p>
-                {l s='You can confirm the payment after close this page. ' mod='payshop'}
-                {l s='In this case, you will receive a message with confirmation' mod='payshop'}
-            </p>
-        </div>
-    </div>
-
-    <div class="overlap" id="declined-mbway">
-        <div class="overlap-content">
-            <h4 class="payshop-error-color">
-                {l s='Declined Payment' mod='payshop'}
-            </h4>
-            <p>{l s='Payment Declined on MBWay' mod='payshop'}</p>
-            <button id="payshop-mbway-view-order">
-                {l s='Check details' mod='payshop'}
-            </button>
-        </div>
-    </div>
-</div>
-
 <script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/jquery-1.11.0.min.js"></script>
 <script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/payshop.js?v=2"></script>

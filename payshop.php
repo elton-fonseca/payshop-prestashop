@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of Payshop
  */
 
-define('PAYSHOP_VERSION', '1.0.4');
+define('PAYSHOP_VERSION', '1.0.5');
 define('PAYSHOP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -226,18 +226,29 @@ class Payshop extends PaymentModule
         }
 
         $orderCurrentState = $order->getCurrentState();
-
+        $paymentSuccess = false;
+        $paymentDeclined = false;
+        
         if ($orderCurrentState == Configuration::get('PAYSHOP_ORDER_STATUS_PAID')) {
-            $this->context->smarty->assign([
-                'success' => true
-            ]);
+            $paymentSuccess = true;
         }
-
+        
         if ($orderCurrentState == Configuration::get('PAYSHOP_ORDER_STATUS_PAYMENT_ERROR')) {
-            $this->context->smarty->assign([
-                'success' => false
-            ]);
+            $paymentDeclined = true;
         }
+        
+        $mBWayPaidCheckUrl = $this->context->link->getModuleLink(
+            $this->name,
+            'MBWayPaidCheck'
+        );
+        
+        $this->context->smarty->assign([
+            'prestashopOrderId' => $order->id,
+            'paymentSuccess' => $paymentSuccess,
+            'paymentDeclined' => $paymentDeclined,
+            'mBWayPaidCheckUrl' => $mBWayPaidCheckUrl,
+            'moduleUrl' => $this->path,
+        ]);
 
         return $this->display(__FILE__, 'views/templates/hook/order-confirmation.tpl');
     }

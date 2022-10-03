@@ -149,8 +149,7 @@
       success: function (data) {
         displayById('payshop-loading', 'none');
 
-        cardWithout3ds(instrument, data);
-        processMBWay(instrument, data);
+        redirectToSuccessPage(instrument, data);
         processPaymentWithRecerence(instrument, data);
       },
       error: function (error) {
@@ -180,57 +179,10 @@
    /**
    * Process Card without 3DS
    */
-    function cardWithout3ds(instrument, data) {
-      if (instrument.charge.charge_type === 'card') {
+    function redirectToSuccessPage(instrument, data) {
+      if (instrument.charge.charge_type === 'card' || instrument.charge.charge_type === 'mbway') {
         window.location.href = data.successRedirectUrl;
       }
-    }
-
-    /**
-     * Process MBWay's instrument
-     */
-    function processMBWay(instrument, data) {
-      if (instrument.charge.charge_type === 'mbway') {
-        displayById('waiting-mbway');
-
-        checkMBWayPayment(data.prestashopOrderId, data.successRedirectUrl);
-      }
-    }
-
-    /**
-     * Check MBWay payment status on backend
-     */
-    function checkMBWayPayment(prestashopOrderId, sucessRedirectUrl) {
-      let MBWayPaidCheckUrl = baseUrl.replace('ControlerName', 'MBWayPaidCheck');
-
-      var interval = setInterval(function () {
-        $.ajax({
-          url: MBWayPaidCheckUrl,
-          type: 'POST',
-          data: {
-            "prestashop-order-id": prestashopOrderId
-          },
-          success: function (data) {
-            if (data.status == 'paid') {
-              clearInterval(interval);
-              window.location.href = sucessRedirectUrl;
-            }
-
-            if (data.status == 'declined') {
-              displayById('waiting-mbway', 'none');
-
-              document.getElementById('payshop-mbway-view-order').addEventListener('click', function () {
-                window.location.href = sucessRedirectUrl;
-              });
-              
-              displayById('declined-mbway');
-            }
-          },
-          error: function (error) {
-            handleError(error);
-          }
-        });
-      }, 3000);
     }
 
     /**

@@ -20,9 +20,9 @@ class PayshopPaymentError
         $order_state->name = array();
         foreach (Language::getLanguages() as $language) {
             if (Tools::strtolower($language['iso_code']) == 'pt') {
-                $order_state->name[$language['id_lang']] = 'Erro de pagamento';
+                $order_state->name[$language['id_lang']] = 'Erro de pagamento Payshop';
             } else {
-                $order_state->name[$language['id_lang']] = 'Payment Error';
+                $order_state->name[$language['id_lang']] = 'Payshop Payment Error';
             }
         }
 
