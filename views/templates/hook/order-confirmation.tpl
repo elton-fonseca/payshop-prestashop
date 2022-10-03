@@ -112,6 +112,8 @@
         }
     </style>
 
+    <form action="{$mBWayPaidCheckUrl|escape:'htmlall':'UTF-8'}" id="payshop_mbway_url"></form>
+
     <script>
         (function () {
             function handlePopup(waitPopup, interval, popupId) {
@@ -135,7 +137,7 @@
 
                 var interval = setInterval(function () {
                 $.ajax({
-                    url: '{$mBWayPaidCheckUrl|escape:'htmlall':'UTF-8'}',
+                    url: document.forms.payshop_mbway_url.action,
                     type: 'POST',
                     data: {
                         "prestashop-order-id": '{$prestashopOrderId|escape:'htmlall':'UTF-8'}'

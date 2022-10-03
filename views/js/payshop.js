@@ -415,7 +415,7 @@
      * Get form
      */
     function getMbwayForm() {
-      return document.querySelector('#payshop_wbway');
+      return document.querySelector('#payshop_mbway');
     }
 
     /**
@@ -469,15 +469,15 @@
      * Handle submit from wbway form
      */
     jQuery(function () {
-      if (document.forms.payshop_wbway !== undefined) {
-        document.forms.payshop_wbway.onsubmit = function () {
+      if (document.forms.payshop_mbway !== undefined) {
+        document.forms.payshop_mbway.onsubmit = function () {
           if (!validateInputs()) {
             uncheckConditionTerms();
             disableFinishOrderButton();
             return false;
           }
 
-          baseUrl = document.forms.payshop_card.action;
+          baseUrl = document.forms.payshop_mbway.action;
           createCharge({
             "chargeType": "mbway"
           });

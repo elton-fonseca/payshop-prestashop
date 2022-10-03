@@ -23,7 +23,7 @@
 * International Registered Trademark & Property of PrestaShop SA
 *}
 
-<form id="payshop_wbway" class="payshop-checkout-form" method="post" action="{$formAction|escape:'htmlall':'UTF-8'}">
+<form id="payshop_mbway" class="payshop-checkout-form" method="post" action="{$formAction|escape:'htmlall':'UTF-8'}">
     <div class="row payshop-frame-checkout-custom-seven">
 
         <!-- Title enter your MBWay details -->
@@ -64,4 +64,4 @@
 </form>
 
 <script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/jquery-1.11.0.min.js"></script>
-<script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/payshop.js?v=5"></script>
+<script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/payshop.js?v={PAYSHOP_VERSION|escape:'htmlall':'UTF-8'}"></script>
