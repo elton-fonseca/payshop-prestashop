@@ -172,9 +172,17 @@
 
     .payshop-payment-success {
         color: green;
+        background: #cbfccf;
     }
 
     .payshop-payment-declined {
         color: red;
+        background: #f9d6d6;
+    }
+
+    .payshop-payment-success, .payshop-payment-declined {
+        padding: 20px;
+        font-size: 1.1rem;
+        font-weight: 500;
     }
 </style>
