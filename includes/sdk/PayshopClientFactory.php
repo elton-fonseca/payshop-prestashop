@@ -109,6 +109,10 @@ class PayshopClientFactory
      */
     private static function getAccountId()
     {
-        return Configuration::get('PAYSHOP_ACCOUNT_ID');
+        if (self::isProduction() == true) {
+            return Configuration::get('PAYSHOP_ACCOUNT_ID');
+        }
+
+        return Configuration::get('PAYSHOP_SANDBOX_ACCOUNT_ID');
     }
 }

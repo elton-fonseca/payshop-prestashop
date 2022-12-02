@@ -148,7 +148,9 @@
             'currency' => 'EUR',
             'description' => $shopName . $this->module->l(' order #', 'PayshopCreateCharge') . $orderId,
             'events_url' => str_replace('http://127.0.0.1', 'https://eltonfonseca.dev', $webHookProcessURL),
-            'instrument_params' => $this->getInstrumentParams($paymentMethod),
+            'instrument_params' => $this->getInstrumentParams($paymentMethod) + [
+                'description' => $shopName,
+            ],
             'redirect_url' => str_replace('http://127.0.0.1', 'https://eltonfonseca.dev', $processInstrumentURL)
         ]);
 

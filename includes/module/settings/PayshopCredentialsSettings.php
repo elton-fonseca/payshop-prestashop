@@ -109,6 +109,14 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
                 'col' => 8,
                 'type' => 'text',
                 'desc' => '',
+                'name' => 'PAYSHOP_SANDBOX_ACCOUNT_ID',
+                'label' => $this->module->l('Account ID', 'PayshopCredentialsSettings'),
+                'required' => true
+            ), 
+            array(
+                'col' => 8,
+                'type' => 'text',
+                'desc' => '',
                 'name' => 'PAYSHOP_SANDBOX_PUBLIC_KEY',
                 'label' => $this->module->l('Public Key', 'PayshopCredentialsSettings'),
                 'required' => true
@@ -137,6 +145,7 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
             'PAYSHOP_ACCOUNT_ID' => 'account_id',
             'PAYSHOP_PUBLIC_KEY' => 'public_key',
             'PAYSHOP_SECRET_KEY' => 'secret_key',
+            'PAYSHOP_SANDBOX_ACCOUNT_ID' => 'account_id',
             'PAYSHOP_SANDBOX_PUBLIC_KEY' => 'public_key',
             'PAYSHOP_SANDBOX_SECRET_KEY' => 'secret_key',
         ]);
@@ -162,6 +171,7 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
             'PAYSHOP_ACCOUNT_ID' => Configuration::get('PAYSHOP_ACCOUNT_ID'),
             'PAYSHOP_PUBLIC_KEY' => Configuration::get('PAYSHOP_PUBLIC_KEY'),
             'PAYSHOP_SECRET_KEY' => Configuration::get('PAYSHOP_SECRET_KEY'),
+            'PAYSHOP_SANDBOX_ACCOUNT_ID' => Configuration::get('PAYSHOP_SANDBOX_ACCOUNT_ID'),
             'PAYSHOP_SANDBOX_PUBLIC_KEY' => Configuration::get('PAYSHOP_SANDBOX_PUBLIC_KEY'),
             'PAYSHOP_SANDBOX_SECRET_KEY' => Configuration::get('PAYSHOP_SANDBOX_SECRET_KEY')
         );
