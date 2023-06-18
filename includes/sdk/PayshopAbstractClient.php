@@ -5,12 +5,12 @@ abstract class PayshopAbstractClient
     /**
      * @var string
      */
-    private const URL_BASE = 'https://api.switchpayments.com/v2';
+    private const URL_BASE = 'https://switch-processing.teya.com/v2';
 
     /**
      * @var string
      */
-    private const URL_BASE_TEST = 'https://api-test.switchpayments.com/v2';
+    private const URL_BASE_TEST = 'https://switch-processing.teya.xyz/v2';
 
     /**
      * @var string
