@@ -82,7 +82,6 @@
     let PaymentInformation = {
       paymentType,
       charge,
-      ...getCardInformation(paymentType),
       ...getMbwayInformation(paymentType)
     }
 
@@ -97,26 +96,6 @@
         handleError(error);
       }
     });
-
-    /**
-     * Get card informations
-     */
-    function getCardInformation(paymentType) {
-      let PaymentInformation = {};
-
-      if (paymentType === 'card') {
-        PaymentInformation["number"] = document.getElementById('id-card-number').value.replace(/\s/g, '');
-        PaymentInformation["name"] = document.getElementById('id-card-holder-name').value;
-
-        let expiry = document.getElementById('id-card-expiration').value.split('/');
-        PaymentInformation["expiration_month"] = expiry[0];
-        PaymentInformation["expiration_year"] = expiry[1];
-
-        PaymentInformation["cvc"] = document.getElementById('id-security-code').value;
-      }
-
-      return PaymentInformation;
-    }
 
     /**
      * Get mbway informations
@@ -136,10 +115,6 @@
    * Process created instrument
    */
   function processInstrument(instrument) {
-    if (cardWith3ds(instrument)) {
-      return;
-    }
-
     let processInstrumentUrl = baseUrl.replace('ControlerName', 'ProcessInstrument');
 
     $.ajax({
@@ -157,30 +132,11 @@
       }
     });
 
-    /**
-    * Process Card with 3DS
-    */
-    function cardWith3ds(instrument) {
-      let isCard = instrument.charge.charge_type === 'card';
-
-      if (isCard) {
-        let isPending = instrument.status === 'pending';
-        let has3dsRedirectUrl = instrument.redirect?.url ?? false;
-
-        if (isPending && has3dsRedirectUrl) {
-          window.location.href = instrument.redirect.url
-          return true;
-        }
-      }
-
-      return false;
-    }
-
    /**
-   * Process Card without 3DS
+   * Redirect to success page when payment is mbway
    */
     function redirectToSuccessPage(instrument, data) {
-      if (instrument.charge.charge_type === 'card' || instrument.charge.charge_type === 'mbway') {
+      if (instrument.charge.charge_type === 'mbway') {
         window.location.href = data.successRedirectUrl;
       }
     }
@@ -244,170 +200,15 @@
     }
   }
 
- /**
- * Disable finish order button
- */
+  /**
+   * Disable finish order button
+   */
   function disableFinishOrderButton() {
     var sevenButton = document.getElementById('payment-confirmation').childNodes[1].childNodes[1];
     sevenButton.setAttribute('disabled', 'disabled');
   }
 
-  /**
-   * Card Scope
-   */
-  (function () {
-    /**
-     * Get form
-     */
-    function getCardForm() {
-      return document.querySelector('#payshop_card');
-    }
-
-    /**
-     * Validate inputs
-     */
-    function validateInputs() {
-      hideErrors();
-
-      var inputsNotFilled = validateinputNotFilled();
-      var numberIsInvalid = cardNumberIsInvalid();
-      var expirationIsInvalid = expirationDateIsInvalid();
-      var codeIsInvalid = cvvIsInvalid();
-
-      if (inputsNotFilled || codeIsInvalid || expirationIsInvalid || numberIsInvalid) {
-        focusInputError();
-        return false;
-      }
-
-      return true;
-    }
-
-    /**
-   * Validate card number length
-   */
-    function cardNumberIsInvalid() {
-      var span = getCardForm().querySelectorAll('small[data-main="#id-card-number"]');
-      var cvvInput = document.getElementById('id-card-number');
-      var numberIsInvalid = cvvInput.value.length < 19;
-
-      if (numberIsInvalid) {
-        span[0].style.display = 'block';
-        cvvInput.classList.add('payshop-form-control-error');
-        cvvInput.focus();
-      }
-
-      return numberIsInvalid;
-    }
-
-    /**
-     * Validate Expiration Date
-     */
-    function expirationDateIsInvalid() {
-      var span = getCardForm().querySelectorAll('small[data-main="#id-card-expiration"]');
-      var expirationInput = document.getElementById('id-card-expiration');
-
-      //validate string length
-      var invalidSize = expirationInput.value.length != 7;
-
-      var expirationMonth = expirationInput.value.substring(0, 2) - 1;
-      var expirationYear = expirationInput.value.substring(3, 7);
-
-      //validate month
-      var invalidMonth = expirationMonth < 0 || expirationMonth > 11;
-
-      //validate year
-      var invalidYear = expirationYear > new Date().getFullYear() + 15;
-
-      //validate full date
-      var lastDayOfPreviousMonth = new Date();
-      lastDayOfPreviousMonth.setDate(0);
-
-      var expirationDate = new Date(expirationYear, expirationMonth);
-
-      var invalidDate = expirationDate < lastDayOfPreviousMonth;
-
-      var invalid = invalidSize || invalidMonth || invalidYear || invalidDate;
-
-      if (invalid) {
-        span[0].style.display = 'block';
-        expirationInput.classList.add('payshop-form-control-error');
-        expirationInput.focus();
-      }
-
-      return invalid;
-    }
-
-    /**
-     * Validate CVV length
-     */
-    function cvvIsInvalid() {
-      var span = getCardForm().querySelectorAll('small[data-main="#id-security-code"]');
-      var cvvInput = document.getElementById('id-security-code');
-      var cvvIsInvalid = cvvInput.value.length < 3;
-
-      if (cvvIsInvalid) {
-        span[0].style.display = 'block';
-        cvvInput.classList.add('payshop-form-control-error');
-        cvvInput.focus();
-      }
-
-      return cvvIsInvalid;
-    }
-
-    /**
-     * Validate fixed Inputs is empty
-     */
-    function validateinputNotFilled() {
-      var emptyInputs = false;
-      var form = getCardForm();
-      var formInputs = form.querySelectorAll('[data-checkout]');
-      var fixedInputs = ['cardNumber', 'cardholderName', 'cardExpiration', 'securityCode', 'installments'];
-
-      for (var x = 0; x < formInputs.length; x++) {
-        var element = formInputs[x];
-
-        // Check is a input to create token.
-        if (fixedInputs.indexOf(element.getAttribute('data-checkout')) > -1) {
-          if (element.value === -1 || element.value === '') {
-            var span = form.querySelectorAll('small[data-main="#' + element.id + '"]');
-
-            if (span.length > 0) {
-              span[0].style.display = 'block';
-            }
-
-            element.classList.add('payshop-form-control-error');
-            emptyInputs = true;
-          }
-        }
-      }
-
-      return emptyInputs;
-    }
-
-    /**
-     * Handle submit from credit card form
-     */
-    jQuery(function () {
-      if (document.forms.payshop_card !== undefined) {
-        document.forms.payshop_card.onsubmit = function () {
-          if (!validateInputs()) {
-            uncheckConditionTerms();
-            disableFinishOrderButton();
-            return false;
-          }
-
-          baseUrl = document.forms.payshop_card.action;
-          createCharge({
-            "chargeType": "card"
-          });
-
-          return false;
-        };
-      }
-    });
-  })();
-
-/**
+ /**
  * MBWay Scope
  */
   (function () {

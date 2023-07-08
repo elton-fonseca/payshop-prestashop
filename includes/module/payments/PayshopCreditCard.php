@@ -13,12 +13,11 @@ class PayshopCreditCard
     {
         $formAction = $this->module->context->link->getModuleLink(
             $this->module->name,
-            'ControlerName'
+            'CreateOrder'
         );
         
         $paymentForm = $this->module->context->smarty->assign([
-            'formAction' => $formAction,
-            'moduleUrl' => $this->module->path,
+            'formAction' => $formAction            
         ])
           ->fetch('module:payshop/views/templates/hook/payments/credit-card.tpl');
 

@@ -27,12 +27,12 @@
  * to avoid any conflicts with others containers.
  */
 
-class PayshopCreateChargeModuleFrontController extends ModuleFrontController
+class PayshopCreateOrderModuleFrontController extends ModuleFrontController
 {
     /**
-     * @var PayshopCreateCharge
+     * @var PayshopCreateOrder
      */
-    private $payshopCreateCharge;
+    private $payshopCreateOrder;
 
     /**
      * Class constructor
@@ -41,7 +41,7 @@ class PayshopCreateChargeModuleFrontController extends ModuleFrontController
     {
         parent::__construct();
         $this->ajax = true;
-        $this->payshopCreateCharge = new PayshopCreateCharge($this->module);
+        $this->payshopCreateOrder = new PayshopCreateOrder($this->module);
     }
 
     /**
@@ -51,45 +51,26 @@ class PayshopCreateChargeModuleFrontController extends ModuleFrontController
      */
     public function postProcess()
     {
-        $this->defineHeaders();
-
         try {
-            $formInformation = json_decode(
-                file_get_contents('php://input')
+            $orderId = $this->payshopCreateOrder->execute('card', 'undefined');
+
+            $confirmationUrl = $this->context->link->getPageLink(
+                'order-confirmation',
+                null,
+                null,
+                [
+                    'id_cart' => $this->context->cart->id,
+                    'id_module' => $this->module->id,
+                    'id_order' => $orderId,
+                    'key' => $this->context->customer->secure_key,
+                ]
             );
 
-            $paymentMethod = $formInformation->chargeType;
-            $orderId = $formInformation->merchantTransactionId ?? null;
-            $confirmationOrderPageUrl = Tools::getValue('confirmationOrderPageURL', null);
-
-            $chargeId = $this->payshopCreateCharge->execute(
-                $paymentMethod,
-                $orderId,
-                $confirmationOrderPageUrl
-            );
-
-            echo json_encode([
-                'id' => $chargeId
-            ]);
+            Tools::redirect($confirmationUrl);
         } catch (\Throwable $e) {
             PayshopHelpers::errorResponse($this->module, $e->getMessage());
         }
     }
 
-    /**
-     * Define headers
-     *
-     * @return void
-     */
-    private function defineHeaders()
-    {
-        header('Access-Control-Allow-Origin: *');
-        header('Content-Type: application/json; charset=UTF-8');
-        header('Access-Control-Allow-Methods: GET,POST,PUT,PATCH,DELETE');
-        header('Access-Control-Allow-Headers: Content-Type,Access-Control-Allow-Headers,Authorization,X-Requested-With');
-
-        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-            exit;
-        }
-    }
+    
 }

@@ -62,11 +62,11 @@
         return $orderId;
     }
 
-
-
     /**
      * Create prestashop order
      *
+     * @param string $paymentMethod
+     * @param string $chargeId
      * @return int
      * @throws Exception
      */
@@ -107,6 +107,7 @@
      * 
      * @param int $orderId
      * @param string $paymentMethod
+     * @param string $chargeId
      * @return bool
      * @throws Exception
      */
@@ -160,7 +161,7 @@
         $payments = [
             'multibanco' => $this->module->l('Payshop (Multibanco)', 'PayshopCreateOrder'),
             'payshop_reference' => $this->module->l('Payshop (Payshop Reference)', 'PayshopCreateOrder'),
-            'card' => $this->module->l('Payshop (Card)', 'PayshopCreateOrder'),
+            'card' => 'Payshop (Card)',
             'mbway' => 'Payshop Online Payments (MBWay)'
         ];
 

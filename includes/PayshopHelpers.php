@@ -91,23 +91,18 @@ class PayshopHelpers
      * @param string $message
      * @return void
      */
-    public static function errorResponse($module, $message, $directRedirect = false)
+    public static function errorResponse($module, $message)
     {
         $module->context->cookie->__set('redirect_message', $message);
 
         $errorUrl = $module->context->link->getBaseLink() .
             'index.php?controller=order&step=3&typeReturn=failure';
 
-        if ($directRedirect) {
-            Tools::redirect($errorUrl);
-        }
-
         echo json_encode([
             'errorRedirectUrl' => $errorUrl,
             'error' => true,
             'message' => $message
         ]);
-
         
         http_response_code(400);
     }
@@ -156,5 +151,16 @@ class PayshopHelpers
             ),
             [$prestashopOrderId, $payshopChargeId]
         );
+    }
+
+    /**
+     * Check is the store is in https
+     * 
+     * @return bool
+     */
+    public static function isHTTPS()
+    {
+        return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
+            || (isset($_SERVER['SERVER_PORT']) && (int) $_SERVER['SERVER_PORT'] === 443);
     }
 }

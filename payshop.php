@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of Payshop
  */
 
-define('PAYSHOP_VERSION', '1.0.9');
+define('PAYSHOP_VERSION', '1.1.0');
 define('PAYSHOP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -36,6 +36,7 @@ class Payshop extends PaymentModule
     public $tab;
     public $name;
     public $path;
+    public $pathDir;
     public $author;
     public $version;
     public $context;
@@ -118,6 +119,9 @@ class Payshop extends PaymentModule
         include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopMBWay.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopReference.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopMultibanco.php';
+
+        include_once PAYSHOP_ROOT_URL . '/includes/module/hooks/PayshopCardOrderConfirmation.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/hooks/PayshopMBWayOrderConfirmation.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/statuses/PayshopOrderStatuses.php';
 
@@ -221,61 +225,25 @@ class Payshop extends PaymentModule
     {
         $order = $params['order'];
 
-        if ($order->payment !== 'Payshop Online Payments (MBWay)') {
-            return;
+        if ($order->payment == 'Payshop (Card)') {
+            $cardOrderConfirmation = new PayshopCardOrderConfirmation($this);
+            return $cardOrderConfirmation->execute($order);
         }
 
-        $orderCurrentState = $order->getCurrentState();
-        $paymentSuccess = false;
-        $paymentDeclined = false;
-        
-        if ($orderCurrentState == Configuration::get('PAYSHOP_ORDER_STATUS_PAID')) {
-            $paymentSuccess = true;
+        if ($order->payment == 'Payshop Online Payments (MBWay)') {
+            $mBWayOrderConfirmation = new PayshopMBWayOrderConfirmation($this);
+            return $mBWayOrderConfirmation->execute($order);
         }
-        
-        if ($orderCurrentState == Configuration::get('PAYSHOP_ORDER_STATUS_PAYMENT_ERROR')) {
-            $paymentDeclined = true;
-        }
-        
-        $mBWayPaidCheckUrl = $this->context->link->getModuleLink(
-            $this->name,
-            'MBWayPaidCheck'
-        );
-        
-        $this->context->smarty->assign([
-            'prestashopOrderId' => $order->id,
-            'paymentSuccess' => $paymentSuccess,
-            'paymentDeclined' => $paymentDeclined,
-            'mBWayPaidCheckUrl' => $mBWayPaidCheckUrl,
-            'moduleUrl' => $this->path,
-        ]);
-
-        return $this->display(__FILE__, 'views/templates/hook/order-confirmation.tpl');
     }
 
     /**
-     * Register js mask used in credit card and MBWay forms
+     * Register css used to payments form
      *
      * @return void
      */
     public function hookActionFrontControllerSetMedia()
     {
         if ('order' === $this->context->controller->php_self) {
-            $this->context->controller->registerJavascript(
-                'mask_payshop_js',
-                $this->_path . 'views/js/mask.js',
-                [
-                    'position' => 'head',
-                    'inline' => false,
-                    'priority' => 10,
-                ]
-            );
-
-            $this->context->controller->addJS(
-                $this->_path . 'views/js/mask.js',
-                false
-            );
-
             $this->context->controller->addCSS(
                 $this->_path . 'views/css/form-styles.css',
                 false

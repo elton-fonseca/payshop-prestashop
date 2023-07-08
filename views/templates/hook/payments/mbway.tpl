@@ -46,7 +46,6 @@
                         maxlength="19"
                         autocopayshoplete="off"
                         data-checkout="wbwayNumber"
-                        {* onkeyup="payshop_maskInput(this, payshop_cc);" *}
                     />
                     <small id="payshop-error-phone-number" class="payshop-erro-form" data-main="#id-phone-number" style="display: none; color: #e81814;">
                         {l s='Invalid MBWay Phone Number' mod='payshop'}

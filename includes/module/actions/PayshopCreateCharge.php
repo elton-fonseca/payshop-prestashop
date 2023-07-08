@@ -55,15 +55,19 @@
      * Send charge and instrument to payshop
      *
      * @param string $paymentMethod
+     * @param int $orderId
+     * @param string $confirmationOrderPageUrl
      * @return int
      * @throws Exception
      */
-    public function execute($paymentMethod)
+    public function execute($paymentMethod, $orderId, $confirmationOrderPageUrl)
     {
-        $this->checkoutIsFilled();
-        $this->moduleIsAuthorized();
-        
-        return $this->createCharge($paymentMethod);
+        if ($paymentMethod !== 'card') {
+            $this->checkoutIsFilled();
+            $this->moduleIsAuthorized();
+        }
+
+        return $this->createCharge($paymentMethod, $orderId, $confirmationOrderPageUrl);
     }
 
     /**
@@ -115,24 +119,44 @@
      * Create charge on payshop
      *
      * @param string $paymentMethod
+     * @param int $orderId
+     * @param string $confirmationOrderPageUrl
      * @return string
      */
-    private function createCharge($paymentMethod)
+    private function createCharge($paymentMethod, $orderId, $confirmationOrderPageUrl)
     {
-        $orderId = (int) $this->module->currentOrder;
-        $total = (float) $this->module->context->cart->getOrderTotal(true, Cart::BOTH);
+        $this->isCurrencyEuro();
 
-        $webHookProcessURL = $this->module->context->link->getModuleLink(
-            $this->module->name,
-            'ProcessEvent'
+        $orderId = $this->getOrderId($paymentMethod, $orderId);
+        $total = $this->getOrderTotal($paymentMethod, $orderId);
+
+        $processInstrumentUrl = $this->getProcessInstrumentUrl(
+            $orderId,
+            $confirmationOrderPageUrl
         );
 
-        $processInstrumentURL = $this->module->context->link->getModuleLink(
-            $this->module->name,
-            'ProcessInstrument'
-        );
+        $response = $this->payshopSDK->createCharge([
+            'charge_type' => $paymentMethod,
+            'amount' => (float) $total,
+            'currency' => 'EUR',
+            'description' => $this->description($orderId),
+            'events_url' => $this->getProcessEventUrl(),
+            'redirect_url' => $processInstrumentUrl,
+            'instrument_params' => $this->getInstrumentParams($paymentMethod)
+        ]);
 
-        $shopName = $this->module->context->shop->name;
+        PayshopHelpers::checkResponse($this->module, $response);
+
+        return $response['response']['id'];
+    }
+
+    /**
+     * Check if currency is euro
+     *
+     * @return void
+     * @throws Exception
+     */
+    private function isCurrencyEuro() {
         $currecy = $this->module->context->currency->iso_code;
 
         if ($currecy != 'EUR') {
@@ -141,22 +165,113 @@
             PayshopLog::generate($message, 'error');
             throw new Exception($message);
         }
+    }
 
-        $response = $this->payshopSDK->createCharge([
-            'charge_type' => $paymentMethod,
-            'amount' => (float) $total,
-            'currency' => 'EUR',
-            'description' => $shopName . $this->module->l(' order #', 'PayshopCreateCharge') . $orderId,
-            'events_url' => str_replace('http://127.0.0.1', 'https://eltonfonseca.dev', $webHookProcessURL),
-            'instrument_params' => $this->getInstrumentParams($paymentMethod) + [
-                'description' => $shopName,
-            ],
-            'redirect_url' => str_replace('http://127.0.0.1', 'https://eltonfonseca.dev', $processInstrumentURL)
-        ]);
+    /**
+     * Get order id
+     *
+     * @return int
+     */
+    private function getOrderId($paymentMethod, $orderId)
+    {
+        if ($paymentMethod !== 'card') {
+            return (int) $this->module->currentOrder;
+        }
 
-        PayshopHelpers::checkResponse($this->module, $response);
+        return $orderId;
+    }
 
-        return $response['response']['id'];
+    /**
+     * Get order total
+     *
+     * @return float
+     */
+    private function getOrderTotal($paymentMethod, $orderId)
+    {
+        if ($paymentMethod !== 'card') {
+            return (float) $this->module->context->cart->getOrderTotal(true, Cart::BOTH);
+        }
+
+        $order = new Order($orderId);
+        return $order->total_paid;
+    }
+
+    /**
+     * Get description
+     *
+     * @param int $orderId
+     * @return string
+     */
+    private function description($orderId)
+    {
+        return vsprintf(
+            '%s %s %s',
+            [
+                $this->module->context->shop->name,
+                $this->module->l(' order #', 'PayshopCreateCharge'),
+                $orderId
+            ]
+        );
+    }
+
+    /**
+     * Get process event url
+     *
+     * @return string
+     */
+    private function getProcessEventUrl()
+    {
+        $processEventURL = $this->module->context->link->getModuleLink(
+            $this->module->name,
+            'ProcessEvent'
+        );
+
+        if (!PayshopHelpers::isHTTPS()) {
+            $processEventURL = str_replace(
+                'http://127.0.0.1',
+                'https://eltonfonseca.dev',
+                $processEventURL
+            );
+        }
+
+        return $processEventURL;
+    }
+
+    /**
+     * Get process instrument url
+     *
+     * @param int $orderId
+     * @param string $confirmationOrderPageUrl
+     * @return string
+     */
+    private function getProcessInstrumentUrl($orderId, $confirmationOrderPageUrl)
+    {
+        if (!PayshopHelpers::isHTTPS()) {
+            $confirmationOrderPageUrl = str_replace(
+                ['http', '127.0.0.1'],
+                ['https', 'eltonfonseca.dev'],
+                $confirmationOrderPageUrl
+            );
+        }
+
+        $processInstrumentURL = $this->module->context->link->getModuleLink(
+            $this->module->name,
+            'ProcessInstrument',
+            [
+                'orderId' => $orderId,
+                'confirmationOrderPageUrl' => $confirmationOrderPageUrl
+            ]
+        );
+
+        if (!PayshopHelpers::isHTTPS()) {
+            $processInstrumentURL = str_replace(
+                'http://127.0.0.1',
+                'https://eltonfonseca.dev',
+                $processInstrumentURL
+            );
+        }
+
+        return $processInstrumentURL;
     }
 
     /**
@@ -167,8 +282,10 @@
      */
     private function getInstrumentParams($paymentMethod)
     {
+        $description = ['description' => $this->module->context->shop->name];
+
         if ($paymentMethod != 'multibanco' && $paymentMethod != 'payshop_reference') {
-            return ['enable3ds' => true];
+            return ['enable3ds' => true] + $description;
         }
 
         if ($paymentMethod == 'multibanco') {
@@ -179,6 +296,8 @@
             $qtdDaysToExpire = (int) Configuration::get('PAYSHOP_PAYSHOP_REFERENCE_EXPIRATION_DAYS');
         }
 
-        return ['end_date' => date('Y-m-d', strtotime('+' . $qtdDaysToExpire . ' days'))];
+        $expirationdate = date('Y-m-d', strtotime('+' . $qtdDaysToExpire . ' days'));
+
+        return ['end_date' => $expirationdate] + $description;
     }
 }

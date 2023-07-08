@@ -63,7 +63,7 @@ class PayshopProcessInstrumentModuleFrontController extends ModuleFrontControlle
     }
 
     /**
-     * Payment process with credit card
+     * Payment process for all payment methods
      *
      * @return void
      */
@@ -77,9 +77,8 @@ class PayshopProcessInstrumentModuleFrontController extends ModuleFrontControlle
             $orderStatus = $this->getOrderStatus($instrument);
             $paymentMethod = $instrument['charge']['charge_type'];
 
-            $prestashopOrderId = $this->payshopCreateOrder->execute(
-                $paymentMethod,
-                $instrument['charge']['id']
+            $prestashopOrderId = $this->getOrCreatePrestashopOrderId(
+                $instrument, $paymentMethod
             );
 
             $this->payshopUpdateOrder->execute(
@@ -97,34 +96,50 @@ class PayshopProcessInstrumentModuleFrontController extends ModuleFrontControlle
 
             PayshopHelpers::sendErrorWarningByEmail($this->module, $e->getMessage());
 
-            PayshopHelpers::errorResponse($this->module, $e->getMessage(), $this->isCard);
+            $this->failedCardRedirect();
+
+            PayshopHelpers::errorResponse($this->module, $e->getMessage());
         }
     }
 
     /**
-     * Get instrument information from the request
+     * Get instrument information from payshop api
      *
      * @return array
      */
-    public function getInstrument()
+    private function getInstrument()
+    {
+        $instrumentId = $this->getInstrumentId();
+
+        $response = $this->payshopSDK->getInstrument($instrumentId);
+
+        if ($response['status'] != 200) {
+            throw new \Exception($this->module->l('Error while getting instrument'));
+        }
+
+        return $response['response'];
+    }
+
+    /**
+     * Get instrument id
+     *
+     * @return int
+     */
+    private function getInstrumentId()
     {
         $instrumentId = Tools::getValue('instrumentId');
 
         if ($instrumentId) {
-            $response = $this->payshopSDK->getInstrument($instrumentId);
-
-            if ($response['status'] != 200) {
-                throw new \Exception($this->module->l('Error while getting instrument'));
-            }
-
             $this->isCard = true;
-            return $response['response'];
+            return $instrumentId;
         }
 
-        return json_decode(
+        $instrument = json_decode(
             file_get_contents('php://input'),
             true
         );
+
+        return $instrument['id'];
     }
 
     /**
@@ -132,8 +147,9 @@ class PayshopProcessInstrumentModuleFrontController extends ModuleFrontControlle
      *
      * @param array $instrument
      * @return string
+     * @throws Exception
      */
-    public function getOrderStatus($instrument)
+    private function getOrderStatus($instrument)
     {
         $paymentMethod = $instrument['charge']['charge_type'];
 
@@ -161,6 +177,25 @@ class PayshopProcessInstrumentModuleFrontController extends ModuleFrontControlle
     }
 
     /**
+     * Get orderId if is card or create order if is not card
+     *
+     * @param array $instrument
+     * @param string $paymentMethod
+     * @return int
+     */
+    private function getOrCreatePrestashopOrderId($instrument, $paymentMethod)
+    {
+        if ($paymentMethod === 'card') {
+            return Tools::getValue('orderId');
+        }
+
+        return $this->payshopCreateOrder->execute(
+            $paymentMethod,
+            $instrument['charge']['id']
+        );
+    }
+
+    /**
      * Get payment id from the instrument response
      *
      * @param array $instrument
@@ -178,6 +213,7 @@ class PayshopProcessInstrumentModuleFrontController extends ModuleFrontControlle
     /**
      * Get Success Response
      *
+     * @param array $instrument
      * @param string $prestashopOrderId
      * @return string
      */
@@ -241,6 +277,10 @@ class PayshopProcessInstrumentModuleFrontController extends ModuleFrontControlle
      */
     private function linkToOrderConfirmationPage()
     {
+        if ($this->isCard) {
+            return urldecode(Tools::getValue('confirmationOrderPageUrl'));
+        }
+
         $cart = $this->module->context->cart;
         $cartId = (int) $cart->id;
         $orderId = (int) $this->module->currentOrder;
@@ -257,6 +297,24 @@ class PayshopProcessInstrumentModuleFrontController extends ModuleFrontControlle
             $moduloId,
             $orderId,
             $securityKey
+        );
+    }
+
+    /**
+     * Redirect to order confirmation page with failure param
+     *
+     * @return void
+     */
+    private function failedCardRedirect()
+    {
+        $isNotCard = !$this->isCard;
+
+        if ($isNotCard) {
+            return;
+        }
+
+        Tools::redirect(
+            $this->linkToOrderConfirmationPage() . '&failed=true'
         );
     }
 }
