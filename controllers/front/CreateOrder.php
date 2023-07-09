@@ -52,19 +52,9 @@ class PayshopCreateOrderModuleFrontController extends ModuleFrontController
     public function postProcess()
     {
         try {
-            $orderId = $this->payshopCreateOrder->execute('card', 'undefined');
+            $this->payshopCreateOrder->execute('card', 'undefined');
 
-            $confirmationUrl = $this->context->link->getPageLink(
-                'order-confirmation',
-                null,
-                null,
-                [
-                    'id_cart' => $this->context->cart->id,
-                    'id_module' => $this->module->id,
-                    'id_order' => $orderId,
-                    'key' => $this->context->customer->secure_key,
-                ]
-            );
+            $confirmationUrl = PayshopHelpers::confirmationPageURL($this->module);
 
             Tools::redirect($confirmationUrl);
         } catch (\Throwable $e) {

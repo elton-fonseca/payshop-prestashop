@@ -278,26 +278,11 @@ class PayshopProcessInstrumentModuleFrontController extends ModuleFrontControlle
     private function linkToOrderConfirmationPage()
     {
         if ($this->isCard) {
-            return urldecode(Tools::getValue('confirmationOrderPageUrl'));
+            $orderId = Tools::getValue('orderId');
+            return PayshopHelpers::confirmationPageURL($this->module, $orderId);
         }
-
-        $cart = $this->module->context->cart;
-        $cartId = (int) $cart->id;
-        $orderId = (int) $this->module->currentOrder;
-
-        $customer = new Customer($cart->id_customer);
-        $securityKey = $customer->secure_key;
-
-        $moduloId = (int) $this->module->id;
-
-        return sprintf(
-            '%sindex.php?controller=order-confirmation&id_cart=%d&id_module=%d&id_order=%d&key=%s',
-            $this->module->context->link->getBaseLink(),
-            $cartId,
-            $moduloId,
-            $orderId,
-            $securityKey
-        );
+        
+        return PayshopHelpers::confirmationPageURL($this->module);
     }
 
     /**

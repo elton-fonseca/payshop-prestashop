@@ -108,6 +108,41 @@ class PayshopHelpers
     }
 
     /**
+     * Get the instrument params
+     *
+     * @param Module $module
+     * @param string|null $orderId
+     * @return array
+     */
+    public static function confirmationPageURL($module, $orderId = null)
+    {
+        if ($orderId) {
+            $order = new Order($orderId);
+            $cartId = $order->id_cart;
+            $cart = new Cart((int) $cartId);
+            $securityKey = $cart->secure_key;
+        } else {
+            $cart = $module->context->cart;
+            $cartId = (int) $cart->id;
+            $orderId = (int) $module->currentOrder;
+            $customer = new Customer($cart->id_customer);
+            $securityKey = $customer->secure_key;
+        }
+
+        return $module->context->link->getPageLink(
+            'order-confirmation',
+            null,
+            null,
+            [
+                'id_cart' => $cartId,
+                'id_module' => $module->id,
+                'id_order' => $orderId,
+                'key' => $securityKey,
+            ]
+        );    
+    }
+
+    /**
      * Send email from prestashop
      *
      * @param module $module

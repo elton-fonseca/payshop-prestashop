@@ -44,15 +44,12 @@
 <script src="https://cdn.switchpayments.com/libs/switch-5.stable.min.js"></script>
 
 <script>
-    let confirmationOrderPageURL = encodeURIComponent(window.location.href);
-    let createChargeURL = new URL(document.forms.payshop_create_charge_url.action);
-    createChargeURL.searchParams.set('confirmationOrderPageURL', confirmationOrderPageURL);
-
+    let createChargeURL = document.forms.payshop_create_charge_url.action;
     let orderId = {$orderId|escape:'htmlall':'UTF-8'};
 
     let formContainer = document.getElementById("dynamic-forms-container");
     let formOptions = {
-        chargesUrl: createChargeURL.toString(),
+        chargesUrl: createChargeURL,
         merchantTransactionId: orderId,
         iframe: true,
         language: 'pt',

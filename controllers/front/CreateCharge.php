@@ -60,12 +60,10 @@ class PayshopCreateChargeModuleFrontController extends ModuleFrontController
 
             $paymentMethod = $formInformation->chargeType;
             $orderId = $formInformation->merchantTransactionId ?? null;
-            $confirmationOrderPageUrl = Tools::getValue('confirmationOrderPageURL', null);
 
             $chargeId = $this->payshopCreateCharge->execute(
                 $paymentMethod,
-                $orderId,
-                $confirmationOrderPageUrl
+                $orderId
             );
 
             echo json_encode([

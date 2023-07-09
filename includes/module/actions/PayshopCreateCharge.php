@@ -56,18 +56,17 @@
      *
      * @param string $paymentMethod
      * @param int $orderId
-     * @param string $confirmationOrderPageUrl
      * @return int
      * @throws Exception
      */
-    public function execute($paymentMethod, $orderId, $confirmationOrderPageUrl)
+    public function execute($paymentMethod, $orderId)
     {
         if ($paymentMethod !== 'card') {
             $this->checkoutIsFilled();
             $this->moduleIsAuthorized();
         }
 
-        return $this->createCharge($paymentMethod, $orderId, $confirmationOrderPageUrl);
+        return $this->createCharge($paymentMethod, $orderId);
     }
 
     /**
@@ -120,20 +119,16 @@
      *
      * @param string $paymentMethod
      * @param int $orderId
-     * @param string $confirmationOrderPageUrl
      * @return string
      */
-    private function createCharge($paymentMethod, $orderId, $confirmationOrderPageUrl)
+    private function createCharge($paymentMethod, $orderId)
     {
         $this->isCurrencyEuro();
 
         $orderId = $this->getOrderId($paymentMethod, $orderId);
         $total = $this->getOrderTotal($paymentMethod, $orderId);
 
-        $processInstrumentUrl = $this->getProcessInstrumentUrl(
-            $orderId,
-            $confirmationOrderPageUrl
-        );
+        $processInstrumentUrl = $this->getProcessInstrumentUrl($orderId);
 
         $response = $this->payshopSDK->createCharge([
             'charge_type' => $paymentMethod,
@@ -241,25 +236,15 @@
      * Get process instrument url
      *
      * @param int $orderId
-     * @param string $confirmationOrderPageUrl
      * @return string
      */
-    private function getProcessInstrumentUrl($orderId, $confirmationOrderPageUrl)
+    private function getProcessInstrumentUrl($orderId)
     {
-        if (!PayshopHelpers::isHTTPS()) {
-            $confirmationOrderPageUrl = str_replace(
-                ['http', '127.0.0.1'],
-                ['https', 'eltonfonseca.dev'],
-                $confirmationOrderPageUrl
-            );
-        }
-
         $processInstrumentURL = $this->module->context->link->getModuleLink(
             $this->module->name,
             'ProcessInstrument',
             [
-                'orderId' => $orderId,
-                'confirmationOrderPageUrl' => $confirmationOrderPageUrl
+                'orderId' => $orderId
             ]
         );
 
