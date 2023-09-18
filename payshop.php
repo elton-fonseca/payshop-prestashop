@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of Payshop
  */
 
-define('PAYSHOP_VERSION', '1.1.0');
+define('PAYSHOP_VERSION', '1.1.1');
 define('PAYSHOP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -341,7 +341,7 @@ class Payshop extends PaymentModule
     }
 }
 
-function dd(...$asd)
+function ddpayshop(...$asd)
 {
     echo "<pre>";
     print_r($asd);
