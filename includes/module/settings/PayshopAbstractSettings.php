@@ -111,53 +111,58 @@ class PayshopAbstractSettings
     public function validateInput($input, $value)
     {
         if ($this->validate != null && array_key_exists($input, $this->validate)) {
+
             switch ($this->validate[$input]) {
-                case "account_id":
-                    if ($value == '') {
-                        Payshop::$form_alert = 'alert-danger';
-                        Payshop::$form_message = $this->module->l('Account ID is not filled. ', 'PayshopAbstractSettings');
-                        PayshopLog::generate('Invalid ' . $input . ' submitted', 'warning');
-                        return false;
-                    }
-                    break;
-                    
-                case "public_key":
+                   
+                case "api_key":
                     if ($value == '') {
                         Payshop::$form_alert = 'alert-danger';
                         Payshop::$form_message = $this->module->l('Credentials can not be empty and must be valid. ', 'PayshopAbstractSettings') .
                         $this->module->l('Please complete your credentials to enable the module.', 'PayshopAbstractSettings');
-                        PayshopLog::generate('Invalid ' . $input . ' submitted', 'warning');
                         return false;
                     }
                     break;
 
-                case "secret_key":
+                case "signature":
                     if ($value == '') {
                         Payshop::$form_alert = 'alert-danger';
                         Payshop::$form_message = $this->module->l('Credentials can not be empty and must be valid. ', 'PayshopAbstractSettings') .
                         $this->module->l('Please complete your credentials to enable the module.', 'PayshopAbstractSettings');
-                        PayshopLog::generate('Invalid ' . $input . ' submitted', 'warning');
                         return false;
                     }
                     break;
 
-                case "multibancoReferenceExpirationDays":
-                    if ($value == '' || !preg_match('/^\d+$/', $value)) {
+                case "cardServiceUuid":
+                    if ($this->values['PAYSHOP_CREDIT_CARD'] == 1 && $value == '') {
                         Payshop::$form_alert = 'alert-danger';
-                        Payshop::$form_message = $this->module->l('Multibanco days to expire must be integer', 'PayshopAbstractSettings');
-                        PayshopLog::generate('Invalid ' . $input . ' submitted', 'warning');
+                        Payshop::$form_message = $this->module->l('The Credit Card Service UUID is required', 'PayshopAbstractSettings');
                         return false;
                     }
                     break;
 
-                case "payshopReferenceExpirationDays":
-                    if ($value == '' || !preg_match('/^\d+$/', $value)) {
+                case "multibancoReferenceServiceUuid":
+                    if ($this->values['PAYSHOP_MULTIBANCO_REFERENCE'] == 1 && $value == '') {
                         Payshop::$form_alert = 'alert-danger';
-                        Payshop::$form_message = $this->module->l('Payshop days to expire must be integer', 'PayshopAbstractSettings');
-                        PayshopLog::generate('Invalid ' . $input . ' submitted', 'warning');
+                        Payshop::$form_message = $this->module->l('The Multibanco Reference Service UUID is required', 'PayshopAbstractSettings');
                         return false;
                     }
-                    break;                 
+                    break;
+                
+                case "referenceServiceUuid":
+                    if ($this->values['PAYSHOP_PAYSHOP_REFERENCE'] == 1 && $value == '') {
+                        Payshop::$form_alert = 'alert-danger';
+                        Payshop::$form_message = $this->module->l('The Payshop Reference Service UUID is required', 'PayshopAbstractSettings');
+                        return false;
+                    }
+                    break;
+
+                case "mbwayServiceUuid":
+                    if ($this->values['PAYSHOP_MBWAY_SERVICE_UUID'] == 1 && $value == '') {
+                        Payshop::$form_alert = 'alert-danger';
+                        Payshop::$form_message = $this->module->l('The MBWay Service UUID is required', 'PayshopAbstractSettings');
+                        return false;
+                    }
+                    break;
 
                 default:
                     return true;

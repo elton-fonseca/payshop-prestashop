@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of Payshop
  */
 
-define('PAYSHOP_VERSION', '1.1.1');
+define('PAYSHOP_VERSION', '2.0.0');
 define('PAYSHOP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -52,9 +52,6 @@ class Payshop extends PaymentModule
     public $payshopPaymentMethods;
     public $payshopOrderStatuses;
 
-    public $mailsLangs;
-    public $mailsTemplate;
-
     public static $form_alert;
     public static $form_message;
 
@@ -80,20 +77,6 @@ class Payshop extends PaymentModule
         $this->ps_version = _PS_VERSION_;
         $this->path = $this->_path;
         $this->pathDir = str_replace('\\', '/', __DIR__);
-
-        $this->mailsTemplate = [
-            'waiting_payment_multibanco.html',
-            'waiting_payment_multibanco.txt',
-            'waiting_payment_payshop.html',
-            'waiting_payment_payshop.txt',
-            'error_warning.html',
-            'error_warning.txt'
-        ];
-
-        $this->mailsLangs = [
-            'en',
-            'pt',
-        ];
 
         $this->payshopPaymentMethods = new PayshopPaymentMethods($this);
         $this->payshopOrderStatuses = new PayshopOrderStatuses();
@@ -155,8 +138,6 @@ class Payshop extends PaymentModule
 
         include PAYSHOP_ROOT_URL . '/database/install.php';
         $this->payshopOrderStatuses->register();
-
-        $this->copyMailTemplates();
 
         //install hooks and dependencies
         return parent::install() &&
@@ -279,28 +260,6 @@ class Payshop extends PaymentModule
         return $this->display(__FILE__, 'views/templates/hook/order-wrapper-top.tpl');
     }
 
-    /**
-     * Copy mail templates to mails root directory
-     *
-     * @return void
-     */
-    private function copyMailTemplates()
-    {
-        foreach ($this->mailsLangs as $lang) {
-            $mailsRootDir = $this->pathDir . "/../../mails/$lang/";
-
-            if (!is_dir($mailsRootDir)) {
-                mkdir($mailsRootDir);
-            }
-
-            foreach ($this->mailsTemplate as $template) {
-                copy(
-                    $this->pathDir . "/mails/$lang/" . $template,
-                    $mailsRootDir . $template
-                );
-            }
-        }
-    }
 
     /**
      * Add (payshop and multibanco) reference variables to mail template

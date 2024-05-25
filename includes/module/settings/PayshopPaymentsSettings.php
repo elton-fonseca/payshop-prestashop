@@ -71,6 +71,14 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
                 )
             ),
             array(
+                'col' => 8,
+                'type' => 'text',
+                'desc' => '',
+                'name' => 'PAYSHOP_CARD_SERVICE_UUID',
+                'label' => $this->module->l('Service UUID (Credit Card)', 'PayshopCredentialsSettings'),
+                'required' => true
+            ),
+            array(
                 'col' => 4,
                 'type' => 'switch',
                 'label' => $this->module->l('Multibanco Reference', 'PayshopPaymentsSettings'),
@@ -93,11 +101,11 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
             array(
                 'col' => 8,
                 'type' => 'text',
-                'desc' => $this->module->l('Number of days for Multibanco reference to expire', 'PayshopPaymentsSettings'),
-                'name' => 'PAYSHOP_MULTIBANCO_REFERENCE_EXPIRATION_DAYS',
-                'label' => $this->module->l('Multibanco Days to expire', 'PayshopPaymentsSettings'),
+                'desc' => '',
+                'name' => 'PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID',
+                'label' => $this->module->l('Service UUID (Multibanco Reference)', 'PayshopCredentialsSettings'),
                 'required' => true
-            ),    
+            ),  
             array(
                 'col' => 4,
                 'type' => 'switch',
@@ -121,31 +129,40 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
             array(
                 'col' => 8,
                 'type' => 'text',
-                'desc' => $this->module->l('Number of days for Payshop reference to expire', 'PayshopPaymentsSettings'),
-                'name' => 'PAYSHOP_PAYSHOP_REFERENCE_EXPIRATION_DAYS',
-                'label' => $this->module->l('Payshop Days to expire', 'PayshopPaymentsSettings'), 
+                'desc' => '',
+                'name' => 'PAYSHOP_REFERENCE_SERVICE_UUID',
+                'label' => $this->module->l('Service UUID (Payshop Reference)', 'PayshopCredentialsSettings'),
                 'required' => true
-            ),   
+            ),  
             array(
                 'col' => 4,
                 'type' => 'switch',
                 'label' => $this->module->l('MBWay', 'PayshopPaymentsSettings'),
-                'name' => 'PAYSHOP_CREDIT_MBWAY',
+                'name' => 'PAYSHOP_MBWAY',
                 'is_bool' => true,
                 'desc' => $this->module->l('Active de payment method on Checkout ', 'PayshopPaymentsSettings'),
                 'values' => array(
                     array(
-                        'id' => 'PAYSHOP_CREDIT_MBWAY_ON',
+                        'id' => 'PAYSHOP_MBWAY_ON',
                         'value' => true,
                         'label' => $this->module->l('Enable', 'PayshopPaymentsSettings')
                     ),
                     array(
-                        'id' => 'PAYSHOP_CREDIT_MBWAY_OFF',
+                        'id' => 'PAYSHOP_MBWAY_OFF',
                         'value' => false,
                         'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
                     )
                 )
-            )
+            ),
+            array(
+                'col' => 8,
+                'type' => 'text',
+                'desc' => '',
+                'name' => 'PAYSHOP_MBWAY_SERVICE_UUID',
+                'label' => $this->module->l('Service UUID (MBWay)', 'PayshopCredentialsSettings'),
+                'required' => true
+            ),
+
 
         );
 
@@ -160,8 +177,10 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
     public function postFormProcess()
     {
         $this->validate = ([
-            'PAYSHOP_MULTIBANCO_REFERENCE_EXPIRATION_DAYS' => 'multibancoReferenceExpirationDays',
-            'PAYSHOP_PAYSHOP_REFERENCE_EXPIRATION_DAYS' => 'payshopReferenceExpirationDays'
+            'PAYSHOP_CARD_SERVICE_UUID' => 'cardServiceUuid',
+            'PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID' => 'multibancoReferenceServiceUuid',
+            'PAYSHOP_REFERENCE_SERVICE_UUID' => 'referenceServiceUuid',
+            'PAYSHOP_MBWAY_SERVICE_UUID' => 'mbwayServiceUuid',
         ]);
 
         parent::postFormProcess();
@@ -181,11 +200,16 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
     {
         return array(
             'PAYSHOP_CREDIT_CARD' => Configuration::get('PAYSHOP_CREDIT_CARD'),
+            'PAYSHOP_CARD_SERVICE_UUID' => Configuration::get('PAYSHOP_CARD_SERVICE_UUID'),
+
             'PAYSHOP_MULTIBANCO_REFERENCE' => Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE'),
-            'PAYSHOP_MULTIBANCO_REFERENCE_EXPIRATION_DAYS' => Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_EXPIRATION_DAYS'),
+            'PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID' => Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID'),
+            
             'PAYSHOP_PAYSHOP_REFERENCE' => Configuration::get('PAYSHOP_PAYSHOP_REFERENCE'),
-            'PAYSHOP_PAYSHOP_REFERENCE_EXPIRATION_DAYS' => Configuration::get('PAYSHOP_PAYSHOP_REFERENCE_EXPIRATION_DAYS'),
-            'PAYSHOP_CREDIT_MBWAY' => Configuration::get('PAYSHOP_CREDIT_MBWAY'),
+            'PAYSHOP_REFERENCE_SERVICE_UUID' => Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID'),
+            
+            'PAYSHOP_MBWAY' => Configuration::get('PAYSHOP_MBWAY'),
+            'PAYSHOP_MBWAY_SERVICE_UUID' => Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID'),
         );
     }
 

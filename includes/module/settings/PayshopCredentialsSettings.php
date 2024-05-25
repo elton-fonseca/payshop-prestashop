@@ -77,7 +77,7 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
                 'name' => '',
                 'desc' => '',
                 'label' => $this->module->l('Load credentials', 'PayshopCredentialsSettings'),
-                'html_content' => '<a href="https://dashboard.switchpayments.com/"'. 
+                'html_content' => '<a href="https://backend.paylands.com/"'. 
                 'target="_blank" class="btn btn-default mp-btn-credenciais">'
                 . $this->module->l('Search my credentials', 'PayshopCredentialsSettings') . '</a>'
             ),
@@ -85,48 +85,32 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
                 'col' => 8,
                 'type' => 'text',
                 'desc' => '',
-                'name' => 'PAYSHOP_ACCOUNT_ID',
-                'label' => $this->module->l('Account ID', 'PayshopCredentialsSettings'),
-                'required' => true
-            ),            
-            array(
-                'col' => 8,
-                'type' => 'text',
-                'desc' => '',
-                'name' => 'PAYSHOP_PUBLIC_KEY',
-                'label' => $this->module->l('Public Key', 'PayshopCredentialsSettings'),
+                'name' => 'PAYSHOP_API_KEY',
+                'label' => $this->module->l('Api Key', 'PayshopCredentialsSettings'),
                 'required' => true
             ),
             array(
                 'col' => 8,
                 'type' => 'text',
                 'desc' => ' ',
-                'name' => 'PAYSHOP_SECRET_KEY',
-                'label' => $this->module->l('Access token', 'PayshopCredentialsSettings'),
+                'name' => 'PAYSHOP_SIGNATURE',
+                'label' => $this->module->l('Signature', 'PayshopCredentialsSettings'),
                 'required' => true
             ),
             array(
                 'col' => 8,
                 'type' => 'text',
                 'desc' => '',
-                'name' => 'PAYSHOP_SANDBOX_ACCOUNT_ID',
-                'label' => $this->module->l('Account ID', 'PayshopCredentialsSettings'),
-                'required' => true
-            ), 
-            array(
-                'col' => 8,
-                'type' => 'text',
-                'desc' => '',
-                'name' => 'PAYSHOP_SANDBOX_PUBLIC_KEY',
-                'label' => $this->module->l('Public Key', 'PayshopCredentialsSettings'),
+                'name' => 'PAYSHOP_SANDBOX_API_KEY',
+                'label' => $this->module->l('Api Key', 'PayshopCredentialsSettings'),
                 'required' => true
             ),
             array(
                 'col' => 8,
                 'type' => 'text',
                 'desc' => '',
-                'name' => 'PAYSHOP_SANDBOX_SECRET_KEY',
-                'label' => $this->module->l('Access token', 'PayshopCredentialsSettings'),
+                'name' => 'PAYSHOP_SANDBOX_SIGNATURE',
+                'label' => $this->module->l('Signature', 'PayshopCredentialsSettings'),
                 'required' => true
             )
         );
@@ -142,12 +126,10 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
     public function postFormProcess()
     {
         $this->validate = ([
-            'PAYSHOP_ACCOUNT_ID' => 'account_id',
-            'PAYSHOP_PUBLIC_KEY' => 'public_key',
-            'PAYSHOP_SECRET_KEY' => 'secret_key',
-            'PAYSHOP_SANDBOX_ACCOUNT_ID' => 'account_id',
-            'PAYSHOP_SANDBOX_PUBLIC_KEY' => 'public_key',
-            'PAYSHOP_SANDBOX_SECRET_KEY' => 'secret_key',
+            'PAYSHOP_API_KEY' => 'api_key',
+            'PAYSHOP_SIGNATURE' => 'signature',
+            'PAYSHOP_SANDBOX_API_KEY' => 'api_key',
+            'PAYSHOP_SANDBOX_SIGNATURE' => 'signature',
         ]);
 
         parent::postFormProcess();
@@ -168,12 +150,10 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
     {
         return array(
             'PAYSHOP_PROD_STATUS' => Configuration::get('PAYSHOP_PROD_STATUS'),
-            'PAYSHOP_ACCOUNT_ID' => Configuration::get('PAYSHOP_ACCOUNT_ID'),
-            'PAYSHOP_PUBLIC_KEY' => Configuration::get('PAYSHOP_PUBLIC_KEY'),
-            'PAYSHOP_SECRET_KEY' => Configuration::get('PAYSHOP_SECRET_KEY'),
-            'PAYSHOP_SANDBOX_ACCOUNT_ID' => Configuration::get('PAYSHOP_SANDBOX_ACCOUNT_ID'),
-            'PAYSHOP_SANDBOX_PUBLIC_KEY' => Configuration::get('PAYSHOP_SANDBOX_PUBLIC_KEY'),
-            'PAYSHOP_SANDBOX_SECRET_KEY' => Configuration::get('PAYSHOP_SANDBOX_SECRET_KEY')
+            'PAYSHOP_API_KEY' => Configuration::get('PAYSHOP_API_KEY'),
+            'PAYSHOP_SIGNATURE' => Configuration::get('PAYSHOP_SIGNATURE'),
+            'PAYSHOP_SANDBOX_API_KEY' => Configuration::get('PAYSHOP_SANDBOX_API_KEY'),
+            'PAYSHOP_SANDBOX_SIGNATURE' => Configuration::get('PAYSHOP_SANDBOX_SIGNATURE')
         );
     }
 }

@@ -20,10 +20,10 @@ class PayshopConfigurationPage extends Payshop
         $paymentsForm = $this->renderSettingsForm($payments->submit, $payments->values, $payments->form);
 
         //variables for admin configuration
-        $public_key = Configuration::get('PAYSHOP_PUBLIC_KEY');
-        $access_token = Configuration::get('PAYSHOP_ACCESS_TOKEN');
-        $sandbox_public_key = Configuration::get('PAYSHOP_SANDBOX_PUBLIC_KEY');
-        $sandbox_access_token = Configuration::get('PAYSHOP_SANDBOX_ACCESS_TOKEN');
+        $api_key = Configuration::get('PAYSHOP_API_KEY');
+        $signature = Configuration::get('PAYSHOP_SIGNATURE');
+        $sandbox_api_key = Configuration::get('PAYSHOP_SANDBOX_API_KEY');
+        $sandbox_signature = Configuration::get('PAYSHOP_SANDBOX_SIGNATURE');
 
         $output = $this->context->smarty->assign(
             array(
@@ -34,17 +34,15 @@ class PayshopConfigurationPage extends Payshop
                 'url_base' => __PS_BASE_URI__,
                 'log' => PayshopLog::getLogUrl(),
                 //credentials
-                'public_key' => $public_key,
-                'access_token' => $access_token,
-                'sandbox_public_key' => $sandbox_public_key,
-                'sandbox_access_token' => $sandbox_access_token,
+                'api_key' => $api_key,
+                'signature' => $signature,
+                'sandbox_api_key' => $sandbox_api_key,
+                'sandbox_signature' => $sandbox_signature,
                 //forms
                 'credentialsForm' => $credentialsForm,
                 'paymentsForm' => $paymentsForm,
                 //currencies
                 'currency' => $this->context->currency->iso_code,
-
-                'mailTemplatesCopied' => $this->mailTemplatesCopied()
             )
         )->fetch($this->local_path . 'views/templates/admin/configurations.tpl');
 
@@ -93,28 +91,5 @@ class PayshopConfigurationPage extends Payshop
         );
 
         return $helper->generateForm(array($form));
-    }
-
-    /**
-     * Check if the mail templates are copied
-     *
-     * @return bool
-     */
-    private function mailTemplatesCopied()
-    {
-        $allCopied = true;
-
-        foreach ($this->mailsLangs as $lang) {
-            foreach ($this->mailsTemplate as $template) {
-                $path = $this->pathDir . "/../../mails/$lang/" . $template;
-
-                if (!file_exists($path)) {
-                    $allCopied = false;
-                    break;
-                }
-            }
-        }
-
-        return $allCopied;
     }
 }

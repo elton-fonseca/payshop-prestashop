@@ -30,6 +30,3 @@
         </div>
     </div>
 </form>
-
-<script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/jquery-1.11.0.min.js"></script>
-<script type="text/javascript" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/js/payshop.js?v={PAYSHOP_VERSION|escape:'htmlall':'UTF-8'}"></script>

@@ -3,6 +3,11 @@
 class PayshopPaymentMethods
 {
     /**
+     * @var Modulo
+     */
+    private $module;
+
+    /**
      * @var PayshopCreditCard
      */
     private $creditCard;
@@ -40,19 +45,19 @@ class PayshopPaymentMethods
     {
         $paymentOptions = [];
 
-        if (Configuration::get('PAYSHOP_CREDIT_CARD') == true) {
+        if (Configuration::get('PAYSHOP_CREDIT_CARD') && Configuration::get('PAYSHOP_CARD_SERVICE_UUID') != '') {
             $paymentOptions[] =  $this->creditCard->register();
         }
 
-        if (Configuration::get('PAYSHOP_CREDIT_MBWAY') == true) {
+        if (Configuration::get('PAYSHOP_MBWAY')  && Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID') != '') {
             $paymentOptions[] =  $this->mbWay->register();
         }
 
-        if (Configuration::get('PAYSHOP_PAYSHOP_REFERENCE') == true) {
+        if (Configuration::get('PAYSHOP_PAYSHOP_REFERENCE')  && Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID') != '') {
             $paymentOptions[] =  $this->payshopReference->register();
         }
 
-        if (Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE') == true) {
+        if (Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE')  && Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID') != '') {
             $paymentOptions[] =  $this->payshopMultibanco->register();
         }
 

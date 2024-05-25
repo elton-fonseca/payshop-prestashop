@@ -1,9 +1,0 @@
-Nós tivemos um problema ao registrar o pagamento
-
-{message}
-
-Verifique no painel administrativo e no dashboard do Payshop. Se necessário, você pode criar a encomenda ou alterar o status manualmente no painal da loja.
-
-Se o problema persistir, entre em contacto com administrador da loja.
-
-{shop_name}

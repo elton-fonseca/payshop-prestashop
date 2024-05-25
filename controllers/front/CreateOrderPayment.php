@@ -27,8 +27,13 @@
  * to avoid any conflicts with others containers.
  */
 
-class PayshopMBWayPaidCheckModuleFrontController extends ModuleFrontController
+class PayshopCreateOrderPaymentModuleFrontController extends ModuleFrontController
 {
+    /**
+     * @var PayshopCreateOrder
+     */
+    private $payshopCreateOrder;
+
     /**
      * Class constructor
      */
@@ -36,6 +41,7 @@ class PayshopMBWayPaidCheckModuleFrontController extends ModuleFrontController
     {
         parent::__construct();
         $this->ajax = true;
+        $this->payshopCreateOrder = new PayshopCreateOrder($this->module);
     }
 
     /**
@@ -45,26 +51,17 @@ class PayshopMBWayPaidCheckModuleFrontController extends ModuleFrontController
      */
     public function postProcess()
     {
-        header('Content-Type: application/json');
-        $prestashopOrderId = Tools::getValue('prestashop-order-id');
-
+        echo "asdas";exit;
         try {
-            $transacion = PayshopHelpers::getTransacion('order_id', $prestashopOrderId);
-            $transacionStatus = $transacion['payment_status'];
+            $this->payshopCreateOrder->execute('card', 'undefined');
 
-            if ($transacionStatus == 'PAYSHOP_ORDER_STATUS_PAID') {
-                echo json_encode(["status" => "paid"]);
-                return;
-            }
+            $confirmationUrl = PayshopHelpers::confirmationPageURL($this->module);
 
-            if ($transacionStatus == 'PAYSHOP_ORDER_STATUS_PAYMENT_ERROR') {
-                echo json_encode(["status" => "declined"]);
-                return;
-            }
-
-            echo json_encode(["status" => "not-paid"]);
+            Tools::redirect($confirmationUrl);
         } catch (\Throwable $e) {
             PayshopHelpers::errorResponse($this->module, $e->getMessage());
         }
     }
+
+    
 }
