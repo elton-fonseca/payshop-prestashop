@@ -13,7 +13,7 @@ class PayshopMultibanco
     {
         $formAction = $this->module->context->link->getModuleLink(
             $this->module->name,
-            'ControlerName'
+            'ProcessMultibanco'
         );
 
         $paymentForm = $this->module->context->smarty->assign([

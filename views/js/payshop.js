@@ -141,12 +141,7 @@
             return false;
           }
 
-          baseUrl = document.forms.payshop_mbway.action;
-          createCharge({
-            "chargeType": "mbway"
-          });
-
-          return false;
+          return true;
         };
       }
     });

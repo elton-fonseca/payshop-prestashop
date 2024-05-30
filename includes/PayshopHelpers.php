@@ -52,36 +52,25 @@ class PayshopHelpers
      */
     public static function checkResponse($module, $response)
     {
-        if ($response['status'] == 201) {
+        if ($response['status'] == 200) {
             return true;
         }
 
         if ($response['status'] == 401 || $response['status'] == 403) {
-            $message = $module->l('Invalid API credentials. Check your credentials in the module settings.', 'PayshopHelpers');
+            $message = $module->l('Invalid API credentials. Check your credentials on the module settings.', 'payshop');
 
             PayshopLog::generate($message, 'error');
-
             throw new Exception($message);
         }
 
-        $body = $response['response'];
+        if ($response['status'] == 400) {
+            $message = $module->l('Invalid gateway settings. Check the service UUID on the payment settings.', 'payshop');
 
-        if (isset($body['parameters']['number'])) {
-            throw new Exception($module->l('Invalid card number', 'PayshopHelpers'));
-        }
-
-        if (!Configuration::get('PAYSHOP_PROD_STATUS')) {
-            $message = print_r($response, true);
-
+            PayshopLog::generate($message, 'error');
             throw new Exception($message);
         }
 
-        $message = isset($body['message']) ? $body['message'] : $body;
-        $message = $message == 'Transaction Error' ? 
-                    $module->l('Transaction error, check your payment informations', 'PayshopHelpers') : 
-                    $message;
-
-        throw new Exception($message);
+        throw new Exception($module->l("We couldn't connect to the payment gateway.", 'payshop'));
     }
 
     /**
@@ -95,16 +84,7 @@ class PayshopHelpers
     {
         $module->context->cookie->__set('redirect_message', $message);
 
-        $errorUrl = $module->context->link->getBaseLink() .
-            'index.php?controller=order&step=3&typeReturn=failure';
-
-        echo json_encode([
-            'errorRedirectUrl' => $errorUrl,
-            'error' => true,
-            'message' => $message
-        ]);
-        
-        http_response_code(400);
+        Tools::redirect('index.php?controller=order&step=3&typeReturn=failure');
     }
 
     /**
@@ -198,4 +178,6 @@ class PayshopHelpers
         return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
             || (isset($_SERVER['SERVER_PORT']) && (int) $_SERVER['SERVER_PORT'] === 443);
     }
+
+
 }

@@ -60,27 +60,23 @@
         $paymentMethod,
         $prestashopOrderId,
         $newOrderStatus,
-        $payshopChargeId,
-        $payshopInstrumentId,
-        $payshopPaymentId = null
+        $paymentOrderId,
     )
     {
         $this->addPrestashopOrderPayment(
             $paymentMethod,
             $prestashopOrderId, 
             $newOrderStatus,
-            $payshopChargeId
+            $paymentOrderId
         );
 
         $this->updatePayshopTransaction(
             $prestashopOrderId,
             $newOrderStatus,
-            $payshopChargeId,
-            $payshopInstrumentId,
-            $payshopPaymentId
+            $paymentOrderId
         );
 
-        $this->updatePrestashopOrder($prestashopOrderId, $newOrderStatus, $payshopChargeId);
+        $this->updatePrestashopOrder($prestashopOrderId, $newOrderStatus, $paymentOrderId);
     }
 
     /**
@@ -97,7 +93,7 @@
         $paymentMethod,
         $prestashopOrderId, 
         $newOrderStatus,
-        $payshopChargeId
+        $paymentOrderId
     )
     {
         if ('PAYSHOP_ORDER_STATUS_PAID' != $newOrderStatus) {
@@ -109,14 +105,14 @@
         $baseOrder = new Order($prestashopOrderId);
 
         $amount = (float) $transaction['total'];
-        $paymentAdicioned = $baseOrder->addOrderPayment($amount, $paymentMethod, $payshopChargeId);
+        $paymentAdicioned = $baseOrder->addOrderPayment($amount, $paymentMethod, $paymentOrderId);
 
         if (!$paymentAdicioned) {
             throw new Exception(
                 PayshopHelpers::errorMessageProcessTransation(
                     $this->module,
                     $prestashopOrderId,
-                    $payshopChargeId
+                    $paymentOrderId
                 )
             );
         }
@@ -130,18 +126,14 @@
      * 
      * @param int $prestashopOrderId
      * @param string $newOrderStatus
-     * @param int $payshopChargeId
-     * @param int $payshopInstrumentId
-     * @param int $payshopPaymentId
+     * @param int $paymentOrderId
      * @return bool
      * @throws Exception
      */
      private function updatePayshopTransaction(
         $prestashopOrderId,
         $newOrderStatus,
-        $payshopChargeId,
-        $payshopInstrumentId,
-        $payshopPaymentId
+        $paymentOrderId
     )
     {
         $transaction = new PayshopTransaction();
@@ -149,9 +141,9 @@
 
         $isUpdated = $transaction->update([
             'payment_status' => $newOrderStatus,
-            'charge_id' => $payshopChargeId,
-            'instrument_id' => $payshopInstrumentId,
-            'payment_id' => $payshopPaymentId
+            'charge_id' => $paymentOrderId,
+            'instrument_id' => '',
+            'payment_id' => ''
         ]);
 
         if (!$isUpdated) {
@@ -159,7 +151,7 @@
                 PayshopHelpers::errorMessageProcessTransation(
                     $this->module,
                     $prestashopOrderId,
-                    $payshopChargeId
+                    $paymentOrderId
                 )
             );
         }
@@ -172,11 +164,11 @@
      *
      * @param int $prestashopOrderId
      * @param string $newOrderStatus
-     * @param int $payshopChargeId
+     * @param int $paymentOrderId
      * @return int
      * @throws Exception
      */
-    private function updatePrestashopOrder($prestashopOrderId, $newOrderStatus, $payshopChargeId)
+    private function updatePrestashopOrder($prestashopOrderId, $newOrderStatus, $paymentOrderId)
     {
         if ('PAYSHOP_ORDER_STATUS_WAITING_PAYMENT' == $newOrderStatus) {
             return;
@@ -187,16 +179,7 @@
         $history = new OrderHistory();
         $history->id_order = (int) $prestashopOrderId;
         $history->changeIdOrderState($newOrderStatusID, $prestashopOrderId);
-        $orderUpdated = $history->addWithemail();
 
-        if (!$orderUpdated) {
-            throw new Exception(
-                PayshopHelpers::errorMessageProcessTransation(
-                    $this->module,
-                    $prestashopOrderId,
-                    $payshopChargeId
-                )
-            );
-        }
+        $history->addWithemail();
     }
  }

@@ -2,6 +2,11 @@
 
 class PayshopPaymentMethods
 {
+    const CREDIT_CARD = 'card';
+    const MB_WAY ='mbway';
+    const PAYSHOP_REFERENCE = 'payshop_reference';
+    const MULTIBANCO ='multibanco';
+
     /**
      * @var Modulo
      */

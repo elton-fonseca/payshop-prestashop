@@ -57,6 +57,10 @@ class Payshop extends PaymentModule
 
     public function __construct()
     {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         $this->loadFiles();
 
         $this->name = 'payshop';
@@ -103,17 +107,16 @@ class Payshop extends PaymentModule
         include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopReference.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopMultibanco.php';
 
-        include_once PAYSHOP_ROOT_URL . '/includes/module/hooks/PayshopCardOrderConfirmation.php';
-        include_once PAYSHOP_ROOT_URL . '/includes/module/hooks/PayshopMBWayOrderConfirmation.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/hooks/PayshopShowReferencesOrderConfirmation.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/statuses/PayshopOrderStatuses.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/models/PayshopTransaction.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/models/PayshopEventModel.php';
 
-        include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopCreateCharge.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopCreatePaymentOrder.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopCreateInstrument.php';
-        include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopCreateOrder.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopCreatePrestashopOrder.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopUpdateOrder.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/sdk/PayshopClientFactory.php';
@@ -206,14 +209,9 @@ class Payshop extends PaymentModule
     {
         $order = $params['order'];
 
-        if ($order->payment == 'Payshop (Card)') {
-            $cardOrderConfirmation = new PayshopCardOrderConfirmation($this);
-            return $cardOrderConfirmation->execute($order);
-        }
-
-        if ($order->payment == 'Payshop Online Payments (MBWay)') {
-            $mBWayOrderConfirmation = new PayshopMBWayOrderConfirmation($this);
-            return $mBWayOrderConfirmation->execute($order);
+        if (in_array($order->payment, ['Payshop (Payshop Reference)', 'Payshop (Multibanco)'])) {
+            $showReferencesOrderConfirmation = new PayshopShowReferencesOrderConfirmation($this);
+            return $showReferencesOrderConfirmation->execute($order);
         }
     }
 
@@ -259,48 +257,9 @@ class Payshop extends PaymentModule
 
         return $this->display(__FILE__, 'views/templates/hook/order-wrapper-top.tpl');
     }
-
-
-    /**
-     * Add (payshop and multibanco) reference variables to mail template
-     *
-     * @param  $params
-     * @return void
-     */
-    public function hooksendMailAlterTemplateVars($params)
-    {
-        $isNotMultibanco = $params['template'] != 'waiting_payment_multibanco';
-        $isNotPayshop = $params['template'] != 'waiting_payment_payshop';
-
-        if ($isNotMultibanco && $isNotPayshop) {
-            return;
-        }
-
-        $orderId = $params['template_vars']['{id_order}'];
-
-        $transation = PayshopHelpers::getTransacion('order_id', $orderId);
-
-        $payshopSDK = PayshopClientFactory::getInstance();
-        $response = $payshopSDK->getInstrument($transation['instrument_id']);
-
-        if ($response['status'] != '200') {
-            return;
-        }
-
-        if (!isset($response['response']['reference'])) {
-            return;
-        }
-
-        $fields = $response['response']['reference']['fields'];
-
-        foreach ($fields as $field) {
-            $fieldName = "{" . $field['field'] . "}";
-            $params['template_vars'][$fieldName] = $field['value'];
-        }
-    }
 }
 
-function ddpayshop(...$asd)
+function dd(...$asd)
 {
     echo "<pre>";
     print_r($asd);

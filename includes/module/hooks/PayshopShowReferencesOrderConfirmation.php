@@ -27,7 +27,7 @@
  * to avoid any conflicts with others containers.
  */
 
-class PayshopMBWayOrderConfirmation
+class PayshopShowReferencesOrderConfirmation
 {
     /**
      * @var Modulo
@@ -52,32 +52,11 @@ class PayshopMBWayOrderConfirmation
      */
     public function execute($order)
     {
-        $orderCurrentState = $order->getCurrentState();
-        $paymentSuccess = false;
-        $paymentDeclined = false;
-
-        if ($orderCurrentState == Configuration::get('PAYSHOP_ORDER_STATUS_PAID')) {
-            $paymentSuccess = true;
-        }
-
-        if ($orderCurrentState == Configuration::get('PAYSHOP_ORDER_STATUS_PAYMENT_ERROR')) {
-            $paymentDeclined = true;
-        }
-
-        $mBWayPaidCheckUrl = $this->module->context->link->getModuleLink(
-            $this->module->name,
-            'MBWayPaidCheck'
-        );
-
         $smarty = $this->module->context->smarty;
         $smarty->assign([
-            'prestashopOrderId' => $order->id,
-            'paymentSuccess' => $paymentSuccess,
-            'paymentDeclined' => $paymentDeclined,
-            'mBWayPaidCheckUrl' => $mBWayPaidCheckUrl,
-            'moduleUrl' => $this->module->path,
+            'iframeURL' => $_SESSION['payshop_iframe_url'],
         ]);
 
-        return $smarty->fetch($this->module->getLocalPath() . 'views/templates/hook/mbway-dialog.tpl');
+        return $smarty->fetch($this->module->getLocalPath() . 'views/templates/hook/show-references.tpl');
     }
 }

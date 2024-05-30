@@ -40,39 +40,3 @@
     </div>
 </div>
 {/if}
-
-<!-- popup references -->
-<div class="overlap" id="payshop-reference">
-    <div class="overlap-content">
-            <h3>{l s='Confirmed Order' mod='payshop'}</h3>
-        <div>
-            <h5>{l s='Reference Informations' mod='payshop'}</h5>
-            <p id="multibanco-entity">
-                {l s='Entity: ' mod='payshop'}
-                <strong id="payshop-reference-entity"></strong>
-            </p>
-            <p>
-                {l s='Reference: ' mod='payshop'}
-                <strong id="payshop-reference-reference"></strong>
-            </p>
-            <p>
-                {l s='Value: ' mod='payshop'}
-                <strong id="payshop-reference-value"></strong>
-            </p>
-            <p>
-                {l s='End Date: ' mod='payshop'}
-                <strong id="payshop-reference-end-date"></strong>
-            </p> 
-        </div>
-        <button id="payshop-reference-view-order">
-            {l s='View Order Details' mod='payshop'}
-        </button>
-    </div>
-</div>
-
-<!-- popup loading -->
-<div class="overlap" id="payshop-loading">
-    <div class="overlap-content">
-        <img width="250" src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/img/loading.gif" />
-    </div>
-</div>

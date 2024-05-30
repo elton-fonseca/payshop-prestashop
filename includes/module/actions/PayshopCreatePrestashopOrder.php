@@ -28,12 +28,22 @@
  * to avoid any conflicts with others containers.
  */
 
- class PayshopCreateOrder
+ class PayshopCreatePrestashopOrder
  {
     /**
      * @var Modulo
      */
     private $module;
+
+    /**
+     * @var string
+     */
+    private $paymentMethod;
+
+    /**
+     * @var string
+     */
+    private $paymentOrderId;
 
     /**
      * Class constructor
@@ -49,17 +59,20 @@
      * Create prestashop order and payshop transaction
      *
      * @param string $paymentMethod
-     * @param int $chargeId
+     * @param int $paymentOrderId
      * @return int
      * @throws Exception
      */
-    public function execute($paymentMethod, $chargeId)
+    public function execute($paymentMethod, $paymentOrderId = 'undefined')
     {
-        $orderId = $this->createPrestashopOrder($paymentMethod, $chargeId);
+        $this->paymentMethod = $paymentMethod;
+        $this->paymentOrderId = $paymentOrderId;
+        
+        $prestashopOrderId = $this->createPrestashopOrder();
 
-        $this->createPayshopTransaction($orderId, $paymentMethod, $chargeId);
+        $this->createPayshopTransaction($prestashopOrderId);
 
-        return $orderId;
+        return $prestashopOrderId;
     }
 
     /**
@@ -70,7 +83,7 @@
      * @return int
      * @throws Exception
      */
-    private function createPrestashopOrder($paymentMethod, $chargeId)
+    private function createPrestashopOrder()
     {
         $cart = $this->module->context->cart;
         $customer = new Customer($cart->id_customer);
@@ -79,7 +92,7 @@
             (int) $this->module->context->cart->id,
             (int) $this->getInitialOrderStatusId(),
             (float) $this->module->context->cart->getOrderTotal(true, Cart::BOTH),
-            $this->formatedPaymentMethodName($paymentMethod),
+            $this->formatedPaymentMethodName($this->paymentMethod),
             null,
             null,
             (int)$this->module->context->currency->id,
@@ -94,7 +107,7 @@
                 PayshopHelpers::errorMessageProcessTransation(
                     $this->module,
                     $this->module->l('not created', 'PayshopCreateOrder'),
-                    $chargeId
+                    $this->paymentOrderId
                 )
             );
         }
@@ -105,23 +118,21 @@
     /**
      * Create payshop transaction
      * 
-     * @param int $orderId
-     * @param string $paymentMethod
-     * @param string $chargeId
+     * @param int $prestashopOrderId
      * @return bool
      * @throws Exception
      */
-     private function createPayshopTransaction($orderId, $paymentMethod, $chargeId)
+     private function createPayshopTransaction($prestashopOrderId)
      {
         $isPaymentTest = !Configuration::get('PAYSHOP_PROD_STATUS');
 
         $transaction = new PayshopTransaction();
         $isCreated = $transaction->create([
             'cart_id' => $this->module->context->cart->id,
-            'order_id' => $orderId,
+            'order_id' => $prestashopOrderId,
             'customer_id' => $this->module->context->customer->id,
             'total' => $this->module->context->cart->getOrderTotal(true, Cart::BOTH),
-            'payment_method' => $paymentMethod,
+            'payment_method' => $this->paymentMethod,
             'payment_status' => 'pending',
             'is_payment_test' => $isPaymentTest
         ]);
@@ -130,8 +141,8 @@
             throw new Exception(
                 PayshopHelpers::errorMessageProcessTransation(
                     $this->module,
-                    $orderId,
-                    $chargeId
+                    $prestashopOrderId,
+                    $this->paymentOrderId
                 )
             );
         }
@@ -159,10 +170,10 @@
      private function formatedPaymentMethodName($paymentMethod)
      {
         $payments = [
-            'multibanco' => $this->module->l('Payshop (Multibanco)', 'PayshopCreateOrder'),
-            'payshop_reference' => $this->module->l('Payshop (Payshop Reference)', 'PayshopCreateOrder'),
-            'card' => 'Payshop (Card)',
-            'mbway' => 'Payshop Online Payments (MBWay)'
+            PayshopPaymentMethods::MULTIBANCO => 'Payshop (Multibanco)',
+            PayshopPaymentMethods::PAYSHOP_REFERENCE => 'Payshop (Payshop Reference)',
+            PayshopPaymentMethods::CREDIT_CARD => 'Payshop (Card)',
+            PayshopPaymentMethods::MB_WAY => 'Payshop Online Payments (MBWay)'
         ];
 
         return $payments[$paymentMethod];

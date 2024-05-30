@@ -8,154 +8,164 @@ class PayshopClient extends PayshopAbstractClient
     /**
      * PayshopClient constructor.
      * 
-     * @param string $publicKeyApi
-     * @param string $secretKeyApi
-     * @param string $accountId
+     * @param string $apiKey
+     * @param string $signature
      * @param bool $isLiveEnvironment
      */
     public function __construct(
-        $publicKeyApi,
-        $secretKeyApi,
-        $accountId,
+        $apiKey,
+        $signature,
         $isLiveEnvironment = true
     ) {
         parent::__construct(
-            $publicKeyApi,
-            $secretKeyApi,
-            $accountId,
+            $apiKey,
+            $signature,
             $isLiveEnvironment
         );
     }
 
     /**
-     * Create a new charge
+     * Create a new payment order
      *
-     * @param array $charge
+     * @param array $order
      * @return array
      */
-    public function createCharge($charge)
+    public function createPaymentOrder($order)
     {
         $response = PayshopRestCli::post(
-            $this->getUrl('/charges'),
-            $charge,
-            $this->getSecretCredentials()
+            $this->getUrl('/payment'),
+            $this->addSignature($order),
+            $this->getCredentials()
         );
 
         return $response;
     }
 
     /**
-     * Create a new instrument
+     * Get payment order by uuid
      *
-     * @param array $chargeId
+     * @param array $order
      * @return array
      */
-    public function createInstrument($instrument)
+    public function getPaymentOrder($orderUUID)
+    {
+        $response = PayshopRestCli::get(
+            $this->getUrl('/order', $orderUUID),
+            $this->getCredentials()
+        );
+
+        return $response;
+    }
+
+    /**
+     * Send the push notification to the user
+     *
+     * @param array $payment
+     * @return array
+     */
+    public function paymentPush($payment)
     {
         $response = PayshopRestCli::post(
-            $this->getUrl('/instruments'),
-            $instrument,
-            $this->getPublicCredentials()
+            $this->getUrl('/payment/push'),
+            $this->addSignature($payment),
+            $this->getCredentials()
         );
 
         return $response;
     }
 
     /**
-     * Create a new refund
+     * Confirm a order payment when is using deffered mode
      *
-     * @param array $refund
+     * @param array $payment
      * @return array
      */
-    public function createRefund($refund)
+    public function paymentConfirmation($payment)
     {
         $response = PayshopRestCli::post(
-            $this->getUrl('/refunds'),
-            $refund,
-            $this->getSecretCredentials()
+            $this->getUrl('/payment/confirmation'),
+            $this->addSignature($payment),
+            $this->getCredentials()
         );
 
         return $response;
     }
 
     /**
-     * Get charge by id
+     * Cancel a order payment when is using deffered mode
      *
-     * @param array $chargeId
+     * @param array $payment
      * @return array
      */
-    public function getCharge($chargeId)
+    public function paymentCancellation($payment)
     {
-        $response = PayshopRestCli::get(
-            $this->getUrl('/charges', $chargeId),
-            $this->getSecretCredentials()
+        $response = PayshopRestCli::post(
+            $this->getUrl('/payment/cancellation'),
+            $this->addSignature($payment),
+            $this->getCredentials()
         );
 
         return $response;
     }
 
     /**
-     * Get instrument by id
+     * Create transation metadata
      *
-     * @param int $instrumentId
+     * @param array $payment
      * @return array
      */
-    public function getInstrument($instrumentId)
+    public function createTransationMetadata($transactionUUID,  $metadata)
     {
-        $response = PayshopRestCli::get(
-            $this->getUrl('/instruments', $instrumentId),
-            $this->getSecretCredentials()
+        $response = PayshopRestCli::post(
+            $this->getUrl('/transaction', $transactionUUID . '/metadata'),
+            $this->addSignature($metadata),
+            $this->getCredentials()
         );
 
         return $response;
     }
 
     /**
-     * Get payment by id
+     * Get the client's services by client_uuid
      *
-     * @param int $paymentId
+     * @param array $payment
      * @return array
      */
-    public function getPayment($paymentId)
+    public function getClientServices($clientUUID)
     {
         $response = PayshopRestCli::get(
-            $this->getUrl('/payments', $paymentId),
-            $this->getSecretCredentials()
+            $this->getUrl("/client", $clientUUID . '/services'),
+            $this->getCredentials()
         );
 
         return $response;
     }
 
     /**
-     * Get event by id
+     * get the terminals by terminal_uuid 
      *
-     * @param int $eventId
+     * @param array $payment
      * @return array
      */
-    public function getEvent($eventId = null)
+    public function getTerminals($terminalUUID)
     {
         $response = PayshopRestCli::get(
-            $this->getUrl('/events', $eventId),
-            $this->getSecretCredentials()
+            $this->getUrl("/terminals", $terminalUUID),
+            $this->getCredentials()
         );
 
         return $response;
     }
 
     /**
-     * Get refund by id
+     * Get the URL used to redirect the user to the payment page
      *
-     * @param int $refundId
+     * @param array $payment
      * @return array
      */
-    public function getRefund($refundId = null)
+    public function getRedirectUrl($token)
     {
-        $response = PayshopRestCli::get(
-            $this->getUrl('/refunds', $refundId),
-            $this->getSecretCredentials()
-        );
-
-        return $response;
+        return $this->getUrl('/payment/process', $token);
     }
 
 }

@@ -37,16 +37,22 @@
                         {l s='Phone number' mod='payshop'}
                         <em class="payshop-required">*</em>
                     </label>
-                    <input
-                        required
-                        id="id-phone-number"
-                        name="phone-number"
-                        class="form-control payshop-form-control"
-                        type="text"
-                        maxlength="19"
-                        autocopayshoplete="off"
-                        data-checkout="wbwayNumber"
-                    />
+                    
+                    <div style="display: flex;">
+                        {include file='module:payshop/views/templates/hook/partials/phone-prefix.tpl'}
+
+                        <input
+                            required
+                            id="id-phone-number"
+                            name="phone-number"
+                            class="form-control payshop-form-control"
+                            type="text"
+                            maxlength="19"
+                            autocopayshoplete="off"
+                            data-checkout="wbwayNumber"
+                            style="flex-grow: 1;"
+                        />
+                    </div>
                     <small id="payshop-error-phone-number" class="payshop-erro-form" data-main="#id-phone-number" style="display: none; color: #e81814;">
                         {l s='Invalid MBWay Phone Number' mod='payshop'}
                     </small>

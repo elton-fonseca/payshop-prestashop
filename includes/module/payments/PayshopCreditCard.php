@@ -2,6 +2,9 @@
 
 class PayshopCreditCard
 {
+    /**
+     * @var Payshop
+     */
     private $module;
 
     public function __construct($module)
@@ -13,9 +16,9 @@ class PayshopCreditCard
     {
         $formAction = $this->module->context->link->getModuleLink(
             $this->module->name,
-            'CreateOrder'
+            'ProcessCard',
         );
-        
+
         $paymentForm = $this->module->context->smarty->assign([
             'formAction' => $formAction            
         ])

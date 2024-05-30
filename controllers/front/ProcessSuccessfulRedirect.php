@@ -27,13 +27,8 @@
  * to avoid any conflicts with others containers.
  */
 
-class PayshopCreateOrderPaymentModuleFrontController extends ModuleFrontController
+class PayshopProcessSuccessfulRedirectModuleFrontController extends ModuleFrontController
 {
-    /**
-     * @var PayshopCreateOrder
-     */
-    private $payshopCreateOrder;
-
     /**
      * Class constructor
      */
@@ -41,7 +36,6 @@ class PayshopCreateOrderPaymentModuleFrontController extends ModuleFrontControll
     {
         parent::__construct();
         $this->ajax = true;
-        $this->payshopCreateOrder = new PayshopCreateOrder($this->module);
     }
 
     /**
@@ -51,17 +45,8 @@ class PayshopCreateOrderPaymentModuleFrontController extends ModuleFrontControll
      */
     public function postProcess()
     {
-        echo "asdas";exit;
-        try {
-            $this->payshopCreateOrder->execute('card', 'undefined');
+        dd('234234');
 
-            $confirmationUrl = PayshopHelpers::confirmationPageURL($this->module);
-
-            Tools::redirect($confirmationUrl);
-        } catch (\Throwable $e) {
-            PayshopHelpers::errorResponse($this->module, $e->getMessage());
-        }
+        PayshopHelpers::confirmationPageURL($this->module);
     }
-
-    
 }

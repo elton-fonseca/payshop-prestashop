@@ -5,39 +5,35 @@ class PayshopEvent
     private function __construct(){}
 
     /**
-     * Get the event data from the request.
-     *
-     * @param boolean $isTestEnvironment If test environment, create request file log.
-     * @return array
-     * @throws Exception
-     */
-    static public function getEvent($isTestEnvironment = false)
-    {
-        $eventData = $_GET;
-
-        self::checkEventData($eventData);
-
-        if ($isTestEnvironment) {
-            self::generateFileLog();
-        }
-
-        return $eventData;
-    }
-
-    /**
      * Check the event data.
      *
-     * @param array $eventData
-     * @return void
+     * @param array $orderData
+     * @param string $signature
+     * @return bool
      * @throws Exception
      */
-    static private function checkEventData($eventData)
+    static public function checkEventSignature($orderData, $signature)
     {
-        $eventIsInvalid = !isset($eventData['event']) || !isset($eventData['event_type']) || !isset($eventData['schema']);
+        $array['order'] = $orderData['order'];
+        $array['client'] = $orderData['client'];
 
-        if ($eventIsInvalid) {
-            throw new Exception('Event is not received');
+        if ($orderData['extra_data'] !== null) {
+            $array['extra_data'] = $orderData['extra_data'];
         }
+
+        $data = json_encode($array, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+        $validationHash = hash('sha256', $data . $signature);
+
+        if (! $validationHash) {
+            throw new Exception('Invalid Hash');
+        }
+
+        if ($validationHash != $orderData['validation_hash']) {
+            throw new Exception('Invalid Signature');
+        }
+
+        return true;
     }
 
     /**

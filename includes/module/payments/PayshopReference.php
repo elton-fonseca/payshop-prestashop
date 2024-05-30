@@ -13,7 +13,7 @@ class PayshopReference
     {
         $formAction = $this->module->context->link->getModuleLink(
             $this->module->name,
-            'CreateOrderPayment'
+            'ProcessPayshop'
         );
 
         $paymentForm = $this->module->context->smarty->assign([

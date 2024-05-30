@@ -47,9 +47,8 @@ class PayshopClientFactory
         if (null === self::$payshopClient) {
             try {
                 self::$payshopClient = new PayshopClient(
-                    self::getPublicKey(),
-                    self::getSecretKey(),
-                    self::getAccountId(),
+                    self::getApiKey(),
+                    self::getSignature(),
                     self::isProduction()
                 );
             } catch (\Exception $e) {
@@ -79,13 +78,13 @@ class PayshopClientFactory
      *
      * @return string
      */
-    public static function getPublicKey()
+    public static function getApiKey()
     {
         if (self::isProduction() == true) {
-            return Configuration::get('PAYSHOP_PUBLIC_KEY');
+            return Configuration::get('PAYSHOP_API_KEY');
         }
 
-        return Configuration::get('PAYSHOP_SANDBOX_PUBLIC_KEY');
+        return Configuration::get('PAYSHOP_SANDBOX_API_KEY');
     }
 
     /**
@@ -93,26 +92,12 @@ class PayshopClientFactory
      *
      * @return string
      */
-    private static function getSecretKey()
+    private static function getSignature()
     {
         if (self::isProduction() == true) {
-            return Configuration::get('PAYSHOP_SECRET_KEY');
+            return Configuration::get('PAYSHOP_SIGNATURE');
         }
 
-        return Configuration::get('PAYSHOP_SANDBOX_SECRET_KEY');
-    }
-
-    /**
-     * Get account ID based on the environment
-     *
-     * @return string
-     */
-    private static function getAccountId()
-    {
-        if (self::isProduction() == true) {
-            return Configuration::get('PAYSHOP_ACCOUNT_ID');
-        }
-
-        return Configuration::get('PAYSHOP_SANDBOX_ACCOUNT_ID');
+        return Configuration::get('PAYSHOP_SANDBOX_SIGNATURE');
     }
 }

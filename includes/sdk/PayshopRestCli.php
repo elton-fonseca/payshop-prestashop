@@ -25,7 +25,7 @@ class PayshopRestCli
 
         $useragent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'webhook';
         curl_setopt($connect, CURLOPT_USERAGENT, $useragent);
-
+        
         curl_setopt($connect, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($connect, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($connect, CURLOPT_HTTPHEADER, $headers);

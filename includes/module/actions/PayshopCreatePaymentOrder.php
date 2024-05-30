@@ -28,7 +28,7 @@
  * to avoid any conflicts with others containers.
  */
 
- class PayshopCreateCharge
+ class PayshopCreatePaymentOrder
  {
     /**
      * @var Modulo
@@ -39,6 +39,20 @@
      * @var PayshopClient
      */
     private $payshopSDK;
+
+    /**
+     * @var string
+     */ 
+    private $paymentMethod;
+
+    /**
+     * List of payment methods that don't need prestashop order before charge
+     * @var array
+     */
+    private $paymentsWithoutOrder = [
+        PayshopPaymentMethods::CREDIT_CARD,
+        PayshopPaymentMethods::MB_WAY
+    ];
 
     /**
      * Class constructor
@@ -59,14 +73,14 @@
      * @return int
      * @throws Exception
      */
-    public function execute($paymentMethod, $orderId)
+    public function execute($paymentMethod, $orderId = null)
     {
-        if ($paymentMethod !== 'card') {
-            $this->checkoutIsFilled();
-            $this->moduleIsAuthorized();
-        }
+        $this->paymentMethod = $paymentMethod;
 
-        return $this->createCharge($paymentMethod, $orderId);
+        $this->checkoutIsFilled();
+        $this->moduleIsAuthorized();
+
+        return $this->createPaymentOrder($orderId);
     }
 
     /**
@@ -121,28 +135,30 @@
      * @param int $orderId
      * @return string
      */
-    private function createCharge($paymentMethod, $orderId)
+    private function createPaymentOrder($orderId)
     {
         $this->isCurrencyEuro();
 
-        $orderId = $this->getOrderId($paymentMethod, $orderId);
-        $total = $this->getOrderTotal($paymentMethod, $orderId);
+        $orderId = $this->getOrderId($orderId);
+        $total = $this->getOrderTotal($orderId);
 
-        $processInstrumentUrl = $this->getProcessInstrumentUrl($orderId);
-
-        $response = $this->payshopSDK->createCharge([
-            'charge_type' => $paymentMethod,
-            'amount' => (float) $total,
+        $response = $this->payshopSDK->createPaymentOrder(array_merge([
+            'amount' => $total * 100,
             'currency' => 'EUR',
-            'description' => $this->description($orderId),
-            'events_url' => $this->getProcessEventUrl(),
-            'redirect_url' => $processInstrumentUrl,
-            'instrument_params' => $this->getInstrumentParams($paymentMethod)
-        ]);
+            'operative' => 'AUTHORIZATION',
+            'service' => $this->getPaymentServiceUUID(),
+    
+            "description" => $this->getDescription($orderId),
+
+            'url_ok' => $this->getProcessSuccessfulRedirectURL(),
+            'url_ko' =>  $this->getProcessFailedRedirectURL(),
+            "url_post" => $this->getProcessEventUrl(),
+        ], $this->getPaymentData()));
 
         PayshopHelpers::checkResponse($this->module, $response);
+        $this->validateGatewayCurrency($response);
 
-        return $response['response']['id'];
+        return $response['response']['order'];
     }
 
     /**
@@ -167,9 +183,9 @@
      *
      * @return int
      */
-    private function getOrderId($paymentMethod, $orderId)
+    private function getOrderId($orderId)
     {
-        if ($paymentMethod !== 'card') {
+        if (in_array($this->paymentMethod, $this->paymentsWithoutOrder)) {
             return (int) $this->module->currentOrder;
         }
 
@@ -181,9 +197,9 @@
      *
      * @return float
      */
-    private function getOrderTotal($paymentMethod, $orderId)
+    private function getOrderTotal($orderId)
     {
-        if ($paymentMethod !== 'card') {
+        if (in_array($this->paymentMethod, $this->paymentsWithoutOrder)) {
             return (float) $this->module->context->cart->getOrderTotal(true, Cart::BOTH);
         }
 
@@ -197,16 +213,37 @@
      * @param int $orderId
      * @return string
      */
-    private function description($orderId)
+    private function getDescription($orderId)
     {
         return vsprintf(
             '%s %s %s',
             [
                 $this->module->context->shop->name,
-                $this->module->l(' order #', 'PayshopCreateCharge'),
+                $this->module->l(' - order #', 'PayshopCreateCharge'),
                 $orderId
             ]
         );
+    }
+
+    /**
+     * Get payment service UUID from the configuration
+     *
+     * @param WC_Order $order
+     * @param array $references
+     * @return void
+     */
+    public function getPaymentServiceUUID()
+    {
+        switch ($this->paymentMethod) {
+            case PayshopPaymentMethods::CREDIT_CARD:
+                return Configuration::get('PAYSHOP_CARD_SERVICE_UUID');
+            case PayshopPaymentMethods::MB_WAY:
+                return Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID');
+            case PayshopPaymentMethods::PAYSHOP_REFERENCE:
+                return Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID');
+            case PayshopPaymentMethods::MULTIBANCO:
+                return Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID');
+        }
     }
 
     /**
@@ -216,20 +253,10 @@
      */
     private function getProcessEventUrl()
     {
-        $processEventURL = $this->module->context->link->getModuleLink(
+        return $this->module->context->link->getModuleLink(
             $this->module->name,
             'ProcessEvent'
         );
-
-        if (!PayshopHelpers::isHTTPS()) {
-            $processEventURL = str_replace(
-                'http://127.0.0.1',
-                'https://eltonfonseca.dev',
-                $processEventURL
-            );
-        }
-
-        return $processEventURL;
     }
 
     /**
@@ -238,51 +265,79 @@
      * @param int $orderId
      * @return string
      */
-    private function getProcessInstrumentUrl($orderId)
+    private function getProcessSuccessfulRedirectURL()
     {
-        $processInstrumentURL = $this->module->context->link->getModuleLink(
+        return $this->module->context->link->getModuleLink(
             $this->module->name,
-            'ProcessInstrument',
-            [
-                'orderId' => $orderId
-            ]
+            'ProcessSuccessfulRedirect',
         );
-
-        if (!PayshopHelpers::isHTTPS()) {
-            $processInstrumentURL = str_replace(
-                'http://127.0.0.1',
-                'https://eltonfonseca.dev',
-                $processInstrumentURL
-            );
-        }
-
-        return $processInstrumentURL;
     }
 
     /**
-     * Get instrument params for the payment method
+     * Get process instrument url
      *
-     * @param string $paymentMethod
+     * @param int $orderId
+     * @return string
+     */
+    private function getProcessFailedRedirectURL()
+    {
+        return $this->module->context->link->getModuleLink(
+            $this->module->name,
+            'ProcessFailedRedirect',
+        );
+    }
+
+    /**
+     * Get payment data
+     * 
+     * @param string paymentMethod
      * @return array
      */
-    private function getInstrumentParams($paymentMethod)
+    private function getPaymentData()
     {
-        $description = ['description' => $this->module->context->shop->name];
-
-        if ($paymentMethod != 'multibanco' && $paymentMethod != 'payshop_reference') {
-            return ['enable3ds' => true] + $description;
+        if ($this->paymentMethod === PayshopPaymentMethods::CREDIT_CARD) {
+            return [
+                'secure' => "true",
+                'save_card' => "false",
+            ];
         }
 
-        if ($paymentMethod == 'multibanco') {
-            $qtdDaysToExpire = (int) Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_EXPIRATION_DAYS');
+        $options['secure'] = "false";
+
+        if ($this->paymentMethod === PayshopPaymentMethods::MB_WAY) {
+            $cart = $this->module->context->cart;
+            $client = $cart->id_customer;
+            $client = new Customer($cart->id_customer);
+
+            $options['extra_data'] = [
+                "profile" => [
+                    "first_name" => $client->firstname ? $client->firstname : "",
+                    "last_name" => $client->lastname ? $client->lastname : "",
+                    "phone" => [
+                        "prefix" => Tools::getValue('phone-prefix'),
+                        "number" => Tools::getValue('phone-number')
+                    ]
+                ]
+            ];
         }
 
-        if ($paymentMethod == 'payshop_reference') {
-            $qtdDaysToExpire = (int) Configuration::get('PAYSHOP_PAYSHOP_REFERENCE_EXPIRATION_DAYS');
+        return $options;
+    }
+
+    /**
+     * Validate currency sent by the gateway
+     * 
+     * @param array $response
+     * @return void
+     * 
+     * @throws Exception
+     */
+    private function validateGatewayCurrency($response)
+    {
+        if ($response['response']['order']['currency'] != '978') {
+            $message = $this->module->l('Product currency must be EUR', 'payshop');
+            PayshopLog::generate($message, PayshopLog::LOG_SEVERITY_ERROR);
+            throw new Exception($message);
         }
-
-        $expirationdate = date('Y-m-d', strtotime('+' . $qtdDaysToExpire . ' days'));
-
-        return ['end_date' => $expirationdate] + $description;
     }
 }

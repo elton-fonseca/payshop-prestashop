@@ -5,12 +5,12 @@ abstract class PayshopAbstractClient
     /**
      * @var string
      */
-    private const URL_BASE = 'https://switch-processing.teya.com/v2';
+    private const URL_BASE = 'https://api.paylands.com/v1';
 
     /**
      * @var string
      */
-    private const URL_BASE_TEST = 'https://switch-processing.teya.xyz/v2';
+    private const URL_BASE_TEST = 'https://api.paylands.com/v1/sandbox';
 
     /**
      * @var string
@@ -20,38 +20,30 @@ abstract class PayshopAbstractClient
     /**
      * @var string
      */
-    private $publicKeyApi;
+    private $apiKey;
 
     /**
      * @var string
      */
-    private $accountId;
-
-    /**
-     * @var string
-     */
-    private $secretKeyApi;
+    private $signature;
 
     /**
      * PayshopAbstractClient constructor.
      * 
-     * @param string $publicKeyApi
-     * @param string $secretKeyApi
-     * @param string $accountId
+     * @param string $apiKey
+     * @param string $signature
      * @param string $environment
      * @throws Exception 
      */
     public function __construct(
-        $publicKeyApi,
-        $secretKeyApi,
-        $accountId,
+        $apiKey,
+        $signature,
         $isLiveEnvironment = true
     ) {
         $this->isCurlLoaded();
 
-        $this->publicKeyApi = $publicKeyApi;
-        $this->secretKeyApi = $secretKeyApi;
-        $this->accountId = $accountId;
+        $this->apiKey = $apiKey;
+        $this->signature = $signature;
         $this->isLiveEnvironment = $isLiveEnvironment;
 
         $this->isCredentilsFilled();
@@ -78,7 +70,7 @@ abstract class PayshopAbstractClient
      */
     private function isCredentilsFilled()
     {
-        $isCredentilsNotFilled = empty($this->publicKeyApi) || empty($this->secretKeyApi) || empty($this->accountId);
+        $isCredentilsNotFilled = empty($this->apiKey) || empty($this->signature);
 
         if ($isCredentilsNotFilled) {
             throw new Exception('Credentials are not filled');
@@ -113,22 +105,24 @@ abstract class PayshopAbstractClient
      * 
      * @return array
      */
-    protected function getPublicCredentials()
+    protected function getCredentials()
     {
         return [
-            'Authorization: Basic ' . base64_encode($this->publicKeyApi . ':'),
+            'Authorization: Basic ' . base64_encode($this->apiKey . ':'),
         ];
     }
 
     /**
-     * get secret credentials
+     * get signature array
      * 
      * @return array
      */
-    protected function getSecretCredentials()
+    protected function addSignature($data)
     {
-        return [
-            'Authorization: Basic ' . base64_encode($this->accountId . ':' . $this->secretKeyApi),
+        $signature = [
+            'signature' => $this->signature
         ];
+
+        return array_merge($data, $signature);
     }
 }
