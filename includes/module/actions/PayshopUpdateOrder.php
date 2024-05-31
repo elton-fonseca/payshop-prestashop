@@ -51,9 +51,7 @@
      * @param string $paymentMethod
      * @param int $prestashopOrderId
      * @param string $newOrderStatus
-     * @param int $payshopChargeId
-     * @param int $payshopInstrumentId
-     * @param int $payshopPaymentId
+     * @param int $paymentOrderId
      * @return void
      */
     public function execute(

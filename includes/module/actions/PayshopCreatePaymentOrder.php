@@ -253,10 +253,14 @@
      */
     private function getProcessEventUrl()
     {
-        return $this->module->context->link->getModuleLink(
+        $url = $this->module->context->link->getModuleLink(
             $this->module->name,
             'ProcessEvent'
         );
+
+        $url =  str_replace('http://127.0.0.1:8080/', 'https://g4mi4eughq.sharedwithexpose.com/', $url);
+
+        return $url;
     }
 
     /**

@@ -56,6 +56,8 @@ class PayshopProcessCardModuleFrontController extends ModuleFrontController
                 PayshopPaymentMethods::CREDIT_CARD
             );
 
+            $this->module->context->cookie->__set('payment_order_id', $paymentOrder['uuid']);
+
             Tools::redirect(
                 PayshopClientFactory::getInstance()->getRedirectUrl($paymentOrder['token'])
             );

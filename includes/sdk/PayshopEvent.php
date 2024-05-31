@@ -17,7 +17,7 @@ class PayshopEvent
         $array['order'] = $orderData['order'];
         $array['client'] = $orderData['client'];
 
-        if ($orderData['extra_data'] !== null) {
+        if (isset($orderData['extra_data']) && $orderData['extra_data'] !== null) {
             $array['extra_data'] = $orderData['extra_data'];
         }
 

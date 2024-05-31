@@ -52,36 +52,48 @@ class PayshopProcessEventModuleFrontController extends ModuleFrontController
     public function postProcess()
     {
         try {
-            $eventBasicInformation = PayshopEvent::getEvent();
-    
-            if ($this->unprocessableEvent($eventBasicInformation)){
+            $json = file_get_contents('php://input');
+            $data = json_decode($json, true);
+
+            PayshopEvent::checkEventSignature(
+                $data,
+                PayshopClientFactory::getSignature()
+            );
+
+            if ($this->unprocessablePaymentOrderStatuses($data['order']['status'])) {
                 return;
             }
-    
-            $this->payshopProcessEvent->execute($eventBasicInformation);
+
+            $this->payshopProcessEvent->execute($data['order']);
         } catch (\Throwable $e) {
             PayshopLog::generate($e->getMessage(), 'error');
 
-            PayshopHelpers::sendErrorWarningByEmail($this->module, $e->getMessage());
+            echo $e->getMessage();
 
             http_response_code(500);
         }
     }
 
     /**
-     * Check if the event is unprocessable
+     * Check if the status is unprocessable
      *
-     * @param array $eventBasicInformation
+     * @param string $orderPaymentStatus
      * @return bool
      */
-    private function unprocessableEvent($eventBasicInformation)
+    private function unprocessablePaymentOrderStatuses($orderPaymentStatus)
     {
-        $eventType = $eventBasicInformation['event_type'];
-
-        return !in_array($eventType, [
-            'payment.success',
-            'instrument.invalid'
+        return in_array($orderPaymentStatus, [
+            'CREATED',
+            'PARTIALLY_REFUNDED',
+            'PARTIALLY_CONFIRMED',
+            'REFUNDED',
+            'PENDING_PROCESSOR_RESPONSE',
+            'PENDING_3DS_RESPONSE',
+            'PENDING_CARD',
+            'USER_CANCELLED',
+            'REDIRECTED_TO_3DS',
+            'AUTHENTICATION_REQUIRED',
+            'PENDING_PAYMENT'
         ]);
     }
-
 }

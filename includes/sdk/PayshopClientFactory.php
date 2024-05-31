@@ -92,7 +92,7 @@ class PayshopClientFactory
      *
      * @return string
      */
-    private static function getSignature()
+    public static function getSignature()
     {
         if (self::isProduction() == true) {
             return Configuration::get('PAYSHOP_SIGNATURE');

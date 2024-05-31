@@ -56,13 +56,9 @@
      * @param array $event
      * @return void
      */
-    public function process($event)
+    public function process($paymentOrder)
     {
-        if ($event['payment']['success'] == false) {
-            return;
-        }
-
-        $transaction = PayshopHelpers::getTransacion('charge_id', $event['charge']['id']);
+        $transaction = PayshopHelpers::getTransacion('charge_id', $paymentOrder['uuid']);
 
         if ($transaction['payment_status'] == 'PAYSHOP_ORDER_STATUS_PAID') {
             return;
@@ -72,15 +68,7 @@
             $transaction['payment_method'],
             $transaction['order_id'],
             'PAYSHOP_ORDER_STATUS_PAID',
-            $transaction['charge_id'],
-            $transaction['instrument_id'],
-            $event['payment']['id']
-        );
-
-        PayshopHelpers::createEvent(
-            $event['id'],
-            $event['type'],
-            $transaction['id']
+            $paymentOrder['uuid'],
         );
     }
  }

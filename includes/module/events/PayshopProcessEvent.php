@@ -29,7 +29,7 @@
  */
 
 require_once('PayshopPaymentSuccess.php');
-require_once('PayshopMBWayDeclined.php');
+require_once('PayshopPaymentRefused.php');
 
  class PayshopProcessEvent
  {
@@ -44,9 +44,9 @@ require_once('PayshopMBWayDeclined.php');
     private $payshopPaymentSuccess;
 
     /**
-     * @var PayshopMbWayDeclined
+     * @var PayshopPaymentRefused
      */
-    private $payshopMbWayDeclined;
+    private $payshopPaymentRefused;
 
     /**
      * Class constructor
@@ -57,7 +57,7 @@ require_once('PayshopMBWayDeclined.php');
     {
         $this->module = $module;
         $this->payshopPaymentSuccess = new PayshopPaymentSuccess($module);
-        $this->payshopMbWayDeclined = new PayshopMBWayDeclined($module);
+        $this->payshopPaymentRefused = new PayshopPaymentRefused($module);
     }
 
     /**
@@ -65,70 +65,12 @@ require_once('PayshopMBWayDeclined.php');
      *
      * @return void
      */
-    public function execute($eventBasicInformation)
+    public function execute($paymentOrder)
     {
-        $eventReponse = $this->getApiEvent($eventBasicInformation['event']);
-
-        $event = $eventReponse['response'];
-
-        if ($event['type'] == 'payment.success') {
-            $this->payshopPaymentSuccess->process($event);
+        if ($paymentOrder['status'] == 'SUCCESS' && $paymentOrder['paid'] == true) {
+            return $this->payshopPaymentSuccess->process($paymentOrder);
         }
 
-        if ($this->isWBWay($event) || $this->isDeclined($event)) {
-            $this->payshopMbWayDeclined->process($event);
-        }
-    }
-
-    /**
-     * Get the event from the API
-     *
-     * @param string $eventId
-     * @return array
-     */
-    private function getApiEvent($eventId)
-    {
-        $payshopSDK = PayshopClientFactory::getInstance();
-        $eventReponse = $payshopSDK->getEvent($eventId);
-
-        $this->checkEventReponse($eventReponse);
-
-        return $eventReponse;
-    }
-
-    /**
-     * Check the event response
-     *
-     * @param array $response
-     * @return void
-     * @throws Exception
-     */
-    private function checkEventReponse($response)
-    {
-        if ($response['status'] != '200') {
-            throw new Exception("Get event on payshop api error");
-        }
-    }
-
-    /**
-     * Check if event is  WBWay
-     *
-     * @param array $event
-     * @return bool
-     */
-    private function isWBWay($event)
-    {
-        return $event['charge']['charge_type'] == "mbway";
-    }
-
-    /**
-     * Check if event is  declined
-     *
-     * @param array $event
-     * @return bool
-     */
-    public function isDeclined($event)
-    {
-        return $event['instrument']['failure_code'] == "03.00.0000";
+        return $this->payshopPaymentRefused->process($paymentOrder);
     }
  }

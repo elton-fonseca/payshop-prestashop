@@ -30,12 +30,24 @@
 class PayshopProcessSuccessfulRedirectModuleFrontController extends ModuleFrontController
 {
     /**
+     * @var PayshopCreatePrestashopOrder
+     */
+    private $payshopCreatePrestashopOrder;    
+
+    /**
+     * @var PayshopUpdateOrder
+     */
+    private $payshopUpdateOrder;    
+
+    /**
      * Class constructor
      */
     public function __construct()
     {
         parent::__construct();
         $this->ajax = true;
+        $this->payshopCreatePrestashopOrder = new PayshopCreatePrestashopOrder($this->module);
+        $this->payshopUpdateOrder = new PayshopUpdateOrder($this->module);
     }
 
     /**
@@ -45,8 +57,19 @@ class PayshopProcessSuccessfulRedirectModuleFrontController extends ModuleFrontC
      */
     public function postProcess()
     {
-        dd('234234');
+        $paymentMethod = PayshopPaymentMethods::CREDIT_CARD;
 
-        PayshopHelpers::confirmationPageURL($this->module);
+        $prestashopOrder = $this->payshopCreatePrestashopOrder->execute($paymentMethod);
+
+        $paymentOrderId = $this->module->context->cookie->__get('payment_order_id');
+
+        $this->payshopUpdateOrder->execute(
+            $paymentMethod,
+            $prestashopOrder,
+            'PAYSHOP_ORDER_STATUS_WAITING_PAYMENT',
+            $paymentOrderId
+        );
+
+        Tools::redirect(PayshopHelpers::confirmationPageURL($this->module));
     }
 }

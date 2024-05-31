@@ -28,7 +28,7 @@
  * to avoid any conflicts with others containers.
  */
 
-class PayshopMBWayDeclined
+class PayshopPaymentRefused
 {
     /**
      * @var Modulo
@@ -57,9 +57,9 @@ class PayshopMBWayDeclined
      * @param array $event
      * @return void
      */
-    public function process($event)
+    public function process($paymentOrder)
     {
-        $transaction = PayshopHelpers::getTransacion('charge_id', $event['charge']['id']);
+        $transaction = PayshopHelpers::getTransacion('charge_id', $paymentOrder['uuid']);
 
         if ($transaction['payment_status'] !== 'PAYSHOP_ORDER_STATUS_WAITING_PAYMENT') {
             return;
@@ -69,16 +69,7 @@ class PayshopMBWayDeclined
             $transaction['payment_method'],
             $transaction['order_id'],
             'PAYSHOP_ORDER_STATUS_PAYMENT_ERROR',
-            $transaction['charge_id'],
-            $transaction['instrument_id']
-        );
-
-        PayshopHelpers::createEvent(
-            $event['id'],
-            $event['type'],
-            $transaction['id']
+            $paymentOrder['uuid'],
         );
     }
-
-
 }

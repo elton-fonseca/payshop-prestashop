@@ -58,6 +58,8 @@ class PayshopProcessMBWayModuleFrontController extends ModuleFrontController
                 PayshopPaymentMethods::MB_WAY
             );
 
+            $this->module->context->cookie->__set('payment_order_id', $paymentOrder['uuid']);
+
             Tools::redirect(
                 PayshopClientFactory::getInstance()->getRedirectUrl($paymentOrder['token']) . '?apm=MBWAY'
             );

@@ -23,26 +23,6 @@ class PayshopHelpers
     }
 
     /**
-     * Create Payshop event
-     *
-     * @param string $eventId
-     * @param string $eventType
-     * @param string $transactionId
-     * @return bool
-     */
-    public static function createEvent($eventId, $eventType, $transactionId)
-    {
-        $event = new PayshopEventModel();
-        $isCreated = $event->create([
-            'event_id' => $eventId,
-            'event_type' => $eventType,
-            'transaction_id' => $transactionId
-        ]);
-
-        return $isCreated;
-    }
-
-    /**
      * Check Payshop response
      *
      * @param module $module
@@ -120,31 +100,6 @@ class PayshopHelpers
                 'key' => $securityKey,
             ]
         );    
-    }
-
-    /**
-     * Send email from prestashop
-     *
-     * @param module $module
-     * @param string $message
-     * @return void
-     */
-    public static function sendErrorWarningByEmail($module, $message)
-    {
-        Mail::Send(
-            (int)(Configuration::get('PS_LANG_DEFAULT')), // defaut language id
-            'error_warning', // email template file to be use
-            $module->l('Payshop Error Warning', 'PayshopHelpers'), // email subject
-            [
-                '{message}' => $message // email content
-            ],
-            Configuration::get('PS_SHOP_EMAIL'), // receiver email address
-            NULL, //receiver name
-            NULL, //from email address
-            NULL,  //from name
-            NULL, //file attachment
-            NULL //mode smtp
-        );
     }
 
     /**
