@@ -46,13 +46,9 @@
     private $paymentMethod;
 
     /**
-     * List of payment methods that don't need prestashop order before charge
-     * @var array
-     */
-    private $paymentsWithoutOrder = [
-        PayshopPaymentMethods::CREDIT_CARD,
-        PayshopPaymentMethods::MB_WAY
-    ];
+     * @var string
+     */ 
+    private $prestashopOrderId;
 
     /**
      * Class constructor
@@ -69,18 +65,19 @@
      * Send charge and instrument to payshop
      *
      * @param string $paymentMethod
-     * @param int $orderId
+     * @param int $prestashopOrderId
      * @return int
      * @throws Exception
      */
-    public function execute($paymentMethod, $orderId = null)
+    public function execute($paymentMethod, $prestashopOrderId)
     {
         $this->paymentMethod = $paymentMethod;
+        $this->prestashopOrderId = $prestashopOrderId;
 
         $this->checkoutIsFilled();
         $this->moduleIsAuthorized();
 
-        return $this->createPaymentOrder($orderId);
+        return $this->createPaymentOrder();
     }
 
     /**
@@ -135,30 +132,41 @@
      * @param int $orderId
      * @return string
      */
-    private function createPaymentOrder($orderId)
+    private function createPaymentOrder()
     {
         $this->isCurrencyEuro();
 
-        $orderId = $this->getOrderId($orderId);
-        $total = $this->getOrderTotal($orderId);
-
-        $response = $this->payshopSDK->createPaymentOrder(array_merge([
-            'amount' => $total * 100,
-            'currency' => 'EUR',
-            'operative' => 'AUTHORIZATION',
-            'service' => $this->getPaymentServiceUUID(),
-    
-            "description" => $this->getDescription($orderId),
-
-            'url_ok' => $this->getProcessSuccessfulRedirectURL(),
-            'url_ko' =>  $this->getProcessFailedRedirectURL(),
-            "url_post" => $this->getProcessEventUrl(),
-        ], $this->getPaymentData()));
+        $response = $this->payshopSDK->createPaymentOrder(
+            $this->getOrderData()
+        );
 
         PayshopHelpers::checkResponse($this->module, $response);
         $this->validateGatewayCurrency($response);
 
         return $response['response']['order'];
+    }
+
+    /**
+     * Get payment order data
+     * 
+     * @return array
+     */
+    private function getOrderData()
+    {
+        $data = [
+            'amount' => $this->getOrderTotal() * 100,
+            'currency' => 'EUR',
+            'operative' => 'AUTHORIZATION',
+            'service' => PayshopHelpers::getPaymentServiceUUID($this->paymentMethod),
+    
+            "description" => $this->getDescription(),
+
+            'url_ok' => PayshopHelpers::confirmationPageURL($this->module),
+            'url_ko' =>  $this->getProcessFailedRedirectURL(),
+            "url_post" => $this->getProcessEventUrl(),
+        ];
+        
+        return array_merge($data, $this->getPaymentData());
     }
 
     /**
@@ -179,71 +187,32 @@
     }
 
     /**
-     * Get order id
-     *
-     * @return int
-     */
-    private function getOrderId($orderId)
-    {
-        if (in_array($this->paymentMethod, $this->paymentsWithoutOrder)) {
-            return (int) $this->module->currentOrder;
-        }
-
-        return $orderId;
-    }
-
-    /**
      * Get order total
      *
      * @return float
      */
-    private function getOrderTotal($orderId)
+    private function getOrderTotal()
     {
-        if (in_array($this->paymentMethod, $this->paymentsWithoutOrder)) {
-            return (float) $this->module->context->cart->getOrderTotal(true, Cart::BOTH);
-        }
+        $order = new Order($this->prestashopOrderId);
 
-        $order = new Order($orderId);
         return $order->total_paid;
     }
 
     /**
      * Get description
      *
-     * @param int $orderId
      * @return string
      */
-    private function getDescription($orderId)
+    private function getDescription()
     {
         return vsprintf(
             '%s %s %s',
             [
                 $this->module->context->shop->name,
                 $this->module->l(' - order #', 'PayshopCreateCharge'),
-                $orderId
+                $this->prestashopOrderId
             ]
         );
-    }
-
-    /**
-     * Get payment service UUID from the configuration
-     *
-     * @param WC_Order $order
-     * @param array $references
-     * @return void
-     */
-    public function getPaymentServiceUUID()
-    {
-        switch ($this->paymentMethod) {
-            case PayshopPaymentMethods::CREDIT_CARD:
-                return Configuration::get('PAYSHOP_CARD_SERVICE_UUID');
-            case PayshopPaymentMethods::MB_WAY:
-                return Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID');
-            case PayshopPaymentMethods::PAYSHOP_REFERENCE:
-                return Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID');
-            case PayshopPaymentMethods::MULTIBANCO:
-                return Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID');
-        }
     }
 
     /**
@@ -258,23 +227,7 @@
             'ProcessEvent'
         );
 
-        $url =  str_replace('http://127.0.0.1:8080/', 'https://g4mi4eughq.sharedwithexpose.com/', $url);
-
         return $url;
-    }
-
-    /**
-     * Get process instrument url
-     *
-     * @param int $orderId
-     * @return string
-     */
-    private function getProcessSuccessfulRedirectURL()
-    {
-        return $this->module->context->link->getModuleLink(
-            $this->module->name,
-            'ProcessSuccessfulRedirect',
-        );
     }
 
     /**
@@ -288,6 +241,7 @@
         return $this->module->context->link->getModuleLink(
             $this->module->name,
             'ProcessFailedRedirect',
+            ['prestashop_order_id' => $this->prestashopOrderId]
         );
     }
 
@@ -344,4 +298,6 @@
             throw new Exception($message);
         }
     }
+
+    
 }

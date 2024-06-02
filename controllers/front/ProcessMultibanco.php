@@ -30,19 +30,9 @@
 class PayshopProcessMultibancoModuleFrontController extends ModuleFrontController
 {
     /**
-     * @var PayshopCreatePaymentOrder
+     * @var PayshopCreateOrder
      */
-    private $payshopCreatePaymentOrder;
-
-    /**
-     * @var PayshopCreatePrestashopOrder
-     */
-    private $payshopCreatePrestashopOrder;    
-
-    /**
-     * @var PayshopUpdateOrder
-     */
-    private $payshopUpdateOrder;    
+    private $payshopCreateOrder;
 
     /**
      * Class constructor
@@ -51,9 +41,7 @@ class PayshopProcessMultibancoModuleFrontController extends ModuleFrontControlle
     {
         parent::__construct();
         $this->ajax = true;
-        $this->payshopCreatePaymentOrder = new PayshopCreatePaymentOrder($this->module);
-        $this->payshopCreatePrestashopOrder = new PayshopCreatePrestashopOrder($this->module);
-        $this->payshopUpdateOrder = new PayshopUpdateOrder($this->module);
+        $this->payshopCreateOrder = new PayshopCreateOrder($this->module);
     }
 
     /**
@@ -64,30 +52,17 @@ class PayshopProcessMultibancoModuleFrontController extends ModuleFrontControlle
     public function postProcess()
     {
         try {
-            $paymentMethod = PayshopPaymentMethods::MULTIBANCO;
-
-            $prestashopOrder = $this->payshopCreatePrestashopOrder->execute($paymentMethod);
-
-            $paymentOrder = $this->payshopCreatePaymentOrder->execute(
-                $paymentMethod, $prestashopOrder
+            $paymentOrder = $this->payshopCreateOrder->execute(
+                PayshopPaymentMethods::MULTIBANCO
             );
 
             $this->saveIframeUrl($paymentOrder);
-
-            $this->payshopUpdateOrder->execute(
-                $paymentMethod,
-                $prestashopOrder,
-                'PAYSHOP_ORDER_STATUS_WAITING_MULTIBANCO',
-                $paymentOrder['uuid']
-            );
 
             Tools::redirect(
                 PayshopHelpers::confirmationPageURL($this->module)
             );
         } catch (\Throwable $e) {
-            dd($e);
-
-            PayshopHelpers::errorResponse($this->module, $e->getMessage());
+            PayshopHelpers::errorResponse($e->getMessage());
         }
     }
 

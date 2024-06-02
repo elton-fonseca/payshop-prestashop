@@ -39,15 +39,61 @@ class PayshopProcessFailedRedirectModuleFrontController extends ModuleFrontContr
     }
 
     /**
-     * Payment process with credit card
+     * Create a new cart, delete the old order and redirect to the payment page
      *
      * @return void
      */
     public function postProcess()
     {
-        PayshopHelpers::errorResponse(
-            $this->module, 
-            $this->module->l('Ckeck your payment information and try again.', 'ProcessFailedRedirect')
-        );
+        try {
+            $orderId = Tools::getValue('prestashop_order_id');
+            $order = new Order($orderId);
+
+            if (Validate::isLoadedObject($order)) {
+                $id_cart = $order->id_cart;
+                $cart = new Cart($id_cart);
+                $new_cart = $cart->duplicate();
+
+                if ($new_cart['success']) {
+                    $this->context->cart = $new_cart['cart'];
+                    $this->context->cookie->id_cart = (int)$new_cart['cart']->id;
+                    $this->context->cookie->write();
+
+                    $this->deleteOrder($order);
+
+                    Tools::redirect(
+                        PayshopHelpers::errorResponse(
+                            $this->module->l('Ckeck your payment information and try again.', 'ProcessFailedRedirect')
+                        )
+                    );
+                }
+            } else {
+                throw new Exception();
+            }
+        } catch (\Throwable $th) {
+            Tools::redirect('index.php?controller=order&step=1');
+        }
+    }
+
+    /**
+     * Delete the order
+     * 
+     * @param Order $order
+     * @return bool
+     */
+    private function deleteOrder($order)
+    {
+        // Excluir o pedido
+        $orderDeleted = $order->delete();
+
+        if (!$orderDeleted) {
+            return false;
+        }
+
+        Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'order_detail WHERE id_order = ' . (int)$order->id);
+        Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'order_carrier WHERE id_order = ' . (int)$order->id);
+        Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'order_history WHERE id_order = ' . (int)$order->id);
+
+        return true;
     }
 }

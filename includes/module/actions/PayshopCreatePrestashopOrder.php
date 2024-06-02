@@ -41,11 +41,6 @@
     private $paymentMethod;
 
     /**
-     * @var string
-     */
-    private $paymentOrderId;
-
-    /**
      * Class constructor
      *
      * @param Module $module
@@ -59,18 +54,15 @@
      * Create prestashop order and payshop transaction
      *
      * @param string $paymentMethod
-     * @param int $paymentOrderId
      * @return int
      * @throws Exception
      */
-    public function execute($paymentMethod, $paymentOrderId = 'undefined')
+    public function execute($paymentMethod)
     {
         $this->paymentMethod = $paymentMethod;
-        $this->paymentOrderId = $paymentOrderId;
         
         $prestashopOrderId = $this->createPrestashopOrder();
-
-        $this->createPayshopTransaction($prestashopOrderId);
+        $this->createPayshopTransaction();
 
         return $prestashopOrderId;
     }
@@ -78,8 +70,6 @@
     /**
      * Create prestashop order
      *
-     * @param string $paymentMethod
-     * @param string $chargeId
      * @return int
      * @throws Exception
      */
@@ -106,8 +96,7 @@
             throw new Exception(
                 PayshopHelpers::errorMessageProcessTransation(
                     $this->module,
-                    $this->module->l('not created', 'PayshopCreateOrder'),
-                    $this->paymentOrderId
+                    $this->module->l('not created', 'PayshopCreateOrder')
                 )
             );
         }
@@ -118,37 +107,38 @@
     /**
      * Create payshop transaction
      * 
-     * @param int $prestashopOrderId
      * @return bool
      * @throws Exception
      */
-     private function createPayshopTransaction($prestashopOrderId)
-     {
-        $isPaymentTest = !Configuration::get('PAYSHOP_PROD_STATUS');
+    private function createPayshopTransaction()
+    {
+       $isPaymentTest = !Configuration::get('PAYSHOP_PROD_STATUS');
 
-        $transaction = new PayshopTransaction();
-        $isCreated = $transaction->create([
-            'cart_id' => $this->module->context->cart->id,
-            'order_id' => $prestashopOrderId,
-            'customer_id' => $this->module->context->customer->id,
-            'total' => $this->module->context->cart->getOrderTotal(true, Cart::BOTH),
-            'payment_method' => $this->paymentMethod,
-            'payment_status' => 'pending',
-            'is_payment_test' => $isPaymentTest
-        ]);
+       $transaction = new PayshopTransaction();
+       $transaction->where('cart_id', '=', $this->module->context->cart->id)->destroy();
 
-        if (!$isCreated) {
-            throw new Exception(
-                PayshopHelpers::errorMessageProcessTransation(
-                    $this->module,
-                    $prestashopOrderId,
-                    $this->paymentOrderId
-                )
-            );
-        }
+       $transaction = new PayshopTransaction();
+       $isCreated = $transaction->create([
+           'cart_id' => $this->module->context->cart->id,
+           'order_id' => $this->module->currentOrder,
+           'customer_id' => $this->module->context->customer->id,
+           'total' => $this->module->context->cart->getOrderTotal(true, Cart::BOTH),
+           'payment_method' => $this->paymentMethod,
+           'payment_status' => 'pending',
+           'is_payment_test' => $isPaymentTest
+       ]);
 
-        return $isCreated;
-     }
+       if (!$isCreated) {
+           throw new Exception(
+               PayshopHelpers::errorMessageProcessTransation(
+                   $this->module,
+                   $this->module->currentOrder
+               )
+           );
+       }
+
+       return $isCreated;
+    }
 
     /**
      * Get initial order status id

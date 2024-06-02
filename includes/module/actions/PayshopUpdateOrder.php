@@ -58,7 +58,7 @@
         $paymentMethod,
         $prestashopOrderId,
         $newOrderStatus,
-        $paymentOrderId,
+        $paymentOrderId
     )
     {
         $this->addPrestashopOrderPayment(
@@ -74,7 +74,7 @@
             $paymentOrderId
         );
 
-        $this->updatePrestashopOrder($prestashopOrderId, $newOrderStatus, $paymentOrderId);
+        $this->updatePrestashopOrder($prestashopOrderId, $newOrderStatus);
     }
 
     /**
@@ -162,11 +162,10 @@
      *
      * @param int $prestashopOrderId
      * @param string $newOrderStatus
-     * @param int $paymentOrderId
      * @return int
      * @throws Exception
      */
-    private function updatePrestashopOrder($prestashopOrderId, $newOrderStatus, $paymentOrderId)
+    private function updatePrestashopOrder($prestashopOrderId, $newOrderStatus)
     {
         if ('PAYSHOP_ORDER_STATUS_WAITING_PAYMENT' == $newOrderStatus) {
             return;

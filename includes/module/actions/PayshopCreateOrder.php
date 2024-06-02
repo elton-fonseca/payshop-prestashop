@@ -28,17 +28,22 @@
  * to avoid any conflicts with others containers.
  */
 
- class PayshopCreateInstrument
+ class PayshopCreateOrder
  {
     /**
-     * @var Modulo
+     * @var PayshopCreatePaymentOrder
      */
-    private $module;
+    private $payshopCreatePaymentOrder;
 
     /**
-     * @var PayshopClient
+     * @var PayshopCreatePrestashopOrder
      */
-    private $payshopSDK;
+    private $payshopCreatePrestashopOrder;    
+
+    /**
+     * @var PayshopUpdateOrder
+     */
+    private $payshopUpdateOrder;    
 
     /**
      * Class constructor
@@ -47,23 +52,33 @@
      */
     public function __construct($module)
     {
-        $this->module = $module;
-        $this->payshopSDK = PayshopClientFactory::getInstance();
+        $this->payshopCreatePaymentOrder = new PayshopCreatePaymentOrder($module);
+        $this->payshopCreatePrestashopOrder = new PayshopCreatePrestashopOrder($module);
+        $this->payshopUpdateOrder = new PayshopUpdateOrder($module);
     }
 
     /**
      * Send instrument to payshop
      *
-     * @param string $instrumentData
+     * @param string $paymentMethod
      * @return int
      * @throws Exception
      */
-    public function execute($instrumentData)
+    public function execute($paymentMethod)
     {
-        $response = $this->payshopSDK->createInstrument($instrumentData);
+        $prestashopOrderId = $this->payshopCreatePrestashopOrder->execute($paymentMethod);
 
-        PayshopHelpers::checkResponse($this->module, $response);
+        $paymentOrder = $this->payshopCreatePaymentOrder->execute(
+            $paymentMethod, $prestashopOrderId
+        );
 
-        return $response['response'];
+        $this->payshopUpdateOrder->execute(
+            $paymentMethod,
+            $prestashopOrderId,
+            'PAYSHOP_ORDER_STATUS_WAITING_PAYMENT',
+            $paymentOrder['uuid']
+        );
+
+        return $paymentOrder;
     }
 }

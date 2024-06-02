@@ -3,6 +3,27 @@
 class PayshopHelpers
 {
     /**
+     * Get payment service UUID from the configuration
+     *
+     * @param WC_Order $order
+     * @param array $references
+     * @return void
+     */
+    public static function getPaymentServiceUUID($paymentMethod)
+    {
+        switch ($paymentMethod) {
+            case PayshopPaymentMethods::CREDIT_CARD:
+                return Configuration::get('PAYSHOP_CARD_SERVICE_UUID');
+            case PayshopPaymentMethods::MB_WAY:
+                return Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID');
+            case PayshopPaymentMethods::PAYSHOP_REFERENCE:
+                return Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID');
+            case PayshopPaymentMethods::MULTIBANCO:
+                return Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID');
+        }
+    }
+
+    /**
      * Get the transaction by column
      *
      * @param string $chargeId
@@ -60,9 +81,11 @@ class PayshopHelpers
      * @param string $message
      * @return void
      */
-    public static function errorResponse($module, $message)
+    public static function errorResponse($message)
     {
-        $module->context->cookie->__set('redirect_message', $message);
+        $context = Context::getContext();
+
+        $context->cookie->__set('redirect_message', $message);
 
         Tools::redirect('index.php?controller=order&step=3&typeReturn=failure');
     }
@@ -76,20 +99,15 @@ class PayshopHelpers
      */
     public static function confirmationPageURL($module, $orderId = null)
     {
-        if ($orderId) {
-            $order = new Order($orderId);
-            $cartId = $order->id_cart;
-            $cart = new Cart((int) $cartId);
-            $securityKey = $cart->secure_key;
-        } else {
-            $cart = $module->context->cart;
-            $cartId = (int) $cart->id;
-            $orderId = (int) $module->currentOrder;
-            $customer = new Customer($cart->id_customer);
-            $securityKey = $customer->secure_key;
-        }
+        $context = Context::getContext();
 
-        return $module->context->link->getPageLink(
+        $cart = $context->cart;
+        $cartId = (int) $cart->id;
+        $orderId = (int) $module->currentOrder;
+        $customer = new Customer($cart->id_customer);
+        $securityKey = $customer->secure_key;
+
+        return $context->link->getPageLink(
             'order-confirmation',
             null,
             null,
@@ -111,7 +129,7 @@ class PayshopHelpers
      * @return string
      */
     public static function errorMessageProcessTransation(
-        $module, $prestashopOrderId, $payshopChargeId
+        $module, $prestashopOrderId, $payshopChargeId = 'undefined'
     )
     {
         return vsprintf(

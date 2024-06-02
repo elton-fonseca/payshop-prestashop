@@ -64,9 +64,12 @@
             return;
         }
 
+        $paymentMethod = $transaction['payment_method'];
+        $prestashopOrderId = $transaction['order_id'];
+
         $this->payshopUpdateOrder->execute(
-            $transaction['payment_method'],
-            $transaction['order_id'],
+            $paymentMethod,
+            $prestashopOrderId,
             'PAYSHOP_ORDER_STATUS_PAID',
             $paymentOrder['uuid'],
         );

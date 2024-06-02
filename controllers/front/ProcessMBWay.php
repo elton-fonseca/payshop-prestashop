@@ -30,9 +30,9 @@
 class PayshopProcessMBWayModuleFrontController extends ModuleFrontController
 {
     /**
-     * @var PayshopCreatePaymentOrder
+     * @var PayshopCreateOrder
      */
-    private $payshopCreatePaymentOrder;
+    private $payshopCreateOrder;
 
     /**
      * Class constructor
@@ -41,7 +41,7 @@ class PayshopProcessMBWayModuleFrontController extends ModuleFrontController
     {
         parent::__construct();
         $this->ajax = true;
-        $this->payshopCreatePaymentOrder = new PayshopCreatePaymentOrder($this->module);
+        $this->payshopCreateOrder = new PayshopCreateOrder($this->module);
     }
 
     /**
@@ -54,17 +54,15 @@ class PayshopProcessMBWayModuleFrontController extends ModuleFrontController
         try {
             $this->phoneValidation();
             
-            $paymentOrder = $this->payshopCreatePaymentOrder->execute(
+            $paymentOrder = $this->payshopCreateOrder->execute(
                 PayshopPaymentMethods::MB_WAY
             );
-
-            $this->module->context->cookie->__set('payment_order_id', $paymentOrder['uuid']);
 
             Tools::redirect(
                 PayshopClientFactory::getInstance()->getRedirectUrl($paymentOrder['token']) . '?apm=MBWAY'
             );
         } catch (\Throwable $e) {
-            PayshopHelpers::errorResponse($this->module, $e->getMessage());
+            PayshopHelpers::errorResponse($e->getMessage());
         }
     }
 
@@ -78,7 +76,7 @@ class PayshopProcessMBWayModuleFrontController extends ModuleFrontController
         $mbwayprefix = trim(Tools::getValue('phone-prefix', ''));
         $mbwayPhone = trim(Tools::getValue('phone-number', ''));
 
-        if (strlen($mbwayprefix) < 1 || strlen($mbwayprefix) > 4 || strlen($mbwayPhone) < 9) {
+        if (strlen($mbwayprefix) < 1 || strlen($mbwayprefix) > 4 || strlen($mbwayPhone) < 4) {
             throw new Exception(
                 $this->module->l('Phone number is invalid', 'ProcessMBWay')
             );

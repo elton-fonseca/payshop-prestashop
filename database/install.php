@@ -50,36 +50,11 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'payshop_transactions` (
       PRIMARY KEY (`id`)
     ) ENGINE = ' . _MYSQL_ENGINE_ . 'DEFAULT CHARSET=utf8';
 
-//events table
-$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'payshop_events` (
-        `id` INT(11) NOT NULL AUTO_INCREMENT,
-        `event_id` VARCHAR(100) NOT NULL,
-        `event_type` VARCHAR(100) NOT NULL,
-        `transaction_id` INT(11) UNSIGNED NOT NULL,
-
-        `created_at` DATETIME NOT NULL,
-        `updated_at` DATETIME NULL,
-
-        PRIMARY KEY (`id`),
-        CONSTRAINT `transaction_id`
-        FOREIGN KEY (`transaction_id`)
-        REFERENCES `' . _DB_PREFIX_ . 'payshop_transactions` (`id`)
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION
-    ) ENGINE = ' . _MYSQL_ENGINE_ . 'DEFAULT CHARSET=utf8';
-
 //Create tables
 foreach ($sql as $query) {
     if (Db::getInstance()->execute($query) == false) {
         PayshopLog::generate('Failed to execute query: ' . Db::getInstance()->getMsgError(), 'error');
         return false;
     }
-}
-if (!Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_EXPIRATION_DAYS')) {
-    Configuration::updateValue('PAYSHOP_MULTIBANCO_REFERENCE_EXPIRATION_DAYS', '2');
-}
-
-if (!Configuration::get('PAYSHOP_PAYSHOP_REFERENCE_EXPIRATION_DAYS')) {
-    Configuration::updateValue('PAYSHOP_PAYSHOP_REFERENCE_EXPIRATION_DAYS', '2');
 }
 

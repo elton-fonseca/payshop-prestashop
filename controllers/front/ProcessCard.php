@@ -30,9 +30,9 @@
 class PayshopProcessCardModuleFrontController extends ModuleFrontController
 {
     /**
-     * @var PayshopCreatePaymentOrder
+     * @var PayshopCreateOrder
      */
-    private $payshopCreatePaymentOrder;
+    private $payshopCreateOrder;
 
     /**
      * Class constructor
@@ -41,7 +41,7 @@ class PayshopProcessCardModuleFrontController extends ModuleFrontController
     {
         parent::__construct();
         $this->ajax = true;
-        $this->payshopCreatePaymentOrder = new PayshopCreatePaymentOrder($this->module);
+        $this->payshopCreateOrder = new PayshopCreateOrder($this->module);
     }
 
     /**
@@ -52,17 +52,15 @@ class PayshopProcessCardModuleFrontController extends ModuleFrontController
     public function postProcess()
     {
         try {
-            $paymentOrder = $this->payshopCreatePaymentOrder->execute(
+            $paymentOrder = $this->payshopCreateOrder->execute(
                 PayshopPaymentMethods::CREDIT_CARD
             );
-
-            $this->module->context->cookie->__set('payment_order_id', $paymentOrder['uuid']);
 
             Tools::redirect(
                 PayshopClientFactory::getInstance()->getRedirectUrl($paymentOrder['token'])
             );
         } catch (\Throwable $e) {
-            PayshopHelpers::errorResponse($this->module, $e->getMessage());
+            PayshopHelpers::errorResponse($e->getMessage());
         }
     }
 
