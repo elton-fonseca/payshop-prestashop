@@ -31,11 +31,6 @@
 class PayshopPaymentRefused
 {
     /**
-     * @var Modulo
-     */
-    private $module;
-
-    /**
      * @var PayshopUpdateOrder
      */
     private $payshopUpdateOrder;
@@ -47,12 +42,11 @@ class PayshopPaymentRefused
      */
     public function __construct($module)
     {
-        $this->module = $module;
-        $this->payshopUpdateOrder = new PayshopUpdateOrder($this->module);
+        $this->payshopUpdateOrder = new PayshopUpdateOrder($module);
     }
 
     /**
-     * Process MBWay payment declined event
+     * Process payment refused event
      *
      * @param array $event
      * @return void

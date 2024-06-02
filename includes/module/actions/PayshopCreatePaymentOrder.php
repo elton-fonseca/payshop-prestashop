@@ -62,7 +62,7 @@
     }
 
     /**
-     * Send charge and instrument to payshop
+     * Create payment order on the gateway
      *
      * @param string $paymentMethod
      * @param int $prestashopOrderId
@@ -74,66 +74,6 @@
         $this->paymentMethod = $paymentMethod;
         $this->prestashopOrderId = $prestashopOrderId;
 
-        $this->checkoutIsFilled();
-        $this->moduleIsAuthorized();
-
-        return $this->createPaymentOrder();
-    }
-
-    /**
-     * Checkout if all informations are filled on checkout page
-     *
-     * return void
-     */
-    private function checkoutIsFilled()
-    {
-        $cart = $this->module->context->cart;
-
-        $moduleDisabed = !$this->module->active;
-        $cartIsEmpty = !$cart->id;
-        $clientNotFilled = $cart->id_customer == 0;
-        $deliveryAddressNotFilled = $cart->id_address_delivery == 0;
-        $invoiceAddressNotFilled = $cart->id_address_invoice == 0;
-
-        if (
-            $moduleDisabed || $cartIsEmpty || $clientNotFilled ||
-            $deliveryAddressNotFilled || $invoiceAddressNotFilled
-        ) {
-            throw new Exception($this->module->l('Checkout fields are not filled', 'PayshopCreateCharge'));
-        }
-    }
-
-    /**
-     * Check if module is authorized
-     *
-     * return void
-     * @throws Exception
-     */
-    private function moduleIsAuthorized()
-    {
-        $authorized = false;
-
-        foreach (Module::getPaymentModules() as $module) {
-            if ($module['name'] == 'payshop') {
-                $authorized = true;
-                break;
-            }
-        }
-
-        if (!$authorized) {
-            throw new Exception($this->module->l('This payment method is not available.', 'PayshopCreateCharge'));
-        }
-    }
-
-    /**
-     * Create charge on payshop
-     *
-     * @param string $paymentMethod
-     * @param int $orderId
-     * @return string
-     */
-    private function createPaymentOrder()
-    {
         $this->isCurrencyEuro();
 
         $response = $this->payshopSDK->createPaymentOrder(
@@ -187,7 +127,7 @@
     }
 
     /**
-     * Get order total
+     * Get order total value
      *
      * @return float
      */
@@ -199,7 +139,7 @@
     }
 
     /**
-     * Get description
+     * Get order description
      *
      * @return string
      */
@@ -216,24 +156,8 @@
     }
 
     /**
-     * Get process event url
+     * Get process failed redirect url
      *
-     * @return string
-     */
-    private function getProcessEventUrl()
-    {
-        $url = $this->module->context->link->getModuleLink(
-            $this->module->name,
-            'ProcessEvent'
-        );
-
-        return $url;
-    }
-
-    /**
-     * Get process instrument url
-     *
-     * @param int $orderId
      * @return string
      */
     private function getProcessFailedRedirectURL()
@@ -246,9 +170,21 @@
     }
 
     /**
+     * Get process event url
+     *
+     * @return string
+     */
+    private function getProcessEventUrl()
+    {
+        return $this->module->context->link->getModuleLink(
+            $this->module->name,
+            'ProcessEvent'
+        );
+    }
+
+    /**
      * Get payment data
      * 
-     * @param string paymentMethod
      * @return array
      */
     private function getPaymentData()

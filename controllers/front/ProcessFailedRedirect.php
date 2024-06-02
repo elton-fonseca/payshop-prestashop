@@ -39,7 +39,8 @@ class PayshopProcessFailedRedirectModuleFrontController extends ModuleFrontContr
     }
 
     /**
-     * Create a new cart, delete the old order and redirect to the payment page
+     * When a payment is failed, the customer is redirected to this page.
+     * Then create a new cart, delete the old order and redirect to the payment page
      *
      * @return void
      */

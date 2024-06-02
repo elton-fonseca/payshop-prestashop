@@ -9,6 +9,11 @@ class PayshopMultibanco
         $this->module = $module;
     }
 
+    /**
+     * Register the Multibanco reference payment method
+     * 
+     * @return PaymentOption
+     */
     public function register()
     {
         $formAction = $this->module->context->link->getModuleLink(

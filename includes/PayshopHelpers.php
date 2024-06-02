@@ -5,9 +5,8 @@ class PayshopHelpers
     /**
      * Get payment service UUID from the configuration
      *
-     * @param WC_Order $order
-     * @param array $references
-     * @return void
+     * @param string $paymentMethod
+     * @return string
      */
     public static function getPaymentServiceUUID($paymentMethod)
     {
@@ -26,7 +25,8 @@ class PayshopHelpers
     /**
      * Get the transaction by column
      *
-     * @param string $chargeId
+     * @param string $column
+     * @param string $value
      * @return array
      * @throws Exception
      */
@@ -48,7 +48,7 @@ class PayshopHelpers
      *
      * @param module $module
      * @param array $response
-     * @return void
+     * @return bool
      * @throws Exception
      */
     public static function checkResponse($module, $response)
@@ -77,7 +77,6 @@ class PayshopHelpers
     /**
      * Set error response
      *
-     * @param module $module
      * @param string $message
      * @return void
      */
@@ -91,7 +90,7 @@ class PayshopHelpers
     }
 
     /**
-     * Get the instrument params
+     * Get the confirmation page URL
      *
      * @param Module $module
      * @param string|null $orderId
@@ -124,7 +123,7 @@ class PayshopHelpers
      * Get formated exception message
      * 
      * @param module $module
-     * @param string $prestashopOrderId
+     * @param int $prestashopOrderId
      * @param string $payshopChargeId
      * @return string
      */
@@ -140,17 +139,4 @@ class PayshopHelpers
             [$prestashopOrderId, $payshopChargeId]
         );
     }
-
-    /**
-     * Check is the store is in https
-     * 
-     * @return bool
-     */
-    public static function isHTTPS()
-    {
-        return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
-            || (isset($_SERVER['SERVER_PORT']) && (int) $_SERVER['SERVER_PORT'] === 443);
-    }
-
-
 }

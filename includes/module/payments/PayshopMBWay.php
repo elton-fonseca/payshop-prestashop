@@ -9,6 +9,11 @@ class PayshopMBWay
         $this->module = $module;
     }
 
+    /**
+     * Register the MBWay payment method
+     * 
+     * @return PaymentOption
+     */
     public function register()
     {
         $formAction = $this->module->context->link->getModuleLink(

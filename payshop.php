@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of Payshop
  */
 
-define('PAYSHOP_VERSION', '2.0.5');
+define('PAYSHOP_VERSION', '2.0.0');
 define('PAYSHOP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -199,7 +199,7 @@ class Payshop extends PaymentModule
     }
 
     /**
-     * Show order status on order confirmation page
+     * Show payment information on order confirmation page
      *
      * @param  $params
      * @return array|string|void
@@ -208,10 +208,8 @@ class Payshop extends PaymentModule
     {
         $order = $params['order'];
 
-        if (in_array($order->payment, ['Payshop (Payshop Reference)', 'Payshop (Multibanco)'])) {
-            $showReferencesOrderConfirmation = new PayshopShowReferencesOrderConfirmation($this);
-            return $showReferencesOrderConfirmation->execute($order);
-        }
+        $showReferencesOrderConfirmation = new PayshopShowReferencesOrderConfirmation($this);
+        return $showReferencesOrderConfirmation->execute($order);
     }
 
     /**
@@ -258,7 +256,7 @@ class Payshop extends PaymentModule
     }
 }
 
-function dd(...$asd)
+function ddpayshop(...$asd)
 {
     echo "<pre>";
     print_r($asd);

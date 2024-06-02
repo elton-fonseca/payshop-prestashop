@@ -45,7 +45,7 @@ class PayshopProcessEventModuleFrontController extends ModuleFrontController
     }
 
     /**
-     * Process webhook events
+     * Process webhook events from the Gateway
      *
      * @return void
      */

@@ -8,11 +8,6 @@ class PayshopPaymentMethods
     const MULTIBANCO ='multibanco';
 
     /**
-     * @var Modulo
-     */
-    private $module;
-
-    /**
      * @var PayshopCreditCard
      */
     private $creditCard;
@@ -34,7 +29,6 @@ class PayshopPaymentMethods
 
     public function __construct($module)
     {
-        $this->module = $module;
         $this->creditCard = new PayshopCreditCard($module);
         $this->mbWay = new PayshopMBWay($module);
         $this->payshopReference = new PayshopReference($module);

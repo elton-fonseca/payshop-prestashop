@@ -67,9 +67,10 @@ class PayshopProcessPayshopModuleFrontController extends ModuleFrontController
     }
 
     /**
-     * Save iframe url in the session
+     * Save iframe url in the session to show it in the confirmation page
      * 
      * @param array $paymentOrder
+     * @return void
      */
     private function saveIframeUrl($paymentOrder)
     {

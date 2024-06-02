@@ -12,6 +12,11 @@ class PayshopCreditCard
         $this->module = $module;
     }
 
+    /**
+     * Register the credit card payment method
+     * 
+     * @return PaymentOption
+     */
     public function register()
     {
         $formAction = $this->module->context->link->getModuleLink(

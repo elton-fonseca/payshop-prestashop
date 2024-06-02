@@ -45,7 +45,7 @@ class PayshopProcessMBWayModuleFrontController extends ModuleFrontController
     }
 
     /**
-     * Payment process with credit card
+     * Payment process with MBWay
      *
      * @return void
      */
@@ -70,6 +70,7 @@ class PayshopProcessMBWayModuleFrontController extends ModuleFrontController
      * Validate the phone number
      * 
      * @return bool
+     * @throws Exception
      */
     public function phoneValidation()
     {

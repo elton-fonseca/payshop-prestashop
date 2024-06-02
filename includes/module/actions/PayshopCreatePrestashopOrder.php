@@ -82,7 +82,7 @@
             (int) $this->module->context->cart->id,
             (int) $this->getInitialOrderStatusId(),
             (float) $this->module->context->cart->getOrderTotal(true, Cart::BOTH),
-            $this->formatedPaymentMethodName($this->paymentMethod),
+            $this->formatedPaymentMethodName(),
             null,
             null,
             (int)$this->module->context->currency->id,
@@ -154,10 +154,9 @@
     /**
      * Formate payment method name
      * 
-     * @param string $paymentMethod
      * @return string
      */
-     private function formatedPaymentMethodName($paymentMethod)
+     private function formatedPaymentMethodName()
      {
         $payments = [
             PayshopPaymentMethods::MULTIBANCO => 'Payshop (Multibanco)',
@@ -166,6 +165,6 @@
             PayshopPaymentMethods::MB_WAY => 'Payshop Online Payments (MBWay)'
         ];
 
-        return $payments[$paymentMethod];
+        return $payments[$this->paymentMethod];
      }
  }

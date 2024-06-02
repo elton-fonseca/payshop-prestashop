@@ -30,11 +30,6 @@
  class PayshopPaymentSuccess
  {
     /**
-     * @var Modulo
-     */
-    private $module;
-
-    /**
      * @var PayshopUpdateOrder
      */
     private $payshopUpdateOrder;
@@ -46,14 +41,13 @@
      */
     public function __construct($module)
     {
-        $this->module = $module;
-        $this->payshopUpdateOrder = new PayshopUpdateOrder($this->module);
+        $this->payshopUpdateOrder = new PayshopUpdateOrder($module);
     }
 
     /**
      * Process payment success event
      *
-     * @param array $event
+     * @param array $paymentOrder
      * @return void
      */
     public function process($paymentOrder)

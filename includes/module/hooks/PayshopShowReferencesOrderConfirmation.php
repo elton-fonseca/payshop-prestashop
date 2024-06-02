@@ -45,13 +45,17 @@ class PayshopShowReferencesOrderConfirmation
     }
 
     /**
-     * Display (waiting/confirmad/rejected) MBWay dialog on order confirmation page
+     * Display iframe with payshop or multibanco references
      *
      * @param Order $order
      * @return string
      */
     public function execute($order)
     {
+        if (!in_array($order->payment, ['Payshop (Payshop Reference)', 'Payshop (Multibanco)'])) {
+            return;
+        }
+
         $smarty = $this->module->context->smarty;
         $smarty->assign([
             'iframeURL' => $_SESSION['payshop_iframe_url'],

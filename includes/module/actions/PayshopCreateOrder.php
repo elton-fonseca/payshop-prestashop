@@ -31,6 +31,11 @@
  class PayshopCreateOrder
  {
     /**
+     * @var Modulo
+     */
+    private $module;
+
+    /**
      * @var PayshopCreatePaymentOrder
      */
     private $payshopCreatePaymentOrder;
@@ -52,20 +57,23 @@
      */
     public function __construct($module)
     {
+        $this->module = $module;
         $this->payshopCreatePaymentOrder = new PayshopCreatePaymentOrder($module);
         $this->payshopCreatePrestashopOrder = new PayshopCreatePrestashopOrder($module);
         $this->payshopUpdateOrder = new PayshopUpdateOrder($module);
     }
 
     /**
-     * Send instrument to payshop
+     * Prepare the payment order and Prestashop Order to all payments
      *
      * @param string $paymentMethod
-     * @return int
-     * @throws Exception
+     * @return string
      */
     public function execute($paymentMethod)
     {
+        $this->checkoutIsFilled();
+        $this->moduleIsAuthorized();
+
         $prestashopOrderId = $this->payshopCreatePrestashopOrder->execute($paymentMethod);
 
         $paymentOrder = $this->payshopCreatePaymentOrder->execute(
@@ -80,5 +88,50 @@
         );
 
         return $paymentOrder;
+    }
+
+    /**
+     * Checkout if all informations are filled on checkout page
+     *
+     * return void
+     */
+    private function checkoutIsFilled()
+    {
+        $cart = $this->module->context->cart;
+
+        $moduleDisabed = !$this->module->active;
+        $cartIsEmpty = !$cart->id;
+        $clientNotFilled = $cart->id_customer == 0;
+        $deliveryAddressNotFilled = $cart->id_address_delivery == 0;
+        $invoiceAddressNotFilled = $cart->id_address_invoice == 0;
+
+        if (
+            $moduleDisabed || $cartIsEmpty || $clientNotFilled ||
+            $deliveryAddressNotFilled || $invoiceAddressNotFilled
+        ) {
+            throw new Exception($this->module->l('Checkout fields are not filled', 'PayshopCreateCharge'));
+        }
+    }
+
+    /**
+     * Check if module is authorized
+     *
+     * return void
+     * @throws Exception
+     */
+    private function moduleIsAuthorized()
+    {
+        $authorized = false;
+
+        foreach (Module::getPaymentModules() as $module) {
+            if ($module['name'] == 'payshop') {
+                $authorized = true;
+                break;
+            }
+        }
+
+        if (!$authorized) {
+            throw new Exception($this->module->l('This payment method is not available.', 'PayshopCreateCharge'));
+        }
     }
 }

@@ -34,11 +34,6 @@ require_once('PayshopPaymentRefused.php');
  class PayshopProcessEvent
  {
     /**
-     * @var Modulo
-     */
-    private $module;
-
-    /**
      * @var PayshopPaymentSuccess
      */
     private $payshopPaymentSuccess;
@@ -55,7 +50,6 @@ require_once('PayshopPaymentRefused.php');
      */
     public function __construct($module)
     {
-        $this->module = $module;
         $this->payshopPaymentSuccess = new PayshopPaymentSuccess($module);
         $this->payshopPaymentRefused = new PayshopPaymentRefused($module);
     }

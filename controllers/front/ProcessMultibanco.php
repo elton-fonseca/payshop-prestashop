@@ -45,7 +45,7 @@ class PayshopProcessMultibancoModuleFrontController extends ModuleFrontControlle
     }
 
     /**
-     * Payment process with credit card
+     * Payment process with Multibanco reference
      *
      * @return void
      */
@@ -67,9 +67,10 @@ class PayshopProcessMultibancoModuleFrontController extends ModuleFrontControlle
     }
 
     /**
-     * Save iframe url in the session
+     * Save iframe url in the session to show it in the confirmation page
      * 
      * @param array $paymentOrder
+     * @return void
      */
     private function saveIframeUrl($paymentOrder)
     {
