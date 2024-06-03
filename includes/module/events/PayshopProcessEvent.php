@@ -34,6 +34,11 @@ require_once('PayshopPaymentRefused.php');
  class PayshopProcessEvent
  {
     /**
+     * @var PayshopClient
+     */
+    private $payshopSDK;
+
+    /**
      * @var PayshopPaymentSuccess
      */
     private $payshopPaymentSuccess;
@@ -50,6 +55,7 @@ require_once('PayshopPaymentRefused.php');
      */
     public function __construct($module)
     {
+        $this->payshopSDK = PayshopClientFactory::getInstance();
         $this->payshopPaymentSuccess = new PayshopPaymentSuccess($module);
         $this->payshopPaymentRefused = new PayshopPaymentRefused($module);
     }
@@ -61,10 +67,42 @@ require_once('PayshopPaymentRefused.php');
      */
     public function execute($paymentOrder)
     {
+        $this->addMetadataAppName($paymentOrder);
+
         if ($paymentOrder['status'] == 'SUCCESS' && $paymentOrder['paid'] == true) {
             return $this->payshopPaymentSuccess->process($paymentOrder);
         }
 
         return $this->payshopPaymentRefused->process($paymentOrder);
+    }
+
+    /**
+     * Add metadata app name to instruction
+     * 
+     * @param  array  $paymentOrder
+     * @return void
+     */
+    private function addMetadataAppName(array $paymentOrder): void
+    {
+        $transactions = $paymentOrder['transactions'] ?? [];
+
+        if (!$transactions) {
+            return;
+        }
+
+        $transaction = $transactions[count($transactions) - 1];
+
+        if (!isset($transaction['uuid'])) {
+            return;
+        }
+        
+        $this->payshopSDK->createTransationMetadata(
+            $transaction['uuid'],
+            [
+                'metadata' => [
+                    'source_application' => 'prestaShop_plugin'
+                ]
+            ]
+        );
     }
  }
