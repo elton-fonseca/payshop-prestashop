@@ -100,4 +100,18 @@ class PayshopClientFactory
 
         return Configuration::get('PAYSHOP_SANDBOX_SIGNATURE');
     }
+
+    /**
+     * Get client UUID key based on the environment
+     *
+     * @return string
+     */
+    public static function getClientUUID()
+    {
+        if (self::isProduction() == true) {
+            return Configuration::get('PAYSHOP_CLIENT_UUID');
+        }
+
+        return Configuration::get('PAYSHOP_SANDBOX_CLIENT_UUID');
+    }
 }

@@ -49,8 +49,11 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
     {
 
         $title = $this->module->l('Payments', 'PayshopPaymentsSettings');
-        $fields = array(
-            array(
+
+        $fields = array();
+
+        if (Configuration::get('PAYSHOP_CARD_SERVICE_UUID', false)) {
+            $fields[] = array(
                 'col' => 4,
                 'type' => 'switch',
                 'label' => $this->module->l('Credit Card', 'PayshopPaymentsSettings'),
@@ -69,16 +72,11 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
                         'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
                     )
                 )
-            ),
-            array(
-                'col' => 8,
-                'type' => 'text',
-                'desc' => '',
-                'name' => 'PAYSHOP_CARD_SERVICE_UUID',
-                'label' => $this->module->l('Service UUID (Credit Card)', 'PayshopCredentialsSettings'),
-                'required' => true
-            ),
-            array(
+            );
+        }
+
+        if (Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID', false)) {
+            $fields[] = array(
                 'col' => 4,
                 'type' => 'switch',
                 'label' => $this->module->l('Multibanco Reference', 'PayshopPaymentsSettings'),
@@ -97,16 +95,11 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
                         'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
                     )
                 )
-            ),
-            array(
-                'col' => 8,
-                'type' => 'text',
-                'desc' => '',
-                'name' => 'PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID',
-                'label' => $this->module->l('Service UUID (Multibanco Reference)', 'PayshopCredentialsSettings'),
-                'required' => true
-            ),  
-            array(
+            );
+        }
+
+        if (Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID', false)) {
+            $fields[] = array(
                 'col' => 4,
                 'type' => 'switch',
                 'label' => $this->module->l('Payshop Reference', 'PayshopPaymentsSettings'),
@@ -125,16 +118,11 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
                         'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
                     )
                 )
-            ),
-            array(
-                'col' => 8,
-                'type' => 'text',
-                'desc' => '',
-                'name' => 'PAYSHOP_REFERENCE_SERVICE_UUID',
-                'label' => $this->module->l('Service UUID (Payshop Reference)', 'PayshopCredentialsSettings'),
-                'required' => true
-            ),  
-            array(
+            );
+        }
+
+        if (Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID', false)) {
+            $fields[] = array(
                 'col' => 4,
                 'type' => 'switch',
                 'label' => $this->module->l('MBWay', 'PayshopPaymentsSettings'),
@@ -153,18 +141,8 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
                         'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
                     )
                 )
-            ),
-            array(
-                'col' => 8,
-                'type' => 'text',
-                'desc' => '',
-                'name' => 'PAYSHOP_MBWAY_SERVICE_UUID',
-                'label' => $this->module->l('Service UUID (MBWay)', 'PayshopCredentialsSettings'),
-                'required' => true
-            ),
-
-
-        );
+            );
+        }
 
         return $this->buildForm($title, $fields);
     }
@@ -176,13 +154,6 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
      */
     public function postFormProcess()
     {
-        $this->validate = ([
-            'PAYSHOP_CARD_SERVICE_UUID' => 'cardServiceUuid',
-            'PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID' => 'multibancoReferenceServiceUuid',
-            'PAYSHOP_REFERENCE_SERVICE_UUID' => 'referenceServiceUuid',
-            'PAYSHOP_MBWAY_SERVICE_UUID' => 'mbwayServiceUuid',
-        ]);
-
         parent::postFormProcess();
 
         if (Payshop::$form_alert != 'alert-danger') {
@@ -200,18 +171,9 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
     {
         return array(
             'PAYSHOP_CREDIT_CARD' => Configuration::get('PAYSHOP_CREDIT_CARD'),
-            'PAYSHOP_CARD_SERVICE_UUID' => Configuration::get('PAYSHOP_CARD_SERVICE_UUID'),
-
             'PAYSHOP_MULTIBANCO_REFERENCE' => Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE'),
-            'PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID' => Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID'),
-            
             'PAYSHOP_PAYSHOP_REFERENCE' => Configuration::get('PAYSHOP_PAYSHOP_REFERENCE'),
-            'PAYSHOP_REFERENCE_SERVICE_UUID' => Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID'),
-            
             'PAYSHOP_MBWAY' => Configuration::get('PAYSHOP_MBWAY'),
-            'PAYSHOP_MBWAY_SERVICE_UUID' => Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID'),
         );
     }
-
-
 }

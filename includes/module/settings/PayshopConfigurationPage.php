@@ -17,7 +17,11 @@ class PayshopConfigurationPage extends Payshop
         $payments = new PayshopPaymentsSettings();
 
         $credentialsForm = $this->renderSettingsForm($credentials->submit, $credentials->values, $credentials->form);
-        $paymentsForm = $this->renderSettingsForm($payments->submit, $payments->values, $payments->form);
+
+        $paymentsForm = '';
+        if ($this->areThereActivePayments()) {
+            $paymentsForm = $this->renderSettingsForm($payments->submit, $payments->values, $payments->form);
+        }
 
         //variables for admin configuration
         $api_key = Configuration::get('PAYSHOP_API_KEY');
@@ -91,5 +95,21 @@ class PayshopConfigurationPage extends Payshop
         );
 
         return $helper->generateForm(array($form));
+    }
+
+
+    /**
+     * Are there active payments?
+     * 
+     * @return boolean
+     */
+    private function areThereActivePayments()
+    {
+        return (
+            Configuration::get('PAYSHOP_CARD_SERVICE_UUID', false) ||
+            Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID', false) ||
+            Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID', false) ||
+            Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID', false)
+        );
     }
 }

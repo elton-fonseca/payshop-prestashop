@@ -158,7 +158,7 @@
             if(i == 1){
                 form_credentials_inputs[i].insertAdjacentHTML('afterend', form_credentials_produccion_append);
             }
-            else if(i == 3){
+            else if(i == 4){
                 form_credentials_inputs[i].insertAdjacentHTML('afterend', form_credentials_pruebas_append);
             }
         }

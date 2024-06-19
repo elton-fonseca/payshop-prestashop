@@ -100,6 +100,14 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
             array(
                 'col' => 8,
                 'type' => 'text',
+                'desc' => ' ',
+                'name' => 'PAYSHOP_CLIENT_UUID',
+                'label' => $this->module->l('Client UUID', 'PayshopCredentialsSettings'),
+                'required' => true
+            ),
+            array(
+                'col' => 8,
+                'type' => 'text',
                 'desc' => '',
                 'name' => 'PAYSHOP_SANDBOX_API_KEY',
                 'label' => $this->module->l('Api Key', 'PayshopCredentialsSettings'),
@@ -112,7 +120,15 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
                 'name' => 'PAYSHOP_SANDBOX_SIGNATURE',
                 'label' => $this->module->l('Signature', 'PayshopCredentialsSettings'),
                 'required' => true
-            )
+            ),
+            array(
+                'col' => 8,
+                'type' => 'text',
+                'desc' => ' ',
+                'name' => 'PAYSHOP_SANDBOX_CLIENT_UUID',
+                'label' => $this->module->l('Client UUID', 'PayshopCredentialsSettings'),
+                'required' => true
+            ),
         );
 
         return $this->buildForm($title, $fields);
@@ -128,8 +144,10 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
         $this->validate = ([
             'PAYSHOP_API_KEY' => 'api_key',
             'PAYSHOP_SIGNATURE' => 'signature',
+            'PAYSHOP_CLIENT_UUID' => 'client_uuid',
             'PAYSHOP_SANDBOX_API_KEY' => 'api_key',
             'PAYSHOP_SANDBOX_SIGNATURE' => 'signature',
+            'PAYSHOP_SANDBOX_CLIENT_UUID' => 'client_uuid',
         ]);
 
         parent::postFormProcess();
@@ -152,8 +170,10 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
             'PAYSHOP_PROD_STATUS' => Configuration::get('PAYSHOP_PROD_STATUS'),
             'PAYSHOP_API_KEY' => Configuration::get('PAYSHOP_API_KEY'),
             'PAYSHOP_SIGNATURE' => Configuration::get('PAYSHOP_SIGNATURE'),
+            'PAYSHOP_CLIENT_UUID' => Configuration::get('PAYSHOP_CLIENT_UUID'),
             'PAYSHOP_SANDBOX_API_KEY' => Configuration::get('PAYSHOP_SANDBOX_API_KEY'),
-            'PAYSHOP_SANDBOX_SIGNATURE' => Configuration::get('PAYSHOP_SANDBOX_SIGNATURE')
+            'PAYSHOP_SANDBOX_SIGNATURE' => Configuration::get('PAYSHOP_SANDBOX_SIGNATURE'),
+            'PAYSHOP_SANDBOX_CLIENT_UUID' => Configuration::get('PAYSHOP_SANDBOX_CLIENT_UUID')
         );
     }
 }

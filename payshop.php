@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of Payshop
  */
 
-define('PAYSHOP_VERSION', '2.0.0');
+define('PAYSHOP_VERSION', '2.0.1');
 define('PAYSHOP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -97,6 +97,7 @@ class Payshop extends PaymentModule
         include_once PAYSHOP_ROOT_URL . '/includes/PayshopHelpers.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/settings/PayshopConfigurationPage.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/settings/PayshopPaymentServiceUUID.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/alerts/PayshopUpdateAlert.php';
         include_once PAYSHOP_ROOT_URL . '/controllers/front/UpdateAlertClose.php';
