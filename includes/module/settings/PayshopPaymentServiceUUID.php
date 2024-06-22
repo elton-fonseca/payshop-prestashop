@@ -13,20 +13,15 @@ class PayshopPaymentServiceUUID
     private $availableServices = [];
 
     /**
-     * Class constructor
-     */
-    public function __construct()
-    {
-        $this->payshopSDK = PayshopClientFactory::getInstance();
-    }
-
-    /**
      * Add links to plugin list
      * 
      * @return void
      */
     public function execute()
     {
+
+        $this->payshopSDK = PayshopClientFactory::getInstance();
+
         $this->availableServices = $this->getGatewayServices();
 
         $this->fillServiceUUID('CREDORAX', 'PAYSHOP_CARD_SERVICE_UUID');

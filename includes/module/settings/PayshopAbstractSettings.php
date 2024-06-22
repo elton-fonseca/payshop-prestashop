@@ -104,7 +104,17 @@ class PayshopAbstractSettings
                 $this->payshopPaymentServiceUUID->execute();
             } catch (Exception $e) {
                 Payshop::$form_alert = 'alert-danger';
-                Payshop::$form_message = $this->module->l('Check the gateway payment credentials', 'PayshopAbstractSettings');
+                Payshop::$form_message = $this->module->l('Click on the save button again or check your credentials', 'PayshopAbstractSettings');
+
+                Configuration::updateValue('PAYSHOP_CREDIT_CARD', null);
+                Configuration::updateValue('PAYSHOP_CARD_SERVICE_UUID', null);
+                Configuration::updateValue('PAYSHOP_MBWAY', null);
+                Configuration::updateValue('PAYSHOP_MBWAY_SERVICE_UUID', null);
+                Configuration::updateValue('PAYSHOP_PAYSHOP_REFERENCE', null);
+                Configuration::updateValue('PAYSHOP_REFERENCE_SERVICE_UUID', null);
+                Configuration::updateValue('PAYSHOP_MULTIBANCO_REFERENCE', null);
+                Configuration::updateValue('PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID', null);
+                
                 return false;
             }
 

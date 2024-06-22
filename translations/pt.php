@@ -45,7 +45,7 @@ $_MODULE['<{payshop}prestashop>payshophelpers_b08243f3fd1c1f30532e454aad43d4d6']
 $_MODULE['<{payshop}prestashop>payshophelpers_533ec3a3ade0ed01433ccfbca44dc01a'] = 'As credênciais da API estão incorretas. Verifique as credênciais';
 $_MODULE['<{payshop}prestashop>payshophelpers_58a3e3fe765a9900e3e401c37d42ada0'] = 'Erro a processar a transação. ID da encomenda: %s, ID payshop: %s.';
 $_MODULE['<{payshop}prestashop>payshopabstractsettings_c9cc8cce247e49bae79f15173ce97354'] = 'Guardar';
-$_MODULE['<{payshop}prestashop>payshopabstractsettings_790428cd7e5636d43d2ed07f1678cbf4'] = 'Verifique as credênciais do gateway';
+$_MODULE['<{payshop}prestashop>payshopabstractsettings_ff8e51771e279b7e5ad7da26295a0cf3'] = 'Clique no botão guardar ou verifique suas credenciais';
 $_MODULE['<{payshop}prestashop>payshopabstractsettings_861b4cb91061d3d375052bffadc14662'] = 'As configuraões foram salvas com sucesso. Agora ative seus meios de pagamento.';
 $_MODULE['<{payshop}prestashop>payshopabstractsettings_93027262f5c97f5faccac9eb7ef7df6d'] = 'As credenciais não podem estar vazias e devem ser válidas.';
 $_MODULE['<{payshop}prestashop>payshopabstractsettings_cbfa2a7c18db32aca0f634532701ee11'] = 'Por favor preencha as credenciais e ative o módulo.';
