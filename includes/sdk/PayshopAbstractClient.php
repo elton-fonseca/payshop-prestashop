@@ -108,7 +108,7 @@ abstract class PayshopAbstractClient
     protected function getCredentials()
     {
         return [
-            'Authorization: Basic ' . base64_encode($this->apiKey . ':'),
+            'Authorization: Basic ' . base64_encode($this->apiKey . ':')
         ];
     }
 

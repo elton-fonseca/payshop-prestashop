@@ -69,7 +69,7 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
                         'value' => false,
                         'label' => $this->module->l('No', 'PayshopCredentialsSettings')
                     )
-                ),
+                )
             ),
             array(
                 'col' => 8,
@@ -128,7 +128,7 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
                 'name' => 'PAYSHOP_SANDBOX_CLIENT_UUID',
                 'label' => $this->module->l('Client UUID', 'PayshopCredentialsSettings'),
                 'required' => true
-            ),
+            )
         );
 
         return $this->buildForm($title, $fields);
@@ -147,7 +147,7 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
             'PAYSHOP_CLIENT_UUID' => 'client_uuid',
             'PAYSHOP_SANDBOX_API_KEY' => 'api_key',
             'PAYSHOP_SANDBOX_SIGNATURE' => 'signature',
-            'PAYSHOP_SANDBOX_CLIENT_UUID' => 'client_uuid',
+            'PAYSHOP_SANDBOX_CLIENT_UUID' => 'client_uuid'
         ]);
 
         parent::postFormProcess();

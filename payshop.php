@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of Payshop
  */
 
-define('PAYSHOP_VERSION', '2.0.2');
+define('PAYSHOP_VERSION', '2.0.3');
 define('PAYSHOP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -250,7 +250,7 @@ class Payshop extends PaymentModule
         $this->context->smarty->assign([
             'hasMessage' => Tools::getValue('typeReturn') == 'failure',
             'message' => $messageError,
-            'moduleUrl' => $this->path,
+            'moduleUrl' => $this->path
         ]);
 
         return $this->display(__FILE__, 'views/templates/hook/order-wrapper-top.tpl');

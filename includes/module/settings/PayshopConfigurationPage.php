@@ -46,7 +46,7 @@ class PayshopConfigurationPage extends Payshop
                 'credentialsForm' => $credentialsForm,
                 'paymentsForm' => $paymentsForm,
                 //currencies
-                'currency' => $this->context->currency->iso_code,
+                'currency' => $this->context->currency->iso_code
             )
         )->fetch($this->local_path . 'views/templates/admin/configurations.tpl');
 
@@ -91,7 +91,7 @@ class PayshopConfigurationPage extends Payshop
         $helper->tpl_vars = array(
             'fields_value' => $values,
             'languages' => $this->context->controller->getLanguages(),
-            'id_language' => $this->context->language->id,
+            'id_language' => $this->context->language->id
         );
 
         return $helper->generateForm(array($form));

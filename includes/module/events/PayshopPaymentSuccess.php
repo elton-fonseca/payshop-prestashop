@@ -65,7 +65,7 @@
             $paymentMethod,
             $prestashopOrderId,
             'PAYSHOP_ORDER_STATUS_PAID',
-            $paymentOrder['uuid'],
+            $paymentOrder['uuid']
         );
     }
  }

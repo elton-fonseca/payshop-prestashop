@@ -21,7 +21,7 @@ class PayshopCreditCard
     {
         $formAction = $this->module->context->link->getModuleLink(
             $this->module->name,
-            'ProcessCard',
+            'ProcessCard'
         );
 
         $paymentForm = $this->module->context->smarty->assign([

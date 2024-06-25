@@ -18,7 +18,7 @@ class PayshopMBWay
     {
         $formAction = $this->module->context->link->getModuleLink(
             $this->module->name,
-            'ProcessMBWay',
+            'ProcessMBWay'
         );
 
         $paymentForm = $this->module->context->smarty->assign([

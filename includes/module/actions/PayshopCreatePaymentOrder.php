@@ -103,7 +103,7 @@
 
             'url_ok' => PayshopHelpers::confirmationPageURL($this->module),
             'url_ko' =>  $this->getProcessFailedRedirectURL(),
-            "url_post" => $this->getProcessEventUrl(),
+            "url_post" => $this->getProcessEventUrl()
         ];
         
         return array_merge($data, $this->getPaymentData());
@@ -192,7 +192,7 @@
         if ($this->paymentMethod === PayshopPaymentMethods::CREDIT_CARD) {
             return [
                 'secure' => "true",
-                'save_card' => "false",
+                'save_card' => "false"
             ];
         }
 

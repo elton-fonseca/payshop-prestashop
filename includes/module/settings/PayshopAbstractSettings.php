@@ -55,14 +55,14 @@ class PayshopAbstractSettings
             'form' => array(
                 'legend' => array(
                     'title' => $title,
-                    'icon' => 'icon-cogs',
+                    'icon' => 'icon-cogs'
                 ),
                 'class' => 'credentials',
                 'input' => $fields,
                 'submit' => array(
-                    'title' => $this->module->l('Save', 'PayshopAbstractSettings'),
-                ),
-            ),
+                    'title' => $this->module->l('Save', 'PayshopAbstractSettings')
+                )
+            )
         );
     }
 

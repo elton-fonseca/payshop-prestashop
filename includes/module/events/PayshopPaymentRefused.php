@@ -63,7 +63,7 @@ class PayshopPaymentRefused
             $transaction['payment_method'],
             $transaction['order_id'],
             'PAYSHOP_ORDER_STATUS_PAYMENT_ERROR',
-            $paymentOrder['uuid'],
+            $paymentOrder['uuid']
         );
     }
 }

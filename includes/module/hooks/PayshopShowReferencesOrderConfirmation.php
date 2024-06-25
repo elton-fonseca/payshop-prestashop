@@ -58,7 +58,7 @@ class PayshopShowReferencesOrderConfirmation
 
         $smarty = $this->module->context->smarty;
         $smarty->assign([
-            'iframeURL' => $_SESSION['payshop_iframe_url'],
+            'iframeURL' => $_SESSION['payshop_iframe_url']
         ]);
 
         return $smarty->fetch($this->module->getLocalPath() . 'views/templates/hook/show-references.tpl');

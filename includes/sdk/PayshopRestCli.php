@@ -16,7 +16,7 @@ class PayshopRestCli
     {
         $headers_default = [
             'Accept: application/json',
-            'Content-Type: application/json',
+            'Content-Type: application/json'
         ];
 
         is_array($headers) ? $headers = array_merge($headers_default, $headers) : '';
@@ -91,7 +91,7 @@ class PayshopRestCli
 
         $response = [
             'status' => $api_http_code,
-            'response' => json_decode($api_result, true),
+            'response' => json_decode($api_result, true)
         ];
 
         curl_close($connect);

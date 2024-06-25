@@ -173,7 +173,7 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
             'PAYSHOP_CREDIT_CARD' => Configuration::get('PAYSHOP_CREDIT_CARD'),
             'PAYSHOP_MULTIBANCO_REFERENCE' => Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE'),
             'PAYSHOP_PAYSHOP_REFERENCE' => Configuration::get('PAYSHOP_PAYSHOP_REFERENCE'),
-            'PAYSHOP_MBWAY' => Configuration::get('PAYSHOP_MBWAY'),
+            'PAYSHOP_MBWAY' => Configuration::get('PAYSHOP_MBWAY')
         );
     }
 }

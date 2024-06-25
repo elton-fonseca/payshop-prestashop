@@ -114,7 +114,7 @@ class PayshopHelpers
                 'id_cart' => $cartId,
                 'id_module' => $module->id,
                 'id_order' => $orderId,
-                'key' => $securityKey,
+                'key' => $securityKey
             ]
         );    
     }
