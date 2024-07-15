@@ -94,7 +94,7 @@
     private function getOrderData()
     {
         $data = [
-            'amount' => $this->getOrderTotal() * 100,
+            'amount' => ceil($this->getOrderTotal() * 100),
             'currency' => 'EUR',
             'operative' => 'AUTHORIZATION',
             'service' => PayshopHelpers::getPaymentServiceUUID($this->paymentMethod),
