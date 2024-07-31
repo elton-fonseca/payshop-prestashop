@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of Payshop
  */
 
-define('PAYSHOP_VERSION', '2.0.4');
+define('PAYSHOP_VERSION', '2.0.5');
 define('PAYSHOP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {

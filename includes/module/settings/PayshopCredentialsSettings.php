@@ -77,7 +77,7 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
                 'name' => '',
                 'desc' => '',
                 'label' => $this->module->l('Load credentials', 'PayshopCredentialsSettings'),
-                'html_content' => '<a href="https://backend.paylands.com/"'. 
+                'html_content' => '<a href="https://popbackoffice.payshop.pt/settings/developers"'. 
                 'target="_blank" class="btn btn-default mp-btn-credenciais">'
                 . $this->module->l('Search my credentials', 'PayshopCredentialsSettings') . '</a>'
             ),
