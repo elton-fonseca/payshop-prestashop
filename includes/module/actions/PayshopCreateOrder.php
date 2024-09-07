@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 2007-2022 PrestaShop
  *
@@ -87,7 +86,7 @@
             $paymentOrder['uuid']
         );
 
-        return $paymentOrder;
+        return [$prestashopOrderId, $paymentOrder];
     }
 
     /**

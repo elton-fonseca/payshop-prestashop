@@ -1,0 +1,9 @@
+We have a problem on registry payment
+
+{message}
+
+Check on shop admin panel and Payshop dashboard. If necessary, you can create order or change order status on shop admin panel.
+
+If the problem persist, contact your Prestashop shop administrator.
+
+{shop_name}

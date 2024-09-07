@@ -168,4 +168,23 @@ class PayshopClient extends PayshopAbstractClient
         return $this->getUrl('/payment/process', $token);
     }
 
+    /**
+     * Get iframe content from the order token
+     *
+     * @param string $token
+     * @return string
+     */
+    public function getIframeContent($token)
+    {
+        $connect = curl_init($this->getUrl('/payment/process', $token));
+
+        $useragent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'webhook';
+        curl_setopt($connect, CURLOPT_USERAGENT, $useragent);
+        
+        curl_setopt($connect, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($connect, CURLOPT_CUSTOMREQUEST, 'GET');
+        curl_setopt($connect, CURLOPT_HTTPHEADER, []);
+
+        return curl_exec($connect);
+    } 
 }

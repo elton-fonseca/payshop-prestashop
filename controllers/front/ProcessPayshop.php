@@ -35,6 +35,11 @@ class PayshopProcessPayshopModuleFrontController extends ModuleFrontController
     private $payshopCreateOrder;
 
     /**
+     * @var PayshopUpdateOrder
+     */
+    private $payshopUpdateOrder;   
+
+    /**
      * Class constructor
      */
     public function __construct()
@@ -42,6 +47,7 @@ class PayshopProcessPayshopModuleFrontController extends ModuleFrontController
         parent::__construct();
         $this->ajax = true;
         $this->payshopCreateOrder = new PayshopCreateOrder($this->module);
+        $this->payshopUpdateOrder = new PayshopUpdateOrder($this->module);
     }
 
     /**
@@ -52,11 +58,18 @@ class PayshopProcessPayshopModuleFrontController extends ModuleFrontController
     public function postProcess()
     {
         try {
-            $paymentOrder = $this->payshopCreateOrder->execute(
+            [$prestashopOrderId, $paymentOrder] = $this->payshopCreateOrder->execute(
                 PayshopPaymentMethods::PAYSHOP_REFERENCE
             );
 
-            $this->saveIframeUrl($paymentOrder);
+            $this->saveIframeContent($paymentOrder);
+
+            $this->payshopUpdateOrder->execute(
+                PayshopPaymentMethods::PAYSHOP_REFERENCE,
+                $prestashopOrderId,
+                'PAYSHOP_ORDER_STATUS_WAITING_PAYSHOP',
+                $paymentOrder['uuid']
+            );
 
             Tools::redirect(
                 PayshopHelpers::confirmationPageURL($this->module)
@@ -72,11 +85,10 @@ class PayshopProcessPayshopModuleFrontController extends ModuleFrontController
      * @param array $paymentOrder
      * @return void
      */
-    private function saveIframeUrl($paymentOrder)
+    private function saveIframeContent($paymentOrder)
     {
-        $url = PayshopClientFactory::getInstance()->getRedirectUrl($paymentOrder['token']);
-        $url.= '?apm=PAYSHOP';
+        $iframeContent = PayshopClientFactory::getInstance()->getIframeContent($paymentOrder['token'] . '?apm=PAYSHOP') ;
 
-        $_SESSION['payshop_iframe_url'] = $url;
+        $_SESSION['payshop_iframe_content'] = $iframeContent;
     }
 }

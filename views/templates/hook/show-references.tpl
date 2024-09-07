@@ -69,7 +69,7 @@
     <div class="overlap" id="references-popup">
         <div class="overlap-content">
             <button class="close-btn" onclick="document.getElementById('references-popup').style.display='none'">X</button>
-            <iframe src="{$iframeURL|escape:'htmlall':'UTF-8'}" frameborder="0" style="height: 90%; width: 400px"></iframe>
+            <iframe srcdoc="{$iframeContent|escape:'htmlall':'UTF-8'}" frameborder="0" style="height: 90%; width: 400px"></iframe>
         </div>
     </div>
 </div>

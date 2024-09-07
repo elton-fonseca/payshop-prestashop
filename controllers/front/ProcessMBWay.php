@@ -54,7 +54,7 @@ class PayshopProcessMBWayModuleFrontController extends ModuleFrontController
         try {
             $this->phoneValidation();
             
-            $paymentOrder = $this->payshopCreateOrder->execute(
+            [$_, $paymentOrder] = $this->payshopCreateOrder->execute(
                 PayshopPaymentMethods::MB_WAY
             );
 

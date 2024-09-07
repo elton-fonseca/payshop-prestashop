@@ -52,7 +52,7 @@ class PayshopProcessCardModuleFrontController extends ModuleFrontController
     public function postProcess()
     {
         try {
-            $paymentOrder = $this->payshopCreateOrder->execute(
+            [$_, $paymentOrder] = $this->payshopCreateOrder->execute(
                 PayshopPaymentMethods::CREDIT_CARD
             );
 

@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of Payshop
  */
 
-define('PAYSHOP_VERSION', '2.0.5');
+define('PAYSHOP_VERSION', '2.0.6');
 define('PAYSHOP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -51,6 +51,9 @@ class Payshop extends PaymentModule
 
     public $payshopPaymentMethods;
     public $payshopOrderStatuses;
+
+    public $mailsLangs;
+    public $mailsTemplate;
 
     public static $form_alert;
     public static $form_message;
@@ -81,6 +84,20 @@ class Payshop extends PaymentModule
         $this->ps_version = _PS_VERSION_;
         $this->path = $this->_path;
         $this->pathDir = str_replace('\\', '/', __DIR__);
+
+        $this->mailsTemplate = [
+            'waiting_payment_multibanco.html',
+            'waiting_payment_multibanco.txt',
+            'waiting_payment_payshop.html',
+            'waiting_payment_payshop.txt',
+            'error_warning.html',
+            'error_warning.txt'
+        ];
+
+        $this->mailsLangs = [
+            'en',
+            'pt',
+        ];
 
         $this->payshopPaymentMethods = new PayshopPaymentMethods($this);
         $this->payshopOrderStatuses = new PayshopOrderStatuses();
@@ -141,6 +158,8 @@ class Payshop extends PaymentModule
 
         include PAYSHOP_ROOT_URL . '/database/install.php';
         $this->payshopOrderStatuses->register();
+
+        $this->copyMailTemplates();
 
         //install hooks and dependencies
         return parent::install() &&
@@ -254,6 +273,58 @@ class Payshop extends PaymentModule
         ]);
 
         return $this->display(__FILE__, 'views/templates/hook/order-wrapper-top.tpl');
+    }
+
+    /**
+     * Copy mail templates to mails root directory
+     *
+     * @return void
+     */
+    private function copyMailTemplates()
+    {
+        foreach ($this->mailsLangs as $lang) {
+            $mailsRootDir = $this->pathDir . "/../../mails/$lang/";
+
+            if (!is_dir($mailsRootDir)) {
+                mkdir($mailsRootDir);
+            }
+
+            foreach ($this->mailsTemplate as $template) {
+                copy(
+                    $this->pathDir . "/mails/$lang/" . $template,
+                    $mailsRootDir . $template
+                );
+            }
+        }
+    }
+
+    /**
+     * Add (payshop and multibanco) reference variables to mail template
+     *
+     * @param  $params
+     * @return void
+     */
+    public function hookSendMailAlterTemplateVars($params)
+    {
+        $isNotMultibanco = $params['template'] != 'waiting_payment_multibanco';
+        $isNotPayshop = $params['template'] != 'waiting_payment_payshop';
+
+        if ($isNotMultibanco && $isNotPayshop) {
+            return;
+        }
+
+        $orderId = $params['template_vars']['{id_order}'];
+        $transation = PayshopHelpers::getTransacion('order_id', $orderId);
+
+        $response = PayshopClientFactory::getInstance()->getPaymentOrder($transation['charge_id']);
+        $fields = $response['response']['order']['transactions'][0]['payment_data'];
+        
+        $params['template_vars']["{reference}"] = $fields['reference'];
+        $params['template_vars']["{end_date}"] = $fields['deadline'];
+
+        if ($isNotPayshop) {
+            $params['template_vars']["{entity}"] = $fields['entity'];
+        }
     }
 }
 
