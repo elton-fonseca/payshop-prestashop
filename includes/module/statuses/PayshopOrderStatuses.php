@@ -15,10 +15,40 @@ class PayshopOrderStatuses
      */
     public function register()
     {
+        $payshopOrderStatus = Configuration::get('PAYSHOP_ORDER_STATUS_WAITING_PAYSHOP');
+        $this->setStatusName('Payshop', $payshopOrderStatus);
+
+        $multibancoOrderStatus = Configuration::get('PAYSHOP_ORDER_STATUS_WAITING_MULTIBANCO');
+        $this->setStatusName('Multibanco', $multibancoOrderStatus);
+
         PayshopPaid::register();
         PayshopWaitingPayment::register();
         PayshopWaitingMultibanco::register();
         PayshopWaitingPayshop::register();
         PayshopPaymentError::register();
+    }
+
+    /**
+     * Set order state name in the corresponding language
+     * 
+     * @param string $paymentName
+     * @param int $orderStatusId
+     * @return void
+     */
+    private function setStatusName($paymentName, $orderStatusId = null)
+    {
+        if ($orderStatusId) {
+            foreach (Language::getLanguages() as $language) {
+                $description = 'Waiting payment ' . $paymentName;
+
+                if (Tools::strtolower($language['iso_code']) == 'pt') {
+                    $description = 'Aguardando pagamento ' . $paymentName;
+                }
+                
+                $sql = "UPDATE ps_order_state_lang SET name = '{$description}' WHERE id_order_state = {$orderStatusId} and id_lang = {$language['id_lang']}";
+
+                DB::getInstance()->execute($sql);
+            }
+        }
     }
 }
