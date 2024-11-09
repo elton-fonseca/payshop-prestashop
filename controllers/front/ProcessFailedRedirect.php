@@ -60,6 +60,7 @@ class PayshopProcessFailedRedirectModuleFrontController extends ModuleFrontContr
                     $this->context->cookie->id_cart = (int)$new_cart['cart']->id;
                     $this->context->cookie->write();
 
+                    $this->restoreStock($order);
                     $this->deleteOrder($order);
 
                     Tools::redirect(
@@ -73,6 +74,23 @@ class PayshopProcessFailedRedirectModuleFrontController extends ModuleFrontContr
             }
         } catch (\Throwable $th) {
             Tools::redirect('index.php?controller=order&step=1');
+        }
+    }
+
+    /**
+     * Restore the stock to the product
+     * 
+     * @param mixed $order 
+     * @return void 
+     */
+    private function restoreStock($order)
+    {
+        foreach ($order->getProducts() as $product) {
+            $productId = (int)$product['product_id'];
+            $productAttributeId = (int)$product['product_attribute_id'];
+            $quantity = (int)$product['product_quantity'];
+
+            StockAvailable::updateQuantity($productId, $productAttributeId, $quantity);
         }
     }
 
@@ -97,4 +115,6 @@ class PayshopProcessFailedRedirectModuleFrontController extends ModuleFrontContr
 
         return true;
     }
+
+
 }
