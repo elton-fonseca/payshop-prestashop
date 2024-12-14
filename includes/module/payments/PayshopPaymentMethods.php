@@ -6,6 +6,10 @@ class PayshopPaymentMethods
     const MB_WAY ='mbway';
     const PAYSHOP_REFERENCE = 'payshop_reference';
     const MULTIBANCO ='multibanco';
+    const GOOGLEPAY = 'googlepay';
+    const APPLEPAY = 'applepay';
+    const PAYPAL = 'paypal';
+    const CLICKTOPAY = 'clicktopay';
 
     /**
      * @var PayshopCreditCard
@@ -27,12 +31,18 @@ class PayshopPaymentMethods
      */
     private $payshopMultibanco;
 
+    /**
+     * @var PayshopGooglepay
+     */
+    private $payshopGooglepay;
+
     public function __construct($module)
     {
         $this->creditCard = new PayshopCreditCard($module);
         $this->mbWay = new PayshopMBWay($module);
         $this->payshopReference = new PayshopReference($module);
         $this->payshopMultibanco = new PayshopMultibanco($module);
+        $this->payshopGooglepay = new PayshopGooglepay($module);
     }
 
     /**
@@ -59,6 +69,8 @@ class PayshopPaymentMethods
         if (Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE')  && Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID') != '') {
             $paymentOptions[] =  $this->payshopMultibanco->register();
         }
+
+        $paymentOptions[] =  $this->payshopGooglepay->register();
 
         return $paymentOptions;
     }

@@ -27,7 +27,7 @@
  * to avoid any conflicts with others containers.
  */
 
-class PayshopShowReferencesOrderConfirmation
+class HookOrderConfirmation
 {
     /**
      * @var Modulo
@@ -45,17 +45,28 @@ class PayshopShowReferencesOrderConfirmation
     }
 
     /**
-     * Display iframe with payshop or multibanco references
+     * Display information on the order confirmation page
      *
+     * @param Order $order
      * @return string
      */
-    public function execute()
+    public function execute($order)
     {
-        $smarty = $this->module->context->smarty;
-        $smarty->assign([
-            'iframeContent' => $_SESSION['payshop_iframe_content']
-        ]);
+        $googlepay = 'Payshop Online Payments (Google Pay)';
 
-        return $smarty->fetch($this->module->getLocalPath() . 'views/templates/hook/show-references.tpl');
+        if ($order->payment == $googlepay) {
+            $googlepayDialog = new PayshopGooglepayOrderConfirmation($this->module);
+            return $googlepayDialog->execute($order);
+        }
+
+        $referencePaymentMethods = [
+            'Payshop (Payshop Reference)', 
+            'Payshop (Multibanco)'
+        ];
+
+        if (in_array($order->payment, $referencePaymentMethods)) {
+            $referencesDialog = new PayshopShowReferencesOrderConfirmation($this->module);
+            return $referencesDialog->execute();
+        }
     }
 }

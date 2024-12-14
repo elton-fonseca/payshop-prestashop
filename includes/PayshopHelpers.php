@@ -19,6 +19,8 @@ class PayshopHelpers
                 return Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID');
             case PayshopPaymentMethods::MULTIBANCO:
                 return Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID');
+            default:
+                return Configuration::get('PAYSHOP_CARD_SERVICE_UUID'); //arrumar isso depois
         }
     }
 

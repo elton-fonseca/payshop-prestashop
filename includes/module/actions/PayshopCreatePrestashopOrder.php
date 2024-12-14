@@ -162,7 +162,8 @@
             PayshopPaymentMethods::MULTIBANCO => 'Payshop (Multibanco)',
             PayshopPaymentMethods::PAYSHOP_REFERENCE => 'Payshop (Payshop Reference)',
             PayshopPaymentMethods::CREDIT_CARD => 'Payshop (Card)',
-            PayshopPaymentMethods::MB_WAY => 'Payshop Online Payments (MBWay)'
+            PayshopPaymentMethods::MB_WAY => 'Payshop Online Payments (MBWay)',
+            PayshopPaymentMethods::GOOGLEPAY => 'Payshop Online Payments (Google Pay)',
         ];
 
         return $payments[$this->paymentMethod];

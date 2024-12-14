@@ -72,7 +72,6 @@
     {
         $this->checkoutIsFilled();
         $this->moduleIsAuthorized();
-
         $prestashopOrderId = $this->payshopCreatePrestashopOrder->execute($paymentMethod);
 
         $paymentOrder = $this->payshopCreatePaymentOrder->execute(
