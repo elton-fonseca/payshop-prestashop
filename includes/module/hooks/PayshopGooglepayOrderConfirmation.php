@@ -53,9 +53,14 @@ class PayshopGooglepayOrderConfirmation
     public function execute($order)
     {
         $smarty = $this->module->context->smarty;
-        // $smarty->assign([
-        //     'iframeContent' => $_SESSION['payshop_iframe_content']
-        // ]);
+        $smarty->assign([
+            'moduleUrl' => $this->module->path,
+            'storeName' => Configuration::get('PS_SHOP_NAME'),
+            'environment' => PayshopClientFactory::isProduction() ? 'PRODUCTION' : 'TEST',
+            'gatewayMerchantId' => PayshopClientFactory::getClientUUID(),
+            'googlePayMerchantId' => '123123123', //arrumar isso aqui
+            'total' => number_format($order->total_paid, 2, '.', '')
+        ]);
 
         return $smarty->fetch($this->module->getLocalPath() . 'views/templates/hook/googlepay-dialog.tpl');
     }
