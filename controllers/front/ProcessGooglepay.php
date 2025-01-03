@@ -69,17 +69,4 @@ class PayshopProcessGooglepayModuleFrontController extends ModuleFrontController
             PayshopHelpers::errorResponse($e->getMessage());
         }
     }
-
-    /**
-     * Save iframe url in the session to show it in the confirmation page
-     * 
-     * @param array $paymentOrder
-     * @return void
-     */
-    private function saveIframeContent($paymentOrder)
-    {
-        $iframeContent = PayshopClientFactory::getInstance()->getIframeContent($paymentOrder['token'] . '?apm=MULTIBANCO') ;
-
-        $_SESSION['payshop_iframe_content'] = $iframeContent;
-    }
 }

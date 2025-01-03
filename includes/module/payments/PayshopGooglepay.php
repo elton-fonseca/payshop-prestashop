@@ -10,7 +10,7 @@ class PayshopGooglepay
     }
 
     /**
-     * Register the Multibanco reference payment method
+     * Register the Googlepay payment method
      * 
      * @return PaymentOption
      */
@@ -30,7 +30,7 @@ class PayshopGooglepay
         $payshopGooglepayCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
 
         $payshopGooglepayCheckout->setForm($paymentForm)
-            ->setCallToActionText($this->module->l('Pay with Google Pay', 'PayshopMultibanco'))
+            ->setCallToActionText($this->module->l('Pay with Google Pay', 'PayshopGooglepay'))
             ->setLogo(_MODULE_DIR_ . 'payshop/views/img/googlepay.png');
 
         return $payshopGooglepayCheckout;

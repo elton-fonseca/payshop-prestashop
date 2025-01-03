@@ -35,6 +35,22 @@ class PayshopPaymentMethods
      * @var PayshopGooglepay
      */
     private $payshopGooglepay;
+    
+    /**
+     * @var PayshopApplepay
+     */
+    private $payshopApplepay;
+
+    /**
+     * @var PayshopPaypal
+     */
+    private $payshopPaypal;
+
+    /**
+     * @var PayshopClicktopay
+     */
+    private $payshopClicktopay;
+
 
     public function __construct($module)
     {
@@ -43,6 +59,9 @@ class PayshopPaymentMethods
         $this->payshopReference = new PayshopReference($module);
         $this->payshopMultibanco = new PayshopMultibanco($module);
         $this->payshopGooglepay = new PayshopGooglepay($module);
+        $this->payshopApplepay = new PayshopApplepay($module);
+        $this->payshopPaypal = new PayshopPaypal($module);
+        $this->payshopClicktopay = new PayshopClicktopay($module);
     }
 
     /**
@@ -71,6 +90,9 @@ class PayshopPaymentMethods
         }
 
         $paymentOptions[] =  $this->payshopGooglepay->register();
+        $paymentOptions[] =  $this->payshopApplepay->register();
+        $paymentOptions[] =  $this->payshopPaypal->register();
+        $paymentOptions[] =  $this->payshopClicktopay->register();
 
         return $paymentOptions;
     }

@@ -114,6 +114,14 @@ class PayshopAbstractSettings
                 Configuration::updateValue('PAYSHOP_REFERENCE_SERVICE_UUID', null);
                 Configuration::updateValue('PAYSHOP_MULTIBANCO_REFERENCE', null);
                 Configuration::updateValue('PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID', null);
+                Configuration::updateValue('PAYSHOP_GOOGLEPAY', null);
+                Configuration::updateValue('PAYSHOP_GOOGLEPAY_SERVICE_UUID', null);
+                Configuration::updateValue('PAYSHOP_APPLEPAY', null);
+                Configuration::updateValue('PAYSHOP_APPLEPAY_SERVICE_UUID', null);
+                Configuration::updateValue('PAYSHOP_PAYPAL', null);
+                Configuration::updateValue('PAYSHOP_PAYPAL_SERVICE_UUID', null);
+                Configuration::updateValue('PAYSHOP_CLICKTOPAY', null);
+                Configuration::updateValue('PAYSHOP_CLICKTOPAY_SERVICE_UUID', null);
                 
                 return false;
             }

@@ -296,37 +296,31 @@ document.addEventListener('DOMContentLoaded', function() {
    * @see @link https://developers.google.com/pay/api/web/reference/response-objects#PaymentData|PaymentData object reference
    */
   function processPayment(paymentData) {
-    // show returned data in developer console for debugging
-      console.log(paymentData);
+    const paymentType = 'GOOGLEPAY';
+    const url = "{$processWalletPayment nofilter}";
+    const orderId = "{$orderId|escape:'htmlall':'UTF-8'}";
 
-      const paymentType = 'payshop_googlepay';
-
-      fetch('/asd', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        },
-        body: JSON.stringify({
-          payment_type: paymentType,
-          payload: paymentData
-        })
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        order_id: orderId,
+        payment_type: paymentType,
+        payload: paymentData
       })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Success:', data);
-        if (data.redirect) {
-          window.location.href = data.redirect;
-        }
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-      
-    // @todo pass payment token to your gateway to process payment
-    // @note DO NOT save the payment credentials for future transactions,
-    // unless they're used for merchant-initiated transactions with user
-    // consent in place.
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.redirect) {
+        window.location.href = data.redirect;
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+    
     paymentToken = paymentData.paymentMethodData.tokenizationData.token;
   }
   </script>

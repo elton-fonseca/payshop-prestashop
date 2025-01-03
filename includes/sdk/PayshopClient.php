@@ -92,6 +92,23 @@ class PayshopClient extends PayshopAbstractClient
     }
 
     /**
+     * Send the wallet payload to the payment gateway
+     *
+     * @param  array  $payload
+     * @return array
+     */
+    public function paymentWallet($payload)
+    {
+        $response = PayshopRestCli::post(
+            $this->getUrl('/payment/wallet'),
+            $this->addSignature($payload),
+            $this->getCredentials()
+        );
+
+        return $response;
+    }
+
+    /**
      * Cancel a order payment when is using deffered mode
      *
      * @param array $payment

@@ -52,6 +52,11 @@ class PayshopGooglepayOrderConfirmation
      */
     public function execute($order)
     {
+        $processWalletPayment = $this->module->context->link->getModuleLink(
+            $this->module->name,
+            'ProcessWalletPayment'
+        );
+
         $smarty = $this->module->context->smarty;
         $smarty->assign([
             'moduleUrl' => $this->module->path,
@@ -59,7 +64,9 @@ class PayshopGooglepayOrderConfirmation
             'environment' => PayshopClientFactory::isProduction() ? 'PRODUCTION' : 'TEST',
             'gatewayMerchantId' => PayshopClientFactory::getClientUUID(),
             'googlePayMerchantId' => '123123123', //arrumar isso aqui
-            'total' => number_format($order->total_paid, 2, '.', '')
+            'total' => number_format($order->total_paid, 2, '.', ''),
+            'processWalletPayment' => $processWalletPayment,
+            'orderId' => $order->id,
         ]);
 
         return $smarty->fetch($this->module->getLocalPath() . 'views/templates/hook/googlepay-dialog.tpl');

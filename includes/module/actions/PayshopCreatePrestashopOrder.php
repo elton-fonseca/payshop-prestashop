@@ -164,6 +164,9 @@
             PayshopPaymentMethods::CREDIT_CARD => 'Payshop (Card)',
             PayshopPaymentMethods::MB_WAY => 'Payshop Online Payments (MBWay)',
             PayshopPaymentMethods::GOOGLEPAY => 'Payshop Online Payments (Google Pay)',
+            PayshopPaymentMethods::APPLEPAY => 'Payshop Online Payments (Apple Pay)',
+            PayshopPaymentMethods::PAYPAL => 'Payshop Online Payments (Paypal)',
+            PayshopPaymentMethods::CLICKTOPAY => 'Payshop Online Payments (Click to Pay)',
         ];
 
         return $payments[$this->paymentMethod];

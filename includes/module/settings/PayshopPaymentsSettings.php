@@ -144,6 +144,152 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
             );
         }
 
+        if (true || Configuration::get('PAYSHOP_GOOGLEPAY_SERVICE_UUID', false)) {
+            $fields[] = array(
+                'col' => 4,
+                'type' => 'switch',
+                'label' => $this->module->l('Google Pay', 'PayshopPaymentsSettings'),
+                'name' => 'PAYSHOP_GOOGLEPAY',
+                'is_bool' => true,
+                'desc' => $this->module->l('Activate the payment method on Checkout', 'PayshopPaymentsSettings'),
+                'values' => array(
+                    array(
+                    'id' => 'PAYSHOP_GOOGLEPAY_ON',
+                    'value' => true,
+                    'label' => $this->module->l('Enable', 'PayshopPaymentsSettings')
+                    ),
+                    array(
+                    'id' => 'PAYSHOP_GOOGLEPAY_OFF',
+                    'value' => false,
+                    'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
+                    )
+                )
+            );
+            
+            $fields[] = array(
+                'col' => 8,
+                'type' => 'text',
+                'desc' => 'Google Pay Merchant ID created in the Google Business Console: https://pay.google.com/business/console/',
+                'name' => 'PAYSHOP_GOOGLEPAY_MERCHANT_ID',
+                'label' => $this->module->l('Google Pay Merchant ID', 'PayshopPaymentsSettings'),
+                'required' => true
+            );
+        }
+
+        if (true || Configuration::get('PAYSHOP_APPLEPAY_SERVICE_UUID', false)) {
+            $fields[] = array(
+                'col' => 4,
+                'type' => 'switch',
+                'label' => $this->module->l('Apple Pay', 'PayshopPaymentsSettings'),
+                'name' => 'PAYSHOP_APPLEPAY',
+                'is_bool' => true,
+                'desc' => $this->module->l('Activate the payment method on Checkout', 'PayshopPaymentsSettings'),
+                'values' => array(
+                    array(
+                    'id' => 'PAYSHOP_APPLEPAY_ON',
+                    'value' => true,
+                    'label' => $this->module->l('Enable', 'PayshopPaymentsSettings')
+                    ),
+                    array(
+                    'id' => 'PAYSHOP_APPLEPAY_OFF',
+                    'value' => false,
+                    'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
+                    )
+                )
+            );
+
+            $fields[] = array(
+                'col' => 8,
+                'type' => 'text',
+                'desc' => 'Your Apple Pay Merchant Identifier.',
+                'name' => 'PAYSHOP_APPLEPAY_MERCHANT_ID',
+                'label' => $this->module->l('Merchant Identifier', 'PayshopPaymentsSettings'),
+                'required' => true
+            );
+
+            $fields[] = array(
+                'col' => 8,
+                'type' => 'text',
+                'desc' => 'The display name for your Apple Pay merchant.',
+                'name' => 'PAYSHOP_APPLEPAY_MERCHANT_NAME',
+                'label' => $this->module->l('Display Name', 'PayshopPaymentsSettings'),
+                'required' => true
+            );
+
+            $fields[] = array(
+                'col' => 8,
+                'type' => 'text',
+                'desc' => 'The domain name associated with your Apple Pay merchant.',
+                'name' => 'PAYSHOP_APPLEPAY_DOMAIN_NAME',
+                'label' => $this->module->l('Site domain', 'PayshopPaymentsSettings'),
+                'required' => true
+            );
+
+            $fields[] = array(
+                'col' => 8,
+                'type' => 'text',
+                'desc' => 'The absolute path to your Apple Pay certificate. Do not place it inside the Prestashop directory for security reasons.',
+                'name' => 'PAYSHOP_APPLEPAY_CERTIFICATE_PATH',
+                'label' => $this->module->l('Certificate Path', 'PayshopPaymentsSettings'),
+                'required' => true
+            );
+
+            $fields[] = array(
+                'col' => 8,
+                'type' => 'text',
+                'desc' => 'The absolute path to your Apple Pay private key. Do not place it inside the Prestashop directory for security reasons.',
+                'name' => 'PAYSHOP_APPLEPAY_PRIVATE_KEY_PATH',
+                'label' => $this->module->l('Private Key Path', 'PayshopPaymentsSettings'),
+                'required' => true
+            );
+        }
+
+        if (true || Configuration::get('PAYSHOP_PAYPAL_SERVICE_UUID', false)) {
+            $fields[] = array(
+                'col' => 4,
+                'type' => 'switch',
+                'label' => $this->module->l('PayPal', 'PayshopPaymentsSettings'),
+                'name' => 'PAYSHOP_PAYPAL',
+                'is_bool' => true,
+                'desc' => $this->module->l('Activate the payment method on Checkout', 'PayshopPaymentsSettings'),
+                'values' => array(
+                    array(
+                    'id' => 'PAYSHOP_PAYPAL_ON',
+                    'value' => true,
+                    'label' => $this->module->l('Enable', 'PayshopPaymentsSettings')
+                    ),
+                    array(
+                    'id' => 'PAYSHOP_PAYPAL_OFF',
+                    'value' => false,
+                    'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
+                    )
+                )
+            );
+        }
+
+        if (true || Configuration::get('PAYSHOP_CLICKTOPAY_SERVICE_UUID', false)) {
+            $fields[] = array(
+            'col' => 4,
+            'type' => 'switch',
+            'label' => $this->module->l('Click to Pay', 'PayshopPaymentsSettings'),
+            'name' => 'PAYSHOP_CLICKTOPAY',
+            'is_bool' => true,
+            'desc' => $this->module->l('Activate the payment method on Checkout', 'PayshopPaymentsSettings'),
+            'values' => array(
+                array(
+                'id' => 'PAYSHOP_CLICKTOPAY_ON',
+                'value' => true,
+                'label' => $this->module->l('Enable', 'PayshopPaymentsSettings')
+                ),
+                array(
+                'id' => 'PAYSHOP_CLICKTOPAY_OFF',
+                'value' => false,
+                'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
+                )
+            )
+            );
+        }
+
         return $this->buildForm($title, $fields);
     }
 
@@ -173,7 +319,17 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
             'PAYSHOP_CREDIT_CARD' => Configuration::get('PAYSHOP_CREDIT_CARD'),
             'PAYSHOP_MULTIBANCO_REFERENCE' => Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE'),
             'PAYSHOP_PAYSHOP_REFERENCE' => Configuration::get('PAYSHOP_PAYSHOP_REFERENCE'),
-            'PAYSHOP_MBWAY' => Configuration::get('PAYSHOP_MBWAY')
+            'PAYSHOP_MBWAY' => Configuration::get('PAYSHOP_MBWAY'),
+            'PAYSHOP_GOOGLEPAY' => Configuration::get('PAYSHOP_GOOGLEPAY'),
+            'PAYSHOP_GOOGLEPAY_MERCHANT_ID' => Configuration::get('PAYSHOP_GOOGLEPAY_MERCHANT_ID'),
+            'PAYSHOP_APPLEPAY' => Configuration::get('PAYSHOP_APPLEPAY'),
+            'PAYSHOP_APPLEPAY_MERCHANT_ID' => Configuration::get('PAYSHOP_APPLEPAY_MERCHANT_ID'),
+            'PAYSHOP_APPLEPAY_MERCHANT_NAME' => Configuration::get('PAYSHOP_APPLEPAY_MERCHANT_NAME'),
+            'PAYSHOP_APPLEPAY_DOMAIN_NAME' => Configuration::get('PAYSHOP_APPLEPAY_DOMAIN_NAME'),
+            'PAYSHOP_APPLEPAY_CERTIFICATE_PATH' => Configuration::get('PAYSHOP_APPLEPAY_CERTIFICATE_PATH'),
+            'PAYSHOP_APPLEPAY_PRIVATE_KEY_PATH' => Configuration::get('PAYSHOP_APPLEPAY_PRIVATE_KEY_PATH'),
+            'PAYSHOP_PAYPAL' => Configuration::get('PAYSHOP_PAYPAL'),
+            'PAYSHOP_CLICKTOPAY' => Configuration::get('PAYSHOP_CLICKTOPAY')
         );
     }
 }

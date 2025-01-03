@@ -109,7 +109,11 @@ class PayshopConfigurationPage extends Payshop
             Configuration::get('PAYSHOP_CARD_SERVICE_UUID', false) ||
             Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID', false) ||
             Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID', false) ||
-            Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID', false)
+            Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID', false) ||
+            Configuration::get('PAYSHOP_GOOGLEPAY_SERVICE_UUID', false) ||
+            Configuration::get('PAYSHOP_APPLEPAY_SERVICE_UUID', false) ||
+            Configuration::get('PAYSHOP_PAYPAL_SERVICE_UUID', false) ||
+            Configuration::get('PAYSHOP_CLICKTOPAY_SERVICE_UUID', false)
         );
     }
 }

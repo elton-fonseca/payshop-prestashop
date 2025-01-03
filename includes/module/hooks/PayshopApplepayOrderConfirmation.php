@@ -27,7 +27,7 @@
  * to avoid any conflicts with others containers.
  */
 
-class HookOrderConfirmation
+class PayshopApplepayOrderConfirmation
 {
     /**
      * @var Modulo
@@ -45,37 +45,33 @@ class HookOrderConfirmation
     }
 
     /**
-     * Display information on the order confirmation page
+     * Display Google Pay dialog on the order confirmation page
      *
      * @param Order $order
      * @return string
      */
     public function execute($order)
     {
-        $referencePaymentMethods = [
-            'Payshop (Payshop Reference)', 
-            'Payshop (Multibanco)'
-        ];
+        $applepayMerchantValidation = $this->module->context->link->getModuleLink(
+            $this->module->name,
+            'ApplepayMerchantValidation'
+        );
 
-        if (in_array($order->payment, $referencePaymentMethods)) {
-            $referencesDialog = new PayshopShowReferencesOrderConfirmation($this->module);
-            return $referencesDialog->execute();
-        }
+        $processWalletPayment = $this->module->context->link->getModuleLink(
+            $this->module->name,
+            'ProcessWalletPayment'
+        );
 
-        $googlepay = 'Payshop Online Payments (Google Pay)';
+        $smarty = $this->module->context->smarty;
+        $smarty->assign([
+            'moduleUrl' => $this->module->path,
+            'storeName' => Configuration::get('PS_SHOP_NAME'),
+            'applepayMerchantValidation' => $applepayMerchantValidation,
+            'processWalletPayment' => $processWalletPayment,
+            'total' => number_format($order->total_paid, 2, '.', ''),
+            'orderId' => $order->id,
+        ]);
 
-        if ($order->payment == $googlepay) {
-            $googlepayDialog = new PayshopGooglepayOrderConfirmation($this->module);
-            return $googlepayDialog->execute($order);
-        }
-
-        $applepay = 'Payshop Online Payments (Apple Pay)';
-
-        if ($order->payment == $applepay) {
-            $applepayDialog = new PayshopApplepayOrderConfirmation($this->module);
-            return $applepayDialog->execute($order);
-        }
-
- 
+        return $smarty->fetch($this->module->getLocalPath() . 'views/templates/hook/applepay-dialog.tpl');
     }
 }

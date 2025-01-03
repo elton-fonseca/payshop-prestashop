@@ -27,55 +27,46 @@
  * to avoid any conflicts with others containers.
  */
 
-class HookOrderConfirmation
+class PayshopProcessClicktopayModuleFrontController extends ModuleFrontController
 {
     /**
-     * @var Modulo
+     * @var PayshopCreateOrder
      */
-    private $module;
+    private $payshopCreateOrder;
+
+    /**
+     * @var PayshopUpdateOrder
+     */
+    private $payshopUpdateOrder;
 
     /**
      * Class constructor
-     *
-     * @param Module $module
      */
-    public function __construct($module)
+    public function __construct()
     {
-        $this->module = $module;
+        parent::__construct();
+        $this->ajax = true;
+        $this->payshopCreateOrder = new PayshopCreateOrder($this->module);
+        $this->payshopUpdateOrder = new PayshopUpdateOrder($this->module);
     }
 
     /**
-     * Display information on the order confirmation page
+     * Payment process with Multibanco reference
      *
-     * @param Order $order
-     * @return string
+     * @return void
      */
-    public function execute($order)
+    public function postProcess()
     {
-        $referencePaymentMethods = [
-            'Payshop (Payshop Reference)', 
-            'Payshop (Multibanco)'
-        ];
+        try {
+            $this->payshopCreateOrder->execute(
+                PayshopPaymentMethods::CLICKTOPAY
+            );
 
-        if (in_array($order->payment, $referencePaymentMethods)) {
-            $referencesDialog = new PayshopShowReferencesOrderConfirmation($this->module);
-            return $referencesDialog->execute();
+            Tools::redirect(
+                PayshopHelpers::confirmationPageURL($this->module)
+            );
+        } catch (\Throwable $e) {
+            PayshopHelpers::errorResponse($e->getMessage());
         }
-
-        $googlepay = 'Payshop Online Payments (Google Pay)';
-
-        if ($order->payment == $googlepay) {
-            $googlepayDialog = new PayshopGooglepayOrderConfirmation($this->module);
-            return $googlepayDialog->execute($order);
-        }
-
-        $applepay = 'Payshop Online Payments (Apple Pay)';
-
-        if ($order->payment == $applepay) {
-            $applepayDialog = new PayshopApplepayOrderConfirmation($this->module);
-            return $applepayDialog->execute($order);
-        }
-
- 
     }
 }

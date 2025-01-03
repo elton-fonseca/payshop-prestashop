@@ -125,10 +125,14 @@ class Payshop extends PaymentModule
         include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopReference.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopMultibanco.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopGooglepay.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopApplepay.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopPaypal.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/payments/PayshopClicktopay.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/hooks/HookOrderConfirmation.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/hooks/PayshopShowReferencesOrderConfirmation.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/hooks/PayshopGooglepayOrderConfirmation.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/hooks/PayshopApplepayOrderConfirmation.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/module/statuses/PayshopOrderStatuses.php';
 
@@ -138,6 +142,7 @@ class Payshop extends PaymentModule
         include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopCreateOrder.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopCreatePrestashopOrder.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopUpdateOrder.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopApplepayValidateMerchant.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/sdk/PayshopClientFactory.php';
 

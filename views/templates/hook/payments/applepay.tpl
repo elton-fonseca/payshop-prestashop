@@ -26,7 +26,7 @@
 <form id="payshop_googlepay" class="payshop-checkout-form" method="post" action="{$formAction|escape:'htmlall':'UTF-8'}">
     <div class="row payshop-frame-checkout-custom-seven">
         <div id="payshop-form" class="col-xs-12 col-md-12 col-12">
-            <p>{l s='After click on confirmation button. You will see the Google Pay button for payment' mod='payshop'}</p>
+            <p>{l s='After click on confirmation button. You will see the Apple Pay button for payment' mod='payshop'}</p>
         </div>
     </div>
 </form>
