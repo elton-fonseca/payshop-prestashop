@@ -62,8 +62,7 @@ class PayshopGooglepayOrderConfirmation
             'moduleUrl' => $this->module->path,
             'storeName' => Configuration::get('PS_SHOP_NAME'),
             'environment' => PayshopClientFactory::isProduction() ? 'PRODUCTION' : 'TEST',
-            'gatewayMerchantId' => PayshopClientFactory::getClientUUID(),
-            'googlePayMerchantId' => '123123123', //arrumar isso aqui
+            'googlePayMerchantId' => Configuration::get('PAYSHOP_GOOGLEPAY_MERCHANT_ID'),
             'total' => number_format($order->total_paid, 2, '.', ''),
             'processWalletPayment' => $processWalletPayment,
             'orderId' => $order->id,

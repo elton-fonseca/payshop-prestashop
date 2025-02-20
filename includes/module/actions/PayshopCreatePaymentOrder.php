@@ -191,12 +191,12 @@
     {
         if ($this->paymentMethod === PayshopPaymentMethods::CREDIT_CARD) {
             return [
-                'secure' => "true",
-                'save_card' => "false"
+                'secure' => true,
+                'save_card' => false
             ];
         }
 
-        $options['secure'] = "false";
+        $options['secure'] = false;
 
         if ($this->paymentMethod === PayshopPaymentMethods::MB_WAY) {
             $cart = $this->module->context->cart;

@@ -143,6 +143,7 @@ class Payshop extends PaymentModule
         include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopCreatePrestashopOrder.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopUpdateOrder.php';
         include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopApplepayValidateMerchant.php';
+        include_once PAYSHOP_ROOT_URL . '/includes/module/actions/PayshopCreateWalletPayment.php';
 
         include_once PAYSHOP_ROOT_URL . '/includes/sdk/PayshopClientFactory.php';
 
