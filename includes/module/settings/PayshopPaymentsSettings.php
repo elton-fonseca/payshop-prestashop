@@ -144,7 +144,7 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
             );
         }
 
-        if (true || Configuration::get('PAYSHOP_GOOGLEPAY_SERVICE_UUID', false)) {
+        if (Configuration::get('PAYSHOP_GOOGLEPAY_SERVICE_UUID', false)) {
             $fields[] = array(
                 'col' => 4,
                 'type' => 'switch',
@@ -176,7 +176,7 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
             );
         }
 
-        if (true || Configuration::get('PAYSHOP_APPLEPAY_SERVICE_UUID', false)) {
+        if (Configuration::get('PAYSHOP_APPLEPAY_SERVICE_UUID', false)) {
             $fields[] = array(
                 'col' => 4,
                 'type' => 'switch',
@@ -244,7 +244,7 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
             );
         }
 
-        if (true || Configuration::get('PAYSHOP_PAYPAL_SERVICE_UUID', false)) {
+        if (Configuration::get('PAYSHOP_PAYPAL_SERVICE_UUID', false)) {
             $fields[] = array(
                 'col' => 4,
                 'type' => 'switch',
@@ -267,7 +267,7 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
             );
         }
 
-        if (true || Configuration::get('PAYSHOP_CLICKTOPAY_SERVICE_UUID', false)) {
+        if (Configuration::get('PAYSHOP_CLICKTOPAY_SERVICE_UUID', false)) {
             $fields[] = array(
             'col' => 4,
             'type' => 'switch',

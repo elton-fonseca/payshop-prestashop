@@ -25,6 +25,9 @@ class PayshopPaymentServiceUUID
         $this->availableServices = $this->getGatewayServices();
 
         $this->fillServiceUUID('CREDORAX', 'PAYSHOP_CARD_SERVICE_UUID');
+        $this->fillServiceUUID('CREDORAX', 'PAYSHOP_GOOGLEPAY_SERVICE_UUID');
+        $this->fillServiceUUID('CREDORAX', 'PAYSHOP_APPLEPAY_SERVICE_UUID');
+
         $this->fillServiceUUID('PAYSHOP', 'PAYSHOP_REFERENCE_SERVICE_UUID');
 
         $this->fillServiceUUID('SIBS', 'PAYSHOP_MBWAY_SERVICE_UUID', function($service) {

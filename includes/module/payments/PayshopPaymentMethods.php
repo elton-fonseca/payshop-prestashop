@@ -89,13 +89,22 @@ class PayshopPaymentMethods
             $paymentOptions[] =  $this->payshopMultibanco->register();
         }
 
-        $paymentOptions[] =  $this->payshopGooglepay->register();
-        $paymentOptions[] =  $this->payshopApplepay->register();
-        $paymentOptions[] =  $this->payshopPaypal->register();
-        $paymentOptions[] =  $this->payshopClicktopay->register();
+        if (Configuration::get('PAYSHOP_GOOGLEPAY')  && Configuration::get('PAYSHOP_GOOGLEPAY_SERVICE_UUID') != '') {
+            $paymentOptions[] =  $this->payshopGooglepay->register();
+        }
+
+        if (Configuration::get('PAYSHOP_APPLEPAY')  && Configuration::get('PAYSHOP_APPLEPAY_SERVICE_UUID') != '') {
+            $paymentOptions[] =  $this->payshopApplepay->register();
+        }
+
+        if (Configuration::get('PAYSHOP_PAYPAL')  && Configuration::get('PAYSHOP_PAYPAL_SERVICE_UUID') != '') {
+            $paymentOptions[] =  $this->payshopPaypal->register();
+        }
+
+        if (Configuration::get('PAYSHOP_CLICKTOPAY')  && Configuration::get('PAYSHOP_CLICKTOPAY_SERVICE_UUID') != '') {
+            $paymentOptions[] =  $this->payshopApplepay->register();
+        }
 
         return $paymentOptions;
     }
-
-
 }
