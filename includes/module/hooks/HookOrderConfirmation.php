@@ -75,7 +75,5 @@ class HookOrderConfirmation
             $applepayDialog = new PayshopApplepayOrderConfirmation($this->module);
             return $applepayDialog->execute($order);
         }
-
- 
     }
 }

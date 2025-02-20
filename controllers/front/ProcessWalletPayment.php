@@ -8,9 +8,9 @@ class PayshopProcessWalletPaymentModuleFrontController extends ModuleFrontContro
     private $payshopSDK;
 
     /**
-     * @var PayshopCreatePaymentOrder
+     * @var PayshopCreateWalletPayment
      */
-    private $payshopCreatePaymentOrder;
+    private $payshopCreateWalletPayment;
 
     /**
      * Class constructor
@@ -18,7 +18,7 @@ class PayshopProcessWalletPaymentModuleFrontController extends ModuleFrontContro
     public function __construct() {
         parent::__construct();
         $this->ajax = true;
-        $this->payshopCreatePaymentOrder = new PayshopCreatePaymentOrder($this->module);
+        $this->payshopCreateWalletPayment = new PayshopCreateWalletPayment($this->module);
         $this->payshopSDK = PayshopClientFactory::getInstance();
     }
 
@@ -32,18 +32,11 @@ class PayshopProcessWalletPaymentModuleFrontController extends ModuleFrontContro
         try {
             $data = $this->validatedRequest();
 
-            $paymentOrder = $this->payshopCreatePaymentOrder->execute($data['payment_type'], $data['order_id']);
-
-            $response = $this->payshopSDK->paymentWallet([
-                'order_uuid' => $paymentOrder['uuid'],
-                'wallet' => $data['payment_type'],
-                'payload' => $data['payload'],
-                'customer_ip' => $_SERVER['REMOTE_ADDR'],
-                'flow' => 'WEB',
-            ]);
+            $result = $this->payshopCreateWalletPayment->execute($data);
 
             echo json_encode([
-                'redirect' => $response['response']['details']
+                'success' => $result,
+                'redirect' => PayshopHelpers::confirmationPageURL($this->module),
             ]);
         } catch (\Throwable $e) {
             PayshopHelpers::errorResponse($e->getMessage());
