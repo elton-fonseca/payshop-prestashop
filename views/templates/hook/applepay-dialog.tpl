@@ -33,7 +33,7 @@
         <div class="overlap-wallets-content">
           <button class="close-btn-wallets" onclick="document.getElementById('references-popup').style.display='none'">X</button>
 
-          <h2>Realize seu pagamento usando o Apple Pay</h2>
+          <h2>Realize o seu pagamento através do Apple Pay</h2>
           <apple-pay-button id="applePayButton" buttonstyle="white-outline" type="pay" locale="pt-PT"></apple-pay-button>
           <img src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/img/payshop-logo.png" alt="Payshop" width="150">
         </div>
@@ -71,7 +71,7 @@
             supportedNetworks: ['visa', 'masterCard', 'amex'],
             total: {
               label: '{$storeName|escape:'htmlall':'UTF-8'}',
-              amount: '0.10',
+              amount: '{$total|escape:'htmlall':'UTF-8'}',
             },
           };
 
@@ -120,9 +120,18 @@
               });
 
               if (response.ok) {
-                session.completePayment(ApplePaySession.STATUS_SUCCESS);
+                let data = await response.json();
+
+                if (data.success) {
+                  session.completePayment(ApplePaySession.STATUS_SUCCESS);
+                } else {
+                  session.completePayment(ApplePaySession.STATUS_FAILURE);
+                }
+
+                window.location.href = data.redirect;
               } else {
                 session.completePayment(ApplePaySession.STATUS_FAILURE);
+                alert('Ocorreu um erro ao processar o pagamento. Por favor, tente novamente mais tarde.');
               }
             } catch (error) {
               console.error('Payment processing failed:', error);

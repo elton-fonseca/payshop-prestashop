@@ -30,7 +30,6 @@ class PayshopApplepayMerchantValidationModuleFrontController extends ModuleFront
 
             echo json_encode($validationData);
         } catch (\Throwable $e) {
-            ddpayshop($e->getMessage());
             PayshopHelpers::errorResponse($e->getMessage());
         }
     }
