@@ -62,6 +62,12 @@ class HookOrderConfirmation
             return $referencesDialog->execute();
         }
 
+        $transaction = PayshopHelpers::getTransacion('order_id', $order->id);
+        
+        if ($transaction['payment_status'] !== 'PAYSHOP_ORDER_STATUS_WAITING_PAYMENT') {
+            return;
+        }
+        
         $googlepay = 'Payshop Online Payments (Google Pay)';
 
         if ($order->payment == $googlepay) {

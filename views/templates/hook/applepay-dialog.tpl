@@ -128,7 +128,7 @@
                   session.completePayment(ApplePaySession.STATUS_FAILURE);
                 }
 
-                window.location.href = data.redirect;
+                window.location.reload();
               } else {
                 session.completePayment(ApplePaySession.STATUS_FAILURE);
                 alert('Ocorreu um erro ao processar o pagamento. Por favor, tente novamente mais tarde.');

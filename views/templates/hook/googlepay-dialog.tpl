@@ -318,17 +318,13 @@ document.addEventListener('DOMContentLoaded', function() {
       })
       .then(response => response.json())
       .then(data => {
-        console.log('Success:', data);
-
         if (data.success) {
             alert('Pagamento realizado com sucesso!');
         } else {
             alert('Ocorreu um erro ao processar o pagamento. Por favor, tente novamente.');
         }
 
-        if (data.redirect) {
-          window.location.href = data.redirect;
-        }
+        window.location.reload();
       })
       .catch((error) => {
         console.error('Error:', error);
