@@ -57,6 +57,12 @@ class PayshopGooglepayOrderConfirmation
             'ProcessWalletPayment'
         );
 
+        $processFailedRedirect = $this->module->context->link->getModuleLink(
+            $this->module->name,
+            'ProcessFailedRedirect',
+            ['prestashop_order_id' => $order->id]
+        );
+
         $smarty = $this->module->context->smarty;
         $smarty->assign([
             'moduleUrl' => $this->module->path,
@@ -65,6 +71,7 @@ class PayshopGooglepayOrderConfirmation
             'googlePayMerchantId' => Configuration::get('PAYSHOP_GOOGLEPAY_MERCHANT_ID'),
             'total' => number_format($order->total_paid, 2, '.', ''),
             'processWalletPayment' => $processWalletPayment,
+            'processFailedRedirect' => $processFailedRedirect,
             'orderId' => $order->id,
         ]);
 

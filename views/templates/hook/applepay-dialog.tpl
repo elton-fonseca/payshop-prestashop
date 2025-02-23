@@ -104,7 +104,9 @@
               const paymentType = 'APPLEPAY';
               const url = "{$processWalletPayment nofilter}";
               const orderId = "{$orderId|escape:'htmlall':'UTF-8'}";
-              const paymentData = event.payment.token;
+              const paymentData = event.payment;
+
+              const processFailedRedirectUrl = "{$processFailedRedirect nofilter}";
 
               // Send payment data to the server
               const response = await fetch(url, {
@@ -124,18 +126,21 @@
 
                 if (data.success) {
                   session.completePayment(ApplePaySession.STATUS_SUCCESS);
-                } else {
-                  session.completePayment(ApplePaySession.STATUS_FAILURE);
-                }
-
-                window.location.reload();
-              } else {
-                session.completePayment(ApplePaySession.STATUS_FAILURE);
-                alert('Ocorreu um erro ao processar o pagamento. Por favor, tente novamente mais tarde.');
+                  alert('Pagamento realizado com sucesso!');
+                  window.location.reload();
+                  return;
+                } 
               }
-            } catch (error) {
-              console.error('Payment processing failed:', error);
+
               session.completePayment(ApplePaySession.STATUS_FAILURE);
+              alert('Ocorreu um erro ao processar o pagamento. Por favor, tente novamente.');
+              location.href = processFailedRedirectUrl;
+              return;
+            } catch (error) {
+              session.completePayment(ApplePaySession.STATUS_FAILURE);
+              alert('Ocorreu um erro ao processar o pagamento. Por favor, tente novamente.');
+              location.href = processFailedRedirectUrl;
+              return;
             }
           };
 

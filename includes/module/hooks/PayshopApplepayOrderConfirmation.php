@@ -62,12 +62,19 @@ class PayshopApplepayOrderConfirmation
             'ProcessWalletPayment'
         );
 
+        $processFailedRedirect = $this->module->context->link->getModuleLink(
+            $this->module->name,
+            'ProcessFailedRedirect',
+            ['prestashop_order_id' => $order->id]
+        );
+
         $smarty = $this->module->context->smarty;
         $smarty->assign([
             'moduleUrl' => $this->module->path,
             'storeName' => Configuration::get('PS_SHOP_NAME'),
             'applepayMerchantValidation' => $applepayMerchantValidation,
             'processWalletPayment' => $processWalletPayment,
+            'processFailedRedirect' => $processFailedRedirect,
             'total' => number_format($order->total_paid, 2, '.', ''),
             'orderId' => $order->id,
         ]);

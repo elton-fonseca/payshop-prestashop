@@ -297,13 +297,13 @@ document.addEventListener('DOMContentLoaded', function() {
    */
   function processPayment(paymentData) {
     // show returned data in developer console for debugging
-      console.log(paymentData);
-
       lockScreenAndShowLoading();
 
       const paymentType = 'GOOGLEPAY';
       const url = "{$processWalletPayment nofilter}";
       const orderId = "{$orderId|escape:'htmlall':'UTF-8'}";
+
+      const processFailedRedirectUrl = "{$processFailedRedirect nofilter}";
 
       fetch(url, {
         method: 'POST',
@@ -320,16 +320,18 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(data => {
         if (data.success) {
             alert('Pagamento realizado com sucesso!');
+            window.location.reload();
+            return;
         } else {
             alert('Ocorreu um erro ao processar o pagamento. Por favor, tente novamente.');
+            location.href = processFailedRedirectUrl;
+            return;
         }
-
-        window.location.reload();
       })
       .catch((error) => {
-        console.error('Error:', error);
-        unlockScreen();
         alert('Ocorreu um erro ao processar o pagamento. Por favor, tente novamente.');
+        location.href = processFailedRedirectUrl;
+        return;
       });
       
     // @todo pass payment token to your gateway to process payment
