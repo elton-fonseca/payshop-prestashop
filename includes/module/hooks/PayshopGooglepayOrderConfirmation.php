@@ -52,6 +52,12 @@ class PayshopGooglepayOrderConfirmation
      */
     public function execute($order)
     {
+        $sessionKey = '_payshop_googlepay_paid_' . $order->id;
+
+        if (isset($_SESSION[$sessionKey]) && $_SESSION[$sessionKey]) {
+            return;
+        }
+
         $processWalletPayment = $this->module->context->link->getModuleLink(
             $this->module->name,
             'ProcessWalletPayment'

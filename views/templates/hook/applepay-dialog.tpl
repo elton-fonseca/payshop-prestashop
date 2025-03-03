@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <div class="flow-button-wallets">
+    <div class="flow-button-wallets" id="flow-button-wallets">
       <img src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/img/applepay.png" alt="Google Pay" width="70px">
     </div>
 </div>
@@ -127,7 +127,9 @@
                 if (data.success) {
                   session.completePayment(ApplePaySession.STATUS_SUCCESS);
                   alert('Pagamento realizado com sucesso!');
-                  window.location.reload();
+                  document.getElementById('applepay-payshop').style.display = 'none';
+                  document.getElementById('flow-button-wallets').style.display = 'none';
+                  unlockScreen();
                   return;
                 } 
               }

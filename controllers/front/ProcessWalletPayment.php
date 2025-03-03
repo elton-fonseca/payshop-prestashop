@@ -34,9 +34,15 @@ class PayshopProcessWalletPaymentModuleFrontController extends ModuleFrontContro
 
             $result = $this->payshopCreateWalletPayment->execute($data);
 
+            if ($data['payment_type'] === 'GOOGLEPAY') {
+                $redirect = $result;
+            } else {
+                $redirect = PayshopHelpers::confirmationPageURL($this->module);
+            }
+
             echo json_encode([
-                'success' => $result,
-                'redirect' => PayshopHelpers::confirmationPageURL($this->module),
+                'success' => !! $result,
+                'redirect' => $redirect,
             ]);
         } catch (\Throwable $e) {
             PayshopHelpers::errorResponse($e->getMessage());

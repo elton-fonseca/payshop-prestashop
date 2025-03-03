@@ -196,6 +196,12 @@
             ];
         }
 
+        if ($this->paymentMethod === PayshopPaymentMethods::GOOGLEPAY) {
+            return [
+                'secure' => true,
+            ];
+        }
+
         $options['secure'] = false;
 
         if ($this->paymentMethod === PayshopPaymentMethods::MB_WAY) {

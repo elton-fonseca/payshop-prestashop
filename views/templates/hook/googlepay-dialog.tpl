@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <div class="flow-button-wallets">
+    <div class="flow-button-wallets" id="flow-button-wallets">
       <img src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/img/googlepay.png" alt="Google Pay" width="70px">
     </div>
 </div>
@@ -319,8 +319,7 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(response => response.json())
       .then(data => {
         if (data.success) {
-            alert('Pagamento realizado com sucesso!');
-            window.location.reload();
+            window.location.href = data.redirect;
             return;
         } else {
             alert('Ocorreu um erro ao processar o pagamento. Por favor, tente novamente.');

@@ -81,6 +81,13 @@
                 return $this->markOrderAsPaid($paymentOrderUUID, $data);
             }
         }
+
+        if (isset($paymentResponse['response']['details'])) {
+            $key = '_payshop_googlepay_paid_' . $data['order_id'];
+            $_SESSION[$key] = true;
+            
+            return $paymentResponse['response']['details'];
+        }
         
         return $this->markOrderAsRefused($paymentOrderUUID, $data);
     }
