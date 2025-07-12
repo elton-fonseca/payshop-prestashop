@@ -48,6 +48,8 @@ class PayshopProcessFailedRedirectModuleFrontController extends ModuleFrontContr
     {
         try {
             $orderId = Tools::getValue('prestashop_order_id');
+            PayshopLog::generate('Executou via KO a exclusao da ordem: ' . $orderId);
+            
             $order = new Order($orderId);
 
             if (Validate::isLoadedObject($order)) {
