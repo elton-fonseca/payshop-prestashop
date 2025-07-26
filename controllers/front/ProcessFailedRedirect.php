@@ -29,6 +29,8 @@
 
 class PayshopProcessFailedRedirectModuleFrontController extends ModuleFrontController
 {
+    const MBWAY = 'Payshop Online Payments (MBWay)';
+
     /**
      * Class constructor
      */
@@ -56,6 +58,26 @@ class PayshopProcessFailedRedirectModuleFrontController extends ModuleFrontContr
                 $id_cart = $order->id_cart;
                 $cart = new Cart($id_cart);
                 $new_cart = $cart->duplicate();
+
+                if ($order->payment === self::MBWAY) {
+                    $customer = new Customer($cart->id_customer);
+                    $securityKey = $customer->secure_key;
+
+                    $context = Context::getContext();
+                    $confirmationPageUrl = $context->link->getPageLink(
+                        'order-confirmation',
+                        null,
+                        null,
+                        [
+                            'id_cart' => $id_cart,
+                            'id_module' => $this->module->id,
+                            'id_order' => $orderId,
+                            'key' => $securityKey
+                        ]
+                    );
+
+                    return Tools::redirect($confirmationPageUrl);
+                }
 
                 if ($new_cart['success']) {
                     $this->context->cart = $new_cart['cart'];
@@ -117,6 +139,4 @@ class PayshopProcessFailedRedirectModuleFrontController extends ModuleFrontContr
 
         return true;
     }
-
-
 }
