@@ -60,14 +60,14 @@ class PayshopHelpers
         }
 
         if ($response['status'] == 401 || $response['status'] == 403) {
-            $message = $module->l('Invalid API credentials. Check your credentials on the module settings.', 'payshop');
+            $message = $module->l('PayshopHelpers: Invalid API credentials. Check your credentials on the module settings.', 'payshop');
 
             PayshopLog::generate($message, 'error');
             throw new Exception($message);
         }
 
         if ($response['status'] == 400) {
-            $message = $module->l('Invalid gateway settings. Check the service UUID on the payment settings.', 'payshop');
+            $message = $module->l('PayshopHelpers: Invalid gateway settings. Check the service UUID on the payment settings.', 'payshop');
 
             PayshopLog::generate($message, 'error');
             throw new Exception($message);

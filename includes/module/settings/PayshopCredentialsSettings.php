@@ -155,7 +155,7 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
         if (Payshop::$form_alert != 'alert-danger') {
             $message = $this->module->l('Settings saved successfully.', 'PayshopCredentialsSettings');
             Payshop::$form_message = $message;
-            PayshopLog::generate($message);
+            PayshopLog::generate('PayshopCredentialsSettings: ' . $message);
         }
     }
 

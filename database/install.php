@@ -53,7 +53,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'payshop_transactions` (
 //Create tables
 foreach ($sql as $query) {
     if (Db::getInstance()->execute($query) == false) {
-        PayshopLog::generate('Failed to execute query: ' . Db::getInstance()->getMsgError(), 'error');
+        PayshopLog::generate('PayshopInstall: Failed to execute query: ' . Db::getInstance()->getMsgError(), 'error');
         return false;
     }
 }

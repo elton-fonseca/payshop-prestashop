@@ -53,7 +53,7 @@ class PayshopClientFactory
                 );
             } catch (\Exception $e) {
                 $message = 'API ' . $e->getMessage();
-                PayshopLog::generate($message, 'error');
+                PayshopLog::generate('PayshopClientFactory: ' . $message, 'error');
 
                 http_response_code(401);
                 exit;

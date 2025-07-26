@@ -50,7 +50,7 @@ abstract class PayshopAbstractModel
     public function executeQuery($query)
     {
         if (Db::getInstance()->execute($query) == false) {
-            PayshopLog::generate('Failed to execute query: ' . Db::getInstance()->getMsgError(), 'error');
+            PayshopLog::generate('PayshopAbstractModel: Failed to execute query: ' . Db::getInstance()->getMsgError(), 'error');
             return false;
         }
         return true;

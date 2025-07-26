@@ -66,7 +66,7 @@ class PayshopProcessEventModuleFrontController extends ModuleFrontController
 
             $this->payshopProcessEvent->execute($data['order']);
         } catch (\Throwable $e) {
-            PayshopLog::generate($e->getMessage(), 'error');
+            PayshopLog::generate('PayshopProcessEvent: ' . $e->getMessage() . ' - ' . $e->getTraceAsString(), 'error');
 
             echo $e->getMessage();
 

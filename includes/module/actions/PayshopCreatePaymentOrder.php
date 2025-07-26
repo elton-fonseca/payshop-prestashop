@@ -121,7 +121,7 @@
         if ($currecy != 'EUR') {
             //$total = $total * dd($this->module->context->currency->conversion_rate);
             $message = $this->module->l('Product currency must be EUR', 'PayshopCreateCharge');
-            PayshopLog::generate($message, 'error');
+            PayshopLog::generate('PayshopCreatePaymentOrder: ' . $message, 'error');
             throw new Exception($message);
         }
     }

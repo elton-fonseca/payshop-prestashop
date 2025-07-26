@@ -29,7 +29,7 @@ class PayshopApplepayValidateMerchant
             $applepaySetting = Configuration::get($field);
 
             if (empty($applepaySetting)) {
-                PayshopLog::generate("Configuration for {$field} is missing or empty", PayshopLog::LOG_SEVERITY_ERROR);
+                PayshopLog::generate("PayshopApplepayValidateMerchant: Configuration for {$field} is missing or empty", PayshopLog::LOG_SEVERITY_ERROR);
                 $config[$key] = '';
             } else {
                 $config[$key] = $applepaySetting;
