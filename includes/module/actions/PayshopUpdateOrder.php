@@ -102,8 +102,11 @@
 
         $baseOrder = new Order($prestashopOrderId);
 
+        $id_currency_eur = Currency::getIdByIsoCode('EUR');
+        $currency = new Currency($id_currency_eur);
+
         $amount = (float) $transaction['total'];
-        $paymentAdicioned = $baseOrder->addOrderPayment($amount, $paymentMethod, $paymentOrderId);
+        $paymentAdicioned = $baseOrder->addOrderPayment($amount, $paymentMethod, $paymentOrderId, $currency);
 
         if (!$paymentAdicioned) {
             throw new Exception(
