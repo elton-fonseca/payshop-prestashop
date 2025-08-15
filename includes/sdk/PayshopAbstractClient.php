@@ -5,12 +5,12 @@ abstract class PayshopAbstractClient
     /**
      * @var string
      */
-    private const URL_BASE = 'https://api.paylands.com/v1';
+    private const URL_BASE = 'https://popbylink.payshop.pt/v1';
 
     /**
      * @var string
      */
-    private const URL_BASE_TEST = 'https://api.paylands.com/v1/sandbox';
+    private const URL_BASE_TEST = 'https://popbylink.payshop.pt/v1/sandbox';
 
     /**
      * @var string
