@@ -300,10 +300,10 @@ document.addEventListener('DOMContentLoaded', function() {
       lockScreenAndShowLoading();
 
       const paymentType = 'GOOGLEPAY';
-      const url = "{$processWalletPayment|escape:'javascript'}".replace(/&amp;/g, '&');
+      const url = "{$processWalletPayment|escape:'javascript':'UTF-8'}".replace(/&amp;/g, '&');
       const orderId = "{$orderId|escape:'htmlall':'UTF-8'}";
 
-      const processFailedRedirectUrl = "{$processFailedRedirect|escape:'javascript'}".replace(/&amp;/g, '&');
+      const processFailedRedirectUrl = "{$processFailedRedirect|escape:'javascript':'UTF-8'}".replace(/&amp;/g, '&');
 
       fetch(url, {
         method: 'POST',

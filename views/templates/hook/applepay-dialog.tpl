@@ -102,11 +102,11 @@
           session.onpaymentauthorized = async (event) => {
             try {
               const paymentType = 'APPLEPAY';
-              const url = "{$processWalletPayment|escape:'javascript'}".replace(/&amp;/g, '&');
+              const url = "{$processWalletPayment|escape:'javascript':'UTF-8'}".replace(/&amp;/g, '&');
               const orderId = "{$orderId|escape:'htmlall':'UTF-8'}";
               const paymentData = event.payment;
 
-              const processFailedRedirectUrl = "{$processFailedRedirect|escape:'javascript'}".replace(/&amp;/g, '&');
+              const processFailedRedirectUrl = "{$processFailedRedirect|escape:'javascript':'UTF-8'}".replace(/&amp;/g, '&');
 
               // Send payment data to the server
               const response = await fetch(url, {
