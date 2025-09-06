@@ -4,7 +4,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 /*
- * 2007-2022 PrestaShop.
+ * 2007-2025 PrestaShop.
  *
  * NOTICE OF LICENSE*
  *

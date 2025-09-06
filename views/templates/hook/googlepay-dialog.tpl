@@ -1,5 +1,5 @@
 {*
-* 2007-2022 PrestaShop
+* 2007-2025 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2022 PrestaShop SA
+*  @copyright 2007-2025 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -300,10 +300,10 @@ document.addEventListener('DOMContentLoaded', function() {
       lockScreenAndShowLoading();
 
       const paymentType = 'GOOGLEPAY';
-      const url = "{$processWalletPayment nofilter}";
+      const url = "{$processWalletPayment|escape:'javascript'}";
       const orderId = "{$orderId|escape:'htmlall':'UTF-8'}";
 
-      const processFailedRedirectUrl = "{$processFailedRedirect nofilter}";
+      const processFailedRedirectUrl = "{$processFailedRedirect|escape:'javascript'}";
 
       fetch(url, {
         method: 'POST',
