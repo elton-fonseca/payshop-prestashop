@@ -1,8 +1,4 @@
 <?php
-
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
 /*
  * 2007-2025 PrestaShop
  *
@@ -27,6 +23,10 @@ if (!defined('_PS_VERSION_')) {
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 require_once 'PayshopRestCli.php';
 require_once 'PayshopAbstractClient.php';
