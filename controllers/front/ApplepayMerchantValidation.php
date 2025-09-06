@@ -41,7 +41,7 @@ class PayshopApplepayMerchantValidationModuleFrontController extends ModuleFront
     {
         parent::__construct();
         $this->ajax = true;
-        $this->payshopApplepayValidateMerchant = new PayshopApplepayValidateMerchant($this->module);
+        $this->payshopApplepayValidateMerchant = new PayshopApplepayValidateMerchant();
     }
 
     /**
@@ -64,8 +64,6 @@ class PayshopApplepayMerchantValidationModuleFrontController extends ModuleFront
 
     /**
      * Validate and return the processed data
-     *
-     * @param array $data
      *
      * @return string
      *

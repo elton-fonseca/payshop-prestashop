@@ -29,7 +29,7 @@ if (!defined('_PS_VERSION_')) {
 class PayshopCreatePaymentOrder
 {
     /**
-     * @var Modulo
+     * @var Module
      */
     private $module;
 
@@ -44,7 +44,7 @@ class PayshopCreatePaymentOrder
     private $paymentMethod;
 
     /**
-     * @var string
+     * @var int
      */
     private $prestashopOrderId;
 

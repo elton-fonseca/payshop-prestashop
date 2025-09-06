@@ -30,11 +30,6 @@ if (!defined('_PS_VERSION_')) {
 class PayshopProcessWalletPaymentModuleFrontController extends ModuleFrontController
 {
     /**
-     * @var PayshopClient
-     */
-    private $payshopSDK;
-
-    /**
      * @var PayshopCreateWalletPayment
      */
     private $payshopCreateWalletPayment;
@@ -47,7 +42,6 @@ class PayshopProcessWalletPaymentModuleFrontController extends ModuleFrontContro
         parent::__construct();
         $this->ajax = true;
         $this->payshopCreateWalletPayment = new PayshopCreateWalletPayment($this->module);
-        $this->payshopSDK = PayshopClientFactory::getInstance();
     }
 
     /**
@@ -79,8 +73,6 @@ class PayshopProcessWalletPaymentModuleFrontController extends ModuleFrontContro
 
     /**
      * Validate and return the processed data
-     *
-     * @param array $data
      *
      * @return array
      *

@@ -75,21 +75,22 @@ class PayshopProcessFailedRedirectModuleFrontController extends ModuleFrontContr
                         ]
                     );
 
-                    return Tools::redirect($confirmationPageUrl);
+                    Tools::redirect($confirmationPageUrl);
                 }
 
                 if ($new_cart['success']) {
+                    /** @var Cookie $cookie */
+                    $cookie = $this->context->cookie;
+
                     $this->context->cart = $new_cart['cart'];
-                    $this->context->cookie->id_cart = (int) $new_cart['cart']->id;
-                    $this->context->cookie->write();
+                    $cookie->id_cart = (int) $new_cart['cart']->id;
+                    $cookie->write();
 
                     $this->restoreStock($order);
                     $this->deleteOrder($order);
 
-                    Tools::redirect(
-                        PayshopHelpers::errorResponse(
-                            $this->module->l('Ckeck your payment information and try again.', 'ProcessFailedRedirect')
-                        )
+                    PayshopHelpers::errorResponse(
+                        $this->module->l('Ckeck your payment information and try again.', 'ProcessFailedRedirect')
                     );
                 }
             } else {

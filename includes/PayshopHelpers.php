@@ -78,7 +78,7 @@ class PayshopHelpers
     /**
      * Check Payshop response
      *
-     * @param module $module
+     * @param Module $module
      * @param array $response
      *
      * @return bool
@@ -130,15 +130,25 @@ class PayshopHelpers
      * @param Module $module
      * @param string|null $orderId
      *
-     * @return array
+     * @return string
      */
     public static function confirmationPageURL($module, $orderId = null)
     {
         $context = Context::getContext();
-
         $cart = $context->cart;
         $cartId = (int) $cart->id;
-        $orderId = (int) $module->currentOrder;
+
+        // 1. Usa o ID do pedido se ele for passado como parâmetro.
+        // 2. Se não, tenta pegar da propriedade 'currentOrder' (de forma segura).
+        if (!$orderId && property_exists($module, 'currentOrder') && $module->currentOrder) {
+            $orderId = (int) $module->currentOrder;
+        }
+
+        // 3. Se ainda não tiver o ID, busca pelo ID do carrinho.
+        if (!$orderId) {
+            $orderId = (int) Order::getIdByCartId($cartId);
+        }
+
         $customer = new Customer($cart->id_customer);
         $securityKey = $customer->secure_key;
 
@@ -158,7 +168,7 @@ class PayshopHelpers
     /**
      * Get formated exception message
      *
-     * @param module $module
+     * @param Module $module
      * @param int $prestashopOrderId
      * @param string $payshopChargeId
      *

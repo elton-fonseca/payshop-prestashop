@@ -68,7 +68,7 @@ class PayshopProcessMBWayModuleFrontController extends ModuleFrontController
     /**
      * Validate the phone number
      *
-     * @return bool
+     * @return void
      *
      * @throws Exception
      */

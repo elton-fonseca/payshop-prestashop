@@ -29,7 +29,7 @@ if (!defined('_PS_VERSION_')) {
 class PayshopUpdateOrder
 {
     /**
-     * @var Modulo
+     * @var Module
      */
     private $module;
 

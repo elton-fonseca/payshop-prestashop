@@ -29,7 +29,7 @@ if (!defined('_PS_VERSION_')) {
 class PayshopCreateOrder
 {
     /**
-     * @var Modulo
+     * @var Module
      */
     private $module;
 
@@ -66,7 +66,7 @@ class PayshopCreateOrder
      *
      * @param string $paymentMethod
      *
-     * @return string
+     * @return array
      */
     public function execute($paymentMethod)
     {

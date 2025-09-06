@@ -34,11 +34,6 @@ class PayshopProcessApplepayModuleFrontController extends ModuleFrontController
     private $payshopCreateOrder;
 
     /**
-     * @var PayshopUpdateOrder
-     */
-    private $payshopUpdateOrder;
-
-    /**
      * Class constructor
      */
     public function __construct()
@@ -46,7 +41,6 @@ class PayshopProcessApplepayModuleFrontController extends ModuleFrontController
         parent::__construct();
         $this->ajax = true;
         $this->payshopCreateOrder = new PayshopCreateOrder($this->module);
-        $this->payshopUpdateOrder = new PayshopUpdateOrder($this->module);
     }
 
     /**

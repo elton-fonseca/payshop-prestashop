@@ -35,7 +35,7 @@ class PayshopLog
     /**
      * Get url for adminto view the logs
      *
-     * @return void
+     * @return string
      */
     public static function getLogUrl()
     {
@@ -48,7 +48,7 @@ class PayshopLog
      * Generate plugin logs
      *
      * @param string $message
-     * @param string $severity
+     * @param int $severity
      *
      * @return void
      */
@@ -67,7 +67,7 @@ class PayshopLog
                 $severity_log = self::LOG_SEVERITY_INFORMATIVE;
         }
 
-        $object_id = str_replace('.', '', PAYSHOP_VERSION);
+        $object_id = (int) str_replace('.', '', PAYSHOP_VERSION);
         $object_type = 'Payshop';
 
         PrestaShopLogger::addLog($message, $severity_log, null, $object_type, $object_id, true, null);
