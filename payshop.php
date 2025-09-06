@@ -259,8 +259,7 @@ class Payshop extends PaymentModule
     {
         if ('order' === $this->context->controller->php_self) {
             $this->context->controller->addCSS(
-                $this->_path . 'views/css/form-styles.css',
-                false
+                $this->_path . 'views/css/form-styles.css'
             );
         }
     }
@@ -273,7 +272,7 @@ class Payshop extends PaymentModule
     public function hookDisplayWrapperTop()
     {
         if ('order' !== $this->context->controller->php_self) {
-            return;
+            return '';
         }
 
         $messageError = '';
