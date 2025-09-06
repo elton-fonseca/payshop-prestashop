@@ -81,7 +81,7 @@
           // Merchant validation
           session.onvalidatemerchant = async (event) => {
             try {
-              const url = "{$applepayMerchantValidation nofilter}";
+              const url = "{$applepayMerchantValidation|escape:'javascript':'UTF-8'}".replace(/&amp;/g, '&');
 
               const validationData = await fetch(url, {
                 method: 'POST',
