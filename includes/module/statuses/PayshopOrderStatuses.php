@@ -1,4 +1,7 @@
 <?php
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 require_once('PayshopPaid.php');
 require_once('PayshopWaitingPayment.php');

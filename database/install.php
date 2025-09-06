@@ -1,4 +1,7 @@
 <?php
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 /**
  * 2007-2022 PrestaShop
@@ -57,4 +60,3 @@ foreach ($sql as $query) {
         return false;
     }
 }
-

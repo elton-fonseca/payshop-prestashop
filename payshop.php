@@ -1,8 +1,11 @@
 <?php
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 /**
  * 2007-2022 PrestaShop.
  *
- * NOTICE OF LICENSE
+ * NOTICE OF LICENSE*
  *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
@@ -12,7 +15,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@prestashop.com so we can send you a copy immediately.
  *
- * DISCLAIMER
+ * DISCLAIMER*
  *
  * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
  * versions in the future. If you wish to customize PrestaShop for your
@@ -160,7 +163,7 @@ class Payshop extends PaymentModule
     public function install()
     {
         if (extension_loaded('curl') == false) {
-            $this->_errors[] = $this->l('You have to enable the cURL extension ' .
+            $this->_errors[] = $this->l('You have to enable the cURL extension '.
             'on your server to install this module.');
             return false;
         }

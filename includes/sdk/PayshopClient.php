@@ -1,4 +1,7 @@
 <?php
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 require_once 'PayshopRestCli.php';
 require_once 'PayshopAbstractClient.php';

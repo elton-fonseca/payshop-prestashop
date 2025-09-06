@@ -1,4 +1,7 @@
 <?php
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 global $_MODULE;
 $_MODULE = array();
@@ -60,7 +63,7 @@ $_MODULE['<{payshop}prestashop>payshoppaymentssettings_ff4261a1bf33b8a2b1a31e2af
 $_MODULE['<{payshop}prestashop>payshoppaymentssettings_d00d4391cd48fda68ccb661d4911c086'] = 'Métodos de pagamento guardados com sucesso.';
 $_MODULE['<{payshop}prestashop>payshopcredentialssettings_2daf1cb573c2c61422faf64610cf9402'] = 'Credenciais';
 $_MODULE['<{payshop}prestashop>payshopcredentialssettings_756d97bb256b8580d4d71ee0c547804e'] = 'Produção';
-$_MODULE['<{payshop}prestashop>payshopcredentialssettings_ebc4608a47aa08cb533d928e0259f1df'] = 'Selecione \"SIM\" quando estiver preparado para começar a vender. ';
+$_MODULE['<{payshop}prestashop>payshopcredentialssettings_ebc4608a47aa08cb533d928e0259f1df'] = 'Selecione "SIM" quando estiver preparado para começar a vender. ';
 $_MODULE['<{payshop}prestashop>payshopcredentialssettings_6087b8439a7036bff644affc8784da4b'] = 'Escolha NÃO para ativar o ambiente de Testes. ';
 $_MODULE['<{payshop}prestashop>payshopcredentialssettings_3bc591c82367247890499e4b021a933e'] = 'ambiente de testes.';
 $_MODULE['<{payshop}prestashop>payshopcredentialssettings_93cba07454f06a4a960172bbd6e2a435'] = 'Sim';
