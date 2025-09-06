@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -30,10 +31,9 @@ if (!defined('_PS_VERSION_')) {
  * Don't forget to prefix your containers with your own identifier
  * to avoid any conflicts with others containers.
  */
+$sql = [];
 
-$sql = array();
-
-//transactions table
+// transactions table
 $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'payshop_transactions` (
       `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
       `cart_id` INT(10) UNSIGNED NOT NULL,
@@ -53,10 +53,11 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'payshop_transactions` (
       PRIMARY KEY (`id`)
     ) ENGINE = ' . _MYSQL_ENGINE_ . 'DEFAULT CHARSET=utf8';
 
-//Create tables
+// Create tables
 foreach ($sql as $query) {
     if (Db::getInstance()->execute($query) == false) {
         PayshopLog::generate('PayshopInstall: Failed to execute query: ' . Db::getInstance()->getMsgError(), 'error');
+
         return false;
     }
 }

@@ -1,25 +1,29 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
 class PayshopRestCli
 {
-    private function __construct(){}
+    private function __construct()
+    {
+    }
 
     /**
      * Get CURL configured with the given URL and headers
-     * 
+     *
      * @param $url
      * @param $method
      * @param $headers
+     *
      * @return false|resource
      */
     private static function getConnect($url, $method, $headers)
     {
         $headers_default = [
             'Accept: application/json',
-            'Content-Type: application/json'
+            'Content-Type: application/json',
         ];
 
         is_array($headers) ? $headers = array_merge($headers_default, $headers) : '';
@@ -28,7 +32,7 @@ class PayshopRestCli
 
         $useragent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'webhook';
         curl_setopt($connect, CURLOPT_USERAGENT, $useragent);
-        
+
         curl_setopt($connect, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($connect, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($connect, CURLOPT_HTTPHEADER, $headers);
@@ -42,7 +46,9 @@ class PayshopRestCli
      * @param $connect
      * @param $data
      * @param $content_type
+     *
      * @return void
+     *
      * @throws Exception
      */
     private static function setData($connect, $data, $content_type)
@@ -67,12 +73,14 @@ class PayshopRestCli
 
     /**
      * Execute one request
-     * 
+     *
      * @param $method
      * @param $url
      * @param $data
      * @param $headers
+     *
      * @return array
+     *
      * @throws Exception
      */
     private static function exec($method, $url, $data, $headers)
@@ -94,7 +102,7 @@ class PayshopRestCli
 
         $response = [
             'status' => $api_http_code,
-            'response' => json_decode($api_result, true)
+            'response' => json_decode($api_result, true),
         ];
 
         curl_close($connect);
@@ -104,10 +112,12 @@ class PayshopRestCli
 
     /**
      * Execute one request using GET method
-     * 
+     *
      * @param $url
      * @param null $headers
+     *
      * @return array
+     *
      * @throws Exception
      */
     public static function get($url, $headers = null)
@@ -117,11 +127,13 @@ class PayshopRestCli
 
     /**
      * Execute one request using POST method
-     * 
+     *
      * @param $url
      * @param $data
      * @param null $headers
+     *
      * @return array
+     *
      * @throws Exception
      */
     public static function post($url, $data, $headers = null)
@@ -131,11 +143,13 @@ class PayshopRestCli
 
     /**
      * Execute one request using PUT method
-     * 
+     *
      * @param $url
      * @param $data
      * @param null $headers
+     *
      * @return array
+     *
      * @throws Exception
      */
     public static function put($url, $data, $headers = null)

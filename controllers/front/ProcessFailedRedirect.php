@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -29,7 +30,6 @@ if (!defined('_PS_VERSION_')) {
  * Don't forget to prefix your containers with your own identifier
  * to avoid any conflicts with others containers.
  */
-
 class PayshopProcessFailedRedirectModuleFrontController extends ModuleFrontController
 {
     const MBWAY = 'Payshop Online Payments (MBWay)';
@@ -54,7 +54,7 @@ class PayshopProcessFailedRedirectModuleFrontController extends ModuleFrontContr
         try {
             $orderId = Tools::getValue('prestashop_order_id');
             PayshopLog::generate('PayshopProcessFailedRedirect: Executou via KO a exclusao da ordem: ' . $orderId);
-            
+
             $order = new Order($orderId);
 
             if (Validate::isLoadedObject($order)) {
@@ -75,7 +75,7 @@ class PayshopProcessFailedRedirectModuleFrontController extends ModuleFrontContr
                             'id_cart' => $id_cart,
                             'id_module' => $this->module->id,
                             'id_order' => $orderId,
-                            'key' => $securityKey
+                            'key' => $securityKey,
                         ]
                     );
 
@@ -84,7 +84,7 @@ class PayshopProcessFailedRedirectModuleFrontController extends ModuleFrontContr
 
                 if ($new_cart['success']) {
                     $this->context->cart = $new_cart['cart'];
-                    $this->context->cookie->id_cart = (int)$new_cart['cart']->id;
+                    $this->context->cookie->id_cart = (int) $new_cart['cart']->id;
                     $this->context->cookie->write();
 
                     $this->restoreStock($order);
@@ -99,23 +99,24 @@ class PayshopProcessFailedRedirectModuleFrontController extends ModuleFrontContr
             } else {
                 throw new Exception();
             }
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             Tools::redirect('index.php?controller=order&step=1');
         }
     }
 
     /**
      * Restore the stock to the product
-     * 
-     * @param mixed $order 
-     * @return void 
+     *
+     * @param mixed $order
+     *
+     * @return void
      */
     private function restoreStock($order)
     {
         foreach ($order->getProducts() as $product) {
-            $productId = (int)$product['product_id'];
-            $productAttributeId = (int)$product['product_attribute_id'];
-            $quantity = (int)$product['product_quantity'];
+            $productId = (int) $product['product_id'];
+            $productAttributeId = (int) $product['product_attribute_id'];
+            $quantity = (int) $product['product_quantity'];
 
             StockAvailable::updateQuantity($productId, $productAttributeId, $quantity);
         }
@@ -123,8 +124,9 @@ class PayshopProcessFailedRedirectModuleFrontController extends ModuleFrontContr
 
     /**
      * Delete the order
-     * 
+     *
      * @param Order $order
+     *
      * @return bool
      */
     private function deleteOrder($order)
@@ -136,9 +138,9 @@ class PayshopProcessFailedRedirectModuleFrontController extends ModuleFrontContr
             return false;
         }
 
-        Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'order_detail WHERE id_order = ' . (int)$order->id);
-        Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'order_carrier WHERE id_order = ' . (int)$order->id);
-        Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'order_history WHERE id_order = ' . (int)$order->id);
+        Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'order_detail WHERE id_order = ' . (int) $order->id);
+        Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'order_carrier WHERE id_order = ' . (int) $order->id);
+        Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'order_history WHERE id_order = ' . (int) $order->id);
 
         return true;
     }

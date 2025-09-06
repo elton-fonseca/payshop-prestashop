@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -50,247 +51,246 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
      */
     public function generateForm()
     {
-
         $title = $this->module->l('Payments', 'PayshopPaymentsSettings');
 
-        $fields = array();
+        $fields = [];
 
         if (Configuration::get('PAYSHOP_CARD_SERVICE_UUID', false)) {
-            $fields[] = array(
+            $fields[] = [
                 'col' => 4,
                 'type' => 'switch',
                 'label' => $this->module->l('Credit Card', 'PayshopPaymentsSettings'),
                 'name' => 'PAYSHOP_CREDIT_CARD',
                 'is_bool' => true,
                 'desc' => $this->module->l('Active de payment method on Checkout ', 'PayshopPaymentsSettings'),
-                'values' => array(
-                    array(
+                'values' => [
+                    [
                         'id' => 'PAYSHOP_CREDIT_CARD_ON',
                         'value' => true,
-                        'label' => $this->module->l('Enable', 'PayshopPaymentsSettings')
-                    ),
-                    array(
+                        'label' => $this->module->l('Enable', 'PayshopPaymentsSettings'),
+                    ],
+                    [
                         'id' => 'PAYSHOP_CREDIT_CARD_OFF',
                         'value' => false,
-                        'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
-                    )
-                )
-            );
+                        'label' => $this->module->l('Disable', 'PayshopPaymentsSettings'),
+                    ],
+                ],
+            ];
         }
 
         if (Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID', false)) {
-            $fields[] = array(
+            $fields[] = [
                 'col' => 4,
                 'type' => 'switch',
                 'label' => $this->module->l('Multibanco Reference', 'PayshopPaymentsSettings'),
                 'name' => 'PAYSHOP_MULTIBANCO_REFERENCE',
                 'is_bool' => true,
                 'desc' => $this->module->l('Active de payment method on Checkout ', 'PayshopPaymentsSettings'),
-                'values' => array(
-                    array(
+                'values' => [
+                    [
                         'id' => 'PAYSHOP_MULTIBANCO_REFERENCE_ON',
                         'value' => true,
-                        'label' => $this->module->l('Enable', 'PayshopPaymentsSettings')
-                    ),
-                    array(
+                        'label' => $this->module->l('Enable', 'PayshopPaymentsSettings'),
+                    ],
+                    [
                         'id' => 'PAYSHOP_MULTIBANCO_REFERENCE_OFF',
                         'value' => false,
-                        'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
-                    )
-                )
-            );
+                        'label' => $this->module->l('Disable', 'PayshopPaymentsSettings'),
+                    ],
+                ],
+            ];
         }
 
         if (Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID', false)) {
-            $fields[] = array(
+            $fields[] = [
                 'col' => 4,
                 'type' => 'switch',
                 'label' => $this->module->l('Payshop Reference', 'PayshopPaymentsSettings'),
                 'name' => 'PAYSHOP_PAYSHOP_REFERENCE',
                 'is_bool' => true,
                 'desc' => $this->module->l('Active de payment method on Checkout ', 'PayshopPaymentsSettings'),
-                'values' => array(
-                    array(
+                'values' => [
+                    [
                         'id' => 'PAYSHOP_PAYSHOP_REFERENCE_ON',
                         'value' => true,
-                        'label' => $this->module->l('Enable', 'PayshopPaymentsSettings')
-                    ),
-                    array(
+                        'label' => $this->module->l('Enable', 'PayshopPaymentsSettings'),
+                    ],
+                    [
                         'id' => 'PAYSHOP_PAYSHOP_REFERENCE_OFF',
                         'value' => false,
-                        'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
-                    )
-                )
-            );
+                        'label' => $this->module->l('Disable', 'PayshopPaymentsSettings'),
+                    ],
+                ],
+            ];
         }
 
         if (Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID', false)) {
-            $fields[] = array(
+            $fields[] = [
                 'col' => 4,
                 'type' => 'switch',
                 'label' => $this->module->l('MBWay', 'PayshopPaymentsSettings'),
                 'name' => 'PAYSHOP_MBWAY',
                 'is_bool' => true,
                 'desc' => $this->module->l('Active de payment method on Checkout ', 'PayshopPaymentsSettings'),
-                'values' => array(
-                    array(
+                'values' => [
+                    [
                         'id' => 'PAYSHOP_MBWAY_ON',
                         'value' => true,
-                        'label' => $this->module->l('Enable', 'PayshopPaymentsSettings')
-                    ),
-                    array(
+                        'label' => $this->module->l('Enable', 'PayshopPaymentsSettings'),
+                    ],
+                    [
                         'id' => 'PAYSHOP_MBWAY_OFF',
                         'value' => false,
-                        'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
-                    )
-                )
-            );
+                        'label' => $this->module->l('Disable', 'PayshopPaymentsSettings'),
+                    ],
+                ],
+            ];
         }
 
         if (Configuration::get('PAYSHOP_GOOGLEPAY_SERVICE_UUID', false)) {
-            $fields[] = array(
+            $fields[] = [
                 'col' => 4,
                 'type' => 'switch',
                 'label' => $this->module->l('Google Pay', 'PayshopPaymentsSettings'),
                 'name' => 'PAYSHOP_GOOGLEPAY',
                 'is_bool' => true,
                 'desc' => $this->module->l('Activate the payment method on Checkout', 'PayshopPaymentsSettings'),
-                'values' => array(
-                    array(
-                    'id' => 'PAYSHOP_GOOGLEPAY_ON',
-                    'value' => true,
-                    'label' => $this->module->l('Enable', 'PayshopPaymentsSettings')
-                    ),
-                    array(
-                    'id' => 'PAYSHOP_GOOGLEPAY_OFF',
-                    'value' => false,
-                    'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
-                    )
-                )
-            );
-            
-            $fields[] = array(
+                'values' => [
+                    [
+                        'id' => 'PAYSHOP_GOOGLEPAY_ON',
+                        'value' => true,
+                        'label' => $this->module->l('Enable', 'PayshopPaymentsSettings'),
+                    ],
+                    [
+                        'id' => 'PAYSHOP_GOOGLEPAY_OFF',
+                        'value' => false,
+                        'label' => $this->module->l('Disable', 'PayshopPaymentsSettings'),
+                    ],
+                ],
+            ];
+
+            $fields[] = [
                 'col' => 8,
                 'type' => 'text',
                 'desc' => 'Google Pay Merchant ID created in the Google Business Console: https://pay.google.com/business/console/',
                 'name' => 'PAYSHOP_GOOGLEPAY_MERCHANT_ID',
                 'label' => $this->module->l('Google Pay Merchant ID', 'PayshopPaymentsSettings'),
-                'required' => true
-            );
+                'required' => true,
+            ];
         }
 
         if (Configuration::get('PAYSHOP_APPLEPAY_SERVICE_UUID', false)) {
-            $fields[] = array(
+            $fields[] = [
                 'col' => 4,
                 'type' => 'switch',
                 'label' => $this->module->l('Apple Pay', 'PayshopPaymentsSettings'),
                 'name' => 'PAYSHOP_APPLEPAY',
                 'is_bool' => true,
                 'desc' => $this->module->l('Activate the payment method on Checkout', 'PayshopPaymentsSettings'),
-                'values' => array(
-                    array(
-                    'id' => 'PAYSHOP_APPLEPAY_ON',
-                    'value' => true,
-                    'label' => $this->module->l('Enable', 'PayshopPaymentsSettings')
-                    ),
-                    array(
-                    'id' => 'PAYSHOP_APPLEPAY_OFF',
-                    'value' => false,
-                    'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
-                    )
-                )
-            );
+                'values' => [
+                    [
+                        'id' => 'PAYSHOP_APPLEPAY_ON',
+                        'value' => true,
+                        'label' => $this->module->l('Enable', 'PayshopPaymentsSettings'),
+                    ],
+                    [
+                        'id' => 'PAYSHOP_APPLEPAY_OFF',
+                        'value' => false,
+                        'label' => $this->module->l('Disable', 'PayshopPaymentsSettings'),
+                    ],
+                ],
+            ];
 
-            $fields[] = array(
+            $fields[] = [
                 'col' => 8,
                 'type' => 'text',
                 'desc' => 'Your Apple Pay Merchant Identifier.',
                 'name' => 'PAYSHOP_APPLEPAY_MERCHANT_ID',
                 'label' => $this->module->l('Merchant Identifier', 'PayshopPaymentsSettings'),
-                'required' => true
-            );
+                'required' => true,
+            ];
 
-            $fields[] = array(
+            $fields[] = [
                 'col' => 8,
                 'type' => 'text',
                 'desc' => 'The display name for your Apple Pay merchant.',
                 'name' => 'PAYSHOP_APPLEPAY_MERCHANT_NAME',
                 'label' => $this->module->l('Display Name', 'PayshopPaymentsSettings'),
-                'required' => true
-            );
+                'required' => true,
+            ];
 
-            $fields[] = array(
+            $fields[] = [
                 'col' => 8,
                 'type' => 'text',
                 'desc' => 'The domain name associated with your Apple Pay merchant.',
                 'name' => 'PAYSHOP_APPLEPAY_DOMAIN_NAME',
                 'label' => $this->module->l('Site domain', 'PayshopPaymentsSettings'),
-                'required' => true
-            );
+                'required' => true,
+            ];
 
-            $fields[] = array(
+            $fields[] = [
                 'col' => 8,
                 'type' => 'text',
                 'desc' => 'The absolute path to your Apple Pay certificate. Do not place it inside the Prestashop directory for security reasons.',
                 'name' => 'PAYSHOP_APPLEPAY_CERTIFICATE_PATH',
                 'label' => $this->module->l('Certificate Path', 'PayshopPaymentsSettings'),
-                'required' => true
-            );
+                'required' => true,
+            ];
 
-            $fields[] = array(
+            $fields[] = [
                 'col' => 8,
                 'type' => 'text',
                 'desc' => 'The absolute path to your Apple Pay private key. Do not place it inside the Prestashop directory for security reasons.',
                 'name' => 'PAYSHOP_APPLEPAY_PRIVATE_KEY_PATH',
                 'label' => $this->module->l('Private Key Path', 'PayshopPaymentsSettings'),
-                'required' => true
-            );
+                'required' => true,
+            ];
         }
 
         if (Configuration::get('PAYSHOP_PAYPAL_SERVICE_UUID', false)) {
-            $fields[] = array(
+            $fields[] = [
                 'col' => 4,
                 'type' => 'switch',
                 'label' => $this->module->l('PayPal', 'PayshopPaymentsSettings'),
                 'name' => 'PAYSHOP_PAYPAL',
                 'is_bool' => true,
                 'desc' => $this->module->l('Activate the payment method on Checkout', 'PayshopPaymentsSettings'),
-                'values' => array(
-                    array(
-                    'id' => 'PAYSHOP_PAYPAL_ON',
-                    'value' => true,
-                    'label' => $this->module->l('Enable', 'PayshopPaymentsSettings')
-                    ),
-                    array(
-                    'id' => 'PAYSHOP_PAYPAL_OFF',
-                    'value' => false,
-                    'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
-                    )
-                )
-            );
+                'values' => [
+                    [
+                        'id' => 'PAYSHOP_PAYPAL_ON',
+                        'value' => true,
+                        'label' => $this->module->l('Enable', 'PayshopPaymentsSettings'),
+                    ],
+                    [
+                        'id' => 'PAYSHOP_PAYPAL_OFF',
+                        'value' => false,
+                        'label' => $this->module->l('Disable', 'PayshopPaymentsSettings'),
+                    ],
+                ],
+            ];
         }
 
         if (Configuration::get('PAYSHOP_CLICKTOPAY_SERVICE_UUID', false)) {
-            $fields[] = array(
-            'col' => 4,
-            'type' => 'switch',
-            'label' => $this->module->l('Click to Pay', 'PayshopPaymentsSettings'),
-            'name' => 'PAYSHOP_CLICKTOPAY',
-            'is_bool' => true,
-            'desc' => $this->module->l('Activate the payment method on Checkout', 'PayshopPaymentsSettings'),
-            'values' => array(
-                array(
-                'id' => 'PAYSHOP_CLICKTOPAY_ON',
-                'value' => true,
-                'label' => $this->module->l('Enable', 'PayshopPaymentsSettings')
-                ),
-                array(
-                'id' => 'PAYSHOP_CLICKTOPAY_OFF',
-                'value' => false,
-                'label' => $this->module->l('Disable', 'PayshopPaymentsSettings')
-                )
-            )
-            );
+            $fields[] = [
+                'col' => 4,
+                'type' => 'switch',
+                'label' => $this->module->l('Click to Pay', 'PayshopPaymentsSettings'),
+                'name' => 'PAYSHOP_CLICKTOPAY',
+                'is_bool' => true,
+                'desc' => $this->module->l('Activate the payment method on Checkout', 'PayshopPaymentsSettings'),
+                'values' => [
+                    [
+                        'id' => 'PAYSHOP_CLICKTOPAY_ON',
+                        'value' => true,
+                        'label' => $this->module->l('Enable', 'PayshopPaymentsSettings'),
+                    ],
+                    [
+                        'id' => 'PAYSHOP_CLICKTOPAY_OFF',
+                        'value' => false,
+                        'label' => $this->module->l('Disable', 'PayshopPaymentsSettings'),
+                    ],
+                ],
+            ];
         }
 
         return $this->buildForm($title, $fields);
@@ -318,7 +318,7 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
      */
     public function getFormValues()
     {
-        return array(
+        return [
             'PAYSHOP_CREDIT_CARD' => Configuration::get('PAYSHOP_CREDIT_CARD'),
             'PAYSHOP_MULTIBANCO_REFERENCE' => Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE'),
             'PAYSHOP_PAYSHOP_REFERENCE' => Configuration::get('PAYSHOP_PAYSHOP_REFERENCE'),
@@ -332,7 +332,7 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
             'PAYSHOP_APPLEPAY_CERTIFICATE_PATH' => Configuration::get('PAYSHOP_APPLEPAY_CERTIFICATE_PATH'),
             'PAYSHOP_APPLEPAY_PRIVATE_KEY_PATH' => Configuration::get('PAYSHOP_APPLEPAY_PRIVATE_KEY_PATH'),
             'PAYSHOP_PAYPAL' => Configuration::get('PAYSHOP_PAYPAL'),
-            'PAYSHOP_CLICKTOPAY' => Configuration::get('PAYSHOP_CLICKTOPAY')
-        );
+            'PAYSHOP_CLICKTOPAY' => Configuration::get('PAYSHOP_CLICKTOPAY'),
+        ];
     }
 }

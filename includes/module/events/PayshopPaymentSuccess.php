@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -29,9 +30,8 @@ if (!defined('_PS_VERSION_')) {
  * Don't forget to prefix your containers with your own identifier
  * to avoid any conflicts with others containers.
  */
-
- class PayshopPaymentSuccess
- {
+class PayshopPaymentSuccess
+{
     /**
      * @var PayshopUpdateOrder
      */
@@ -51,6 +51,7 @@ if (!defined('_PS_VERSION_')) {
      * Process payment success event
      *
      * @param array $paymentOrder
+     *
      * @return void
      */
     public function process($paymentOrder)
@@ -71,4 +72,4 @@ if (!defined('_PS_VERSION_')) {
             $paymentOrder['uuid']
         );
     }
- }
+}

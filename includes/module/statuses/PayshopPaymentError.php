@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -20,7 +21,7 @@ class PayshopPaymentError
 
         $order_state = new OrderState();
 
-        $order_state->name = array();
+        $order_state->name = [];
         foreach (Language::getLanguages() as $language) {
             if (Tools::strtolower($language['iso_code']) == 'pt') {
                 $order_state->name[$language['id_lang']] = 'Erro de pagamento Payshop';

@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -14,7 +15,7 @@ class PayshopReference
 
     /**
      * Register the Multibanco reference payment method
-     * 
+     *
      * @return PaymentOption
      */
     public function register()
@@ -26,7 +27,7 @@ class PayshopReference
 
         $paymentForm = $this->module->context->smarty->assign([
             'formAction' => $formAction,
-            'moduleUrl' => $this->module->path
+            'moduleUrl' => $this->module->path,
         ])
           ->fetch('module:payshop/views/templates/hook/payments/payshop-reference.tpl');
 

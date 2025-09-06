@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -29,7 +30,6 @@ if (!defined('_PS_VERSION_')) {
  * Don't forget to prefix your containers with your own identifier
  * to avoid any conflicts with others containers.
  */
-
 class HookOrderConfirmation
 {
     /**
@@ -51,30 +51,33 @@ class HookOrderConfirmation
      * Display information on the order confirmation page
      *
      * @param Order $order
+     *
      * @return string
      */
     public function execute($order)
     {
         $referencePaymentMethods = [
-            'Payshop (Payshop Reference)', 
-            'Payshop (Multibanco)'
+            'Payshop (Payshop Reference)',
+            'Payshop (Multibanco)',
         ];
 
         if (in_array($order->payment, $referencePaymentMethods)) {
             $referencesDialog = new PayshopShowReferencesOrderConfirmation($this->module);
+
             return $referencesDialog->execute();
         }
 
         $transaction = PayshopHelpers::getTransacion('order_id', $order->id);
-        
+
         if ($transaction['payment_status'] !== 'PAYSHOP_ORDER_STATUS_WAITING_PAYMENT') {
             return;
         }
-        
+
         $googlepay = 'Payshop Online Payments (Google Pay)';
 
         if ($order->payment == $googlepay) {
             $googlepayDialog = new PayshopGooglepayOrderConfirmation($this->module);
+
             return $googlepayDialog->execute($order);
         }
 
@@ -82,6 +85,7 @@ class HookOrderConfirmation
 
         if ($order->payment == $applepay) {
             $applepayDialog = new PayshopApplepayOrderConfirmation($this->module);
+
             return $applepayDialog->execute($order);
         }
     }

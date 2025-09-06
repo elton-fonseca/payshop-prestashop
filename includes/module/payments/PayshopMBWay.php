@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -14,7 +15,7 @@ class PayshopMBWay
 
     /**
      * Register the MBWay payment method
-     * 
+     *
      * @return PaymentOption
      */
     public function register()
@@ -27,7 +28,7 @@ class PayshopMBWay
         $paymentForm = $this->module->context->smarty->assign([
             'formAction' => $formAction,
             'moduleUrl' => $this->module->path,
-            'shopUrl' => $this->module->context->shop->getBaseURL()
+            'shopUrl' => $this->module->context->shop->getBaseURL(),
         ])
           ->fetch('module:payshop/views/templates/hook/payments/mbway.tpl');
 

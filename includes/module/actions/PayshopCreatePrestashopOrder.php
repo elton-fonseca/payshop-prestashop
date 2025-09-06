@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -30,9 +31,8 @@ if (!defined('_PS_VERSION_')) {
  * Don't forget to prefix your containers with your own identifier
  * to avoid any conflicts with others containers.
  */
-
- class PayshopCreatePrestashopOrder
- {
+class PayshopCreatePrestashopOrder
+{
     /**
      * @var Modulo
      */
@@ -57,13 +57,15 @@ if (!defined('_PS_VERSION_')) {
      * Create prestashop order and payshop transaction
      *
      * @param string $paymentMethod
+     *
      * @return int
+     *
      * @throws Exception
      */
     public function execute($paymentMethod)
     {
         $this->paymentMethod = $paymentMethod;
-        
+
         $prestashopOrderId = $this->createPrestashopOrder();
         $this->createPayshopTransaction();
 
@@ -74,13 +76,14 @@ if (!defined('_PS_VERSION_')) {
      * Create prestashop order
      *
      * @return int
+     *
      * @throws Exception
      */
     private function createPrestashopOrder()
     {
         $cart = $this->module->context->cart;
         $customer = new Customer($cart->id_customer);
-        
+
         $this->module->validateOrder(
             (int) $this->module->context->cart->id,
             (int) $this->getInitialOrderStatusId(),
@@ -88,7 +91,7 @@ if (!defined('_PS_VERSION_')) {
             $this->formatedPaymentMethodName(),
             null,
             null,
-            (int)$this->module->context->currency->id,
+            (int) $this->module->context->currency->id,
             false,
             $customer->secure_key
         );
@@ -96,12 +99,7 @@ if (!defined('_PS_VERSION_')) {
         $orderId = (int) $this->module->currentOrder;
 
         if (!$orderId) {
-            throw new Exception(
-                PayshopHelpers::errorMessageProcessTransation(
-                    $this->module,
-                    $this->module->l('not created', 'PayshopCreateOrder')
-                )
-            );
+            throw new Exception(PayshopHelpers::errorMessageProcessTransation($this->module, $this->module->l('not created', 'PayshopCreateOrder')));
         }
 
         return $orderId;
@@ -109,58 +107,55 @@ if (!defined('_PS_VERSION_')) {
 
     /**
      * Create payshop transaction
-     * 
+     *
      * @return bool
+     *
      * @throws Exception
      */
     private function createPayshopTransaction()
     {
-       $isPaymentTest = !Configuration::get('PAYSHOP_PROD_STATUS');
+        $isPaymentTest = !Configuration::get('PAYSHOP_PROD_STATUS');
 
-       $transaction = new PayshopTransaction();
-       $transaction->where('cart_id', '=', $this->module->context->cart->id)->destroy();
+        $transaction = new PayshopTransaction();
+        $transaction->where('cart_id', '=', $this->module->context->cart->id)->destroy();
 
-       $transaction = new PayshopTransaction();
-       $isCreated = $transaction->create([
-           'cart_id' => $this->module->context->cart->id,
-           'order_id' => $this->module->currentOrder,
-           'customer_id' => $this->module->context->customer->id,
-           'total' => $this->module->context->cart->getOrderTotal(true, Cart::BOTH),
-           'payment_method' => $this->paymentMethod,
-           'payment_status' => 'pending',
-           'is_payment_test' => $isPaymentTest
-       ]);
+        $transaction = new PayshopTransaction();
+        $isCreated = $transaction->create([
+            'cart_id' => $this->module->context->cart->id,
+            'order_id' => $this->module->currentOrder,
+            'customer_id' => $this->module->context->customer->id,
+            'total' => $this->module->context->cart->getOrderTotal(true, Cart::BOTH),
+            'payment_method' => $this->paymentMethod,
+            'payment_status' => 'pending',
+            'is_payment_test' => $isPaymentTest,
+        ]);
 
-       if (!$isCreated) {
-           throw new Exception(
-               PayshopHelpers::errorMessageProcessTransation(
-                   $this->module,
-                   $this->module->currentOrder
-               )
-           );
-       }
+        if (!$isCreated) {
+            throw new Exception(PayshopHelpers::errorMessageProcessTransation($this->module, $this->module->currentOrder));
+        }
 
-       return $isCreated;
+        return $isCreated;
     }
 
     /**
      * Get initial order status id
-     * 
+     *
      * @param string $paymentMethod
+     *
      * @return int
      */
-     private function getInitialOrderStatusId()
-     {
+    private function getInitialOrderStatusId()
+    {
         return Configuration::get('PAYSHOP_ORDER_STATUS_WAITING_PAYMENT');
-     }
+    }
 
     /**
      * Formate payment method name
-     * 
+     *
      * @return string
      */
-     private function formatedPaymentMethodName()
-     {
+    private function formatedPaymentMethodName()
+    {
         $payments = [
             PayshopPaymentMethods::MULTIBANCO => 'Payshop (Multibanco)',
             PayshopPaymentMethods::PAYSHOP_REFERENCE => 'Payshop (Payshop Reference)',
@@ -173,5 +168,5 @@ if (!defined('_PS_VERSION_')) {
         ];
 
         return $payments[$this->paymentMethod];
-     }
- }
+    }
+}

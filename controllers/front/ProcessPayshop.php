@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -29,10 +30,9 @@ if (!defined('_PS_VERSION_')) {
  * Don't forget to prefix your containers with your own identifier
  * to avoid any conflicts with others containers.
  */
-
 class PayshopProcessPayshopModuleFrontController extends ModuleFrontController
 {
-/**
+    /**
      * @var PayshopCreateOrder
      */
     private $payshopCreateOrder;
@@ -40,7 +40,7 @@ class PayshopProcessPayshopModuleFrontController extends ModuleFrontController
     /**
      * @var PayshopUpdateOrder
      */
-    private $payshopUpdateOrder;   
+    private $payshopUpdateOrder;
 
     /**
      * Class constructor
@@ -77,20 +77,21 @@ class PayshopProcessPayshopModuleFrontController extends ModuleFrontController
             Tools::redirect(
                 PayshopHelpers::confirmationPageURL($this->module)
             );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             PayshopHelpers::errorResponse($e->getMessage());
         }
     }
 
     /**
      * Save iframe url in the session to show it in the confirmation page
-     * 
+     *
      * @param array $paymentOrder
+     *
      * @return void
      */
     private function saveIframeContent($paymentOrder)
     {
-        $iframeContent = PayshopClientFactory::getInstance()->getIframeContent($paymentOrder['token'] . '?apm=PAYSHOP') ;
+        $iframeContent = PayshopClientFactory::getInstance()->getIframeContent($paymentOrder['token'] . '?apm=PAYSHOP');
 
         $_SESSION['payshop_iframe_content'] = $iframeContent;
     }

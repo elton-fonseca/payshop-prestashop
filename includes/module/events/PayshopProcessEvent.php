@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -31,11 +32,11 @@ if (!defined('_PS_VERSION_')) {
  * to avoid any conflicts with others containers.
  */
 
-require_once('PayshopPaymentSuccess.php');
-require_once('PayshopPaymentRefused.php');
+require_once 'PayshopPaymentSuccess.php';
+require_once 'PayshopPaymentRefused.php';
 
- class PayshopProcessEvent
- {
+class PayshopProcessEvent
+{
     /**
      * @var PayshopClient
      */
@@ -81,8 +82,9 @@ require_once('PayshopPaymentRefused.php');
 
     /**
      * Add metadata app name to instruction
-     * 
-     * @param  array  $paymentOrder
+     *
+     * @param array $paymentOrder
+     *
      * @return void
      */
     private function addMetadataAppName(array $paymentOrder): void
@@ -98,14 +100,14 @@ require_once('PayshopPaymentRefused.php');
         if (!isset($transaction['uuid'])) {
             return;
         }
-        
+
         $this->payshopSDK->createTransationMetadata(
             $transaction['uuid'],
             [
                 'metadata' => [
-                    'source_application' => 'prestaShop_plugin'
-                ]
+                    'source_application' => 'prestaShop_plugin',
+                ],
             ]
         );
     }
- }
+}

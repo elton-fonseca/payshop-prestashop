@@ -1,10 +1,11 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
 global $_MODULE;
-$_MODULE = array();
+$_MODULE = [];
 $_MODULE['<{payshop}prestashop>payshop_00ddf6f56dabef2d1aab713a0dbf2eb1'] = 'Payshop Online Payments';
 $_MODULE['<{payshop}prestashop>payshop_b9a2e0f33da43f952a816aa78f78ee2e'] = 'Configure o seu módulo de pagamentos';
 $_MODULE['<{payshop}prestashop>payshop_0f379daaee21894a7c6453950658fe8b'] = 'Tem certeza que você deseja remover esse módulo?';

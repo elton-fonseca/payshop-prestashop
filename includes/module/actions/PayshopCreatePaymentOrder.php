@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -30,9 +31,8 @@ if (!defined('_PS_VERSION_')) {
  * Don't forget to prefix your containers with your own identifier
  * to avoid any conflicts with others containers.
  */
-
- class PayshopCreatePaymentOrder
- {
+class PayshopCreatePaymentOrder
+{
     /**
      * @var Modulo
      */
@@ -45,12 +45,12 @@ if (!defined('_PS_VERSION_')) {
 
     /**
      * @var string
-     */ 
+     */
     private $paymentMethod;
 
     /**
      * @var string
-     */ 
+     */
     private $prestashopOrderId;
 
     /**
@@ -69,7 +69,9 @@ if (!defined('_PS_VERSION_')) {
      *
      * @param string $paymentMethod
      * @param int $prestashopOrderId
+     *
      * @return int
+     *
      * @throws Exception
      */
     public function execute($paymentMethod, $prestashopOrderId)
@@ -91,7 +93,7 @@ if (!defined('_PS_VERSION_')) {
 
     /**
      * Get payment order data
-     * 
+     *
      * @return array
      */
     private function getOrderData()
@@ -101,14 +103,14 @@ if (!defined('_PS_VERSION_')) {
             'currency' => 'EUR',
             'operative' => 'AUTHORIZATION',
             'service' => PayshopHelpers::getPaymentServiceUUID($this->paymentMethod),
-    
-            "description" => $this->getDescription(),
+
+            'description' => $this->getDescription(),
 
             'url_ok' => PayshopHelpers::confirmationPageURL($this->module),
-            'url_ko' =>  $this->getProcessFailedRedirectURL(),
-            "url_post" => $this->getProcessEventUrl()
+            'url_ko' => $this->getProcessFailedRedirectURL(),
+            'url_post' => $this->getProcessEventUrl(),
         ];
-        
+
         return array_merge($data, $this->getPaymentData());
     }
 
@@ -116,13 +118,15 @@ if (!defined('_PS_VERSION_')) {
      * Check if currency is euro
      *
      * @return void
+     *
      * @throws Exception
      */
-    private function isCurrencyEuro() {
+    private function isCurrencyEuro()
+    {
         $currecy = $this->module->context->currency->iso_code;
 
         if ($currecy != 'EUR') {
-            //$total = $total * dd($this->module->context->currency->conversion_rate);
+            // $total = $total * dd($this->module->context->currency->conversion_rate);
             $message = $this->module->l('Product currency must be EUR', 'PayshopCreateCharge');
             PayshopLog::generate('PayshopCreatePaymentOrder: ' . $message, 'error');
             throw new Exception($message);
@@ -153,7 +157,7 @@ if (!defined('_PS_VERSION_')) {
             [
                 $this->module->context->shop->name,
                 $this->module->l(' - order #', 'PayshopCreateCharge'),
-                $this->prestashopOrderId
+                $this->prestashopOrderId,
             ]
         );
     }
@@ -187,7 +191,7 @@ if (!defined('_PS_VERSION_')) {
 
     /**
      * Get payment data
-     * 
+     *
      * @return array
      */
     private function getPaymentData()
@@ -195,7 +199,7 @@ if (!defined('_PS_VERSION_')) {
         if ($this->paymentMethod === PayshopPaymentMethods::CREDIT_CARD) {
             return [
                 'secure' => true,
-                'save_card' => false
+                'save_card' => false,
             ];
         }
 
@@ -213,14 +217,14 @@ if (!defined('_PS_VERSION_')) {
             $client = new Customer($cart->id_customer);
 
             $options['extra_data'] = [
-                "profile" => [
-                    "first_name" => $client->firstname ? $client->firstname : "",
-                    "last_name" => $client->lastname ? $client->lastname : "",
-                    "phone" => [
-                        "prefix" => Tools::getValue('phone-prefix'),
-                        "number" => Tools::getValue('phone-number')
-                    ]
-                ]
+                'profile' => [
+                    'first_name' => $client->firstname ? $client->firstname : '',
+                    'last_name' => $client->lastname ? $client->lastname : '',
+                    'phone' => [
+                        'prefix' => Tools::getValue('phone-prefix'),
+                        'number' => Tools::getValue('phone-number'),
+                    ],
+                ],
             ];
         }
 
@@ -229,10 +233,11 @@ if (!defined('_PS_VERSION_')) {
 
     /**
      * Validate currency sent by the gateway
-     * 
+     *
      * @param array $response
+     *
      * @return void
-     * 
+     *
      * @throws Exception
      */
     private function validateGatewayCurrency($response)
@@ -243,6 +248,4 @@ if (!defined('_PS_VERSION_')) {
             throw new Exception($message);
         }
     }
-
-    
 }

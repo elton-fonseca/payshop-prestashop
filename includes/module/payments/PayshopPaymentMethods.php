@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -6,9 +7,9 @@ if (!defined('_PS_VERSION_')) {
 class PayshopPaymentMethods
 {
     const CREDIT_CARD = 'card';
-    const MB_WAY ='mbway';
+    const MB_WAY = 'mbway';
     const PAYSHOP_REFERENCE = 'payshop_reference';
-    const MULTIBANCO ='multibanco';
+    const MULTIBANCO = 'multibanco';
     const GOOGLEPAY = 'googlepay';
     const APPLEPAY = 'applepay';
     const PAYPAL = 'paypal';
@@ -38,7 +39,7 @@ class PayshopPaymentMethods
      * @var PayshopGooglepay
      */
     private $payshopGooglepay;
-    
+
     /**
      * @var PayshopApplepay
      */
@@ -54,7 +55,6 @@ class PayshopPaymentMethods
      */
     private $payshopClicktopay;
 
-
     public function __construct($module)
     {
         $this->creditCard = new PayshopCreditCard($module);
@@ -69,7 +69,7 @@ class PayshopPaymentMethods
 
     /**
      * Register payment methods
-     * 
+     *
      * @return array
      */
     public function getPaymentOptions($params)
@@ -77,35 +77,35 @@ class PayshopPaymentMethods
         $paymentOptions = [];
 
         if (Configuration::get('PAYSHOP_CREDIT_CARD') && Configuration::get('PAYSHOP_CARD_SERVICE_UUID') != '') {
-            $paymentOptions[] =  $this->creditCard->register();
+            $paymentOptions[] = $this->creditCard->register();
         }
 
-        if (Configuration::get('PAYSHOP_MBWAY')  && Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID') != '') {
-            $paymentOptions[] =  $this->mbWay->register();
+        if (Configuration::get('PAYSHOP_MBWAY') && Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID') != '') {
+            $paymentOptions[] = $this->mbWay->register();
         }
 
-        if (Configuration::get('PAYSHOP_PAYSHOP_REFERENCE')  && Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID') != '') {
-            $paymentOptions[] =  $this->payshopReference->register();
+        if (Configuration::get('PAYSHOP_PAYSHOP_REFERENCE') && Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID') != '') {
+            $paymentOptions[] = $this->payshopReference->register();
         }
 
-        if (Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE')  && Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID') != '') {
-            $paymentOptions[] =  $this->payshopMultibanco->register();
+        if (Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE') && Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID') != '') {
+            $paymentOptions[] = $this->payshopMultibanco->register();
         }
 
-        if (Configuration::get('PAYSHOP_GOOGLEPAY')  && Configuration::get('PAYSHOP_GOOGLEPAY_SERVICE_UUID') != '') {
-            $paymentOptions[] =  $this->payshopGooglepay->register();
+        if (Configuration::get('PAYSHOP_GOOGLEPAY') && Configuration::get('PAYSHOP_GOOGLEPAY_SERVICE_UUID') != '') {
+            $paymentOptions[] = $this->payshopGooglepay->register();
         }
 
-        if (Configuration::get('PAYSHOP_APPLEPAY')  && Configuration::get('PAYSHOP_APPLEPAY_SERVICE_UUID') != '') {
-            $paymentOptions[] =  $this->payshopApplepay->register();
+        if (Configuration::get('PAYSHOP_APPLEPAY') && Configuration::get('PAYSHOP_APPLEPAY_SERVICE_UUID') != '') {
+            $paymentOptions[] = $this->payshopApplepay->register();
         }
 
-        if (Configuration::get('PAYSHOP_PAYPAL')  && Configuration::get('PAYSHOP_PAYPAL_SERVICE_UUID') != '') {
-            $paymentOptions[] =  $this->payshopPaypal->register();
+        if (Configuration::get('PAYSHOP_PAYPAL') && Configuration::get('PAYSHOP_PAYPAL_SERVICE_UUID') != '') {
+            $paymentOptions[] = $this->payshopPaypal->register();
         }
 
-        if (Configuration::get('PAYSHOP_CLICKTOPAY')  && Configuration::get('PAYSHOP_CLICKTOPAY_SERVICE_UUID') != '') {
-            $paymentOptions[] =  $this->payshopApplepay->register();
+        if (Configuration::get('PAYSHOP_CLICKTOPAY') && Configuration::get('PAYSHOP_CLICKTOPAY_SERVICE_UUID') != '') {
+            $paymentOptions[] = $this->payshopApplepay->register();
         }
 
         return $paymentOptions;

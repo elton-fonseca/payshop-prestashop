@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -32,16 +33,17 @@ abstract class PayshopAbstractClient
 
     /**
      * PayshopAbstractClient constructor.
-     * 
+     *
      * @param string $apiKey
      * @param string $signature
      * @param string $environment
-     * @throws Exception 
+     *
+     * @throws Exception
      */
     public function __construct(
         $apiKey,
         $signature,
-        $isLiveEnvironment = true
+        $isLiveEnvironment = true,
     ) {
         $this->isCurlLoaded();
 
@@ -54,9 +56,10 @@ abstract class PayshopAbstractClient
 
     /**
      * Check if curl is loaded
-     * 
-     * @return void 
-     * @throws Exception 
+     *
+     * @return void
+     *
+     * @throws Exception
      */
     private function isCurlLoaded()
     {
@@ -67,9 +70,10 @@ abstract class PayshopAbstractClient
 
     /**
      * Check if credentils are filled
-     * 
-     * @return void 
-     * @throws Exception 
+     *
+     * @return void
+     *
+     * @throws Exception
      */
     private function isCredentilsFilled()
     {
@@ -82,7 +86,7 @@ abstract class PayshopAbstractClient
 
     /**
      * get url base for environment
-     * 
+     *
      * @return string
      */
     private function getUrlBase()
@@ -92,8 +96,9 @@ abstract class PayshopAbstractClient
 
     /**
      * get url for endpoint
-     * 
+     *
      * @param string $endpoint
+     *
      * @return string
      */
     protected function getUrl($endpoint, $resourceId = null)
@@ -105,25 +110,25 @@ abstract class PayshopAbstractClient
 
     /**
      * get public credentials
-     * 
+     *
      * @return array
      */
     protected function getCredentials()
     {
         return [
-            'Authorization: Basic ' . base64_encode($this->apiKey . ':')
+            'Authorization: Basic ' . base64_encode($this->apiKey . ':'),
         ];
     }
 
     /**
      * get signature array
-     * 
+     *
      * @return array
      */
     protected function addSignature($data)
     {
         $signature = [
-            'signature' => $this->signature
+            'signature' => $this->signature,
         ];
 
         return array_merge($data, $signature);

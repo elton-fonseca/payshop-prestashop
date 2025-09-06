@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -29,7 +30,6 @@ if (!defined('_PS_VERSION_')) {
  * Don't forget to prefix your containers with your own identifier
  * to avoid any conflicts with others containers.
  */
-
 class PayshopGooglepayOrderConfirmation
 {
     /**
@@ -51,6 +51,7 @@ class PayshopGooglepayOrderConfirmation
      * Display Google Pay dialog on the order confirmation page
      *
      * @param Order $order
+     *
      * @return string
      */
     public function execute($order)

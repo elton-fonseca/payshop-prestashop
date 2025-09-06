@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -17,12 +18,11 @@ class PayshopPaymentServiceUUID
 
     /**
      * Add links to plugin list
-     * 
+     *
      * @return void
      */
     public function execute()
     {
-
         $this->payshopSDK = PayshopClientFactory::getInstance();
 
         $this->availableServices = $this->getGatewayServices();
@@ -33,7 +33,7 @@ class PayshopPaymentServiceUUID
 
         $this->fillServiceUUID('PAYSHOP', 'PAYSHOP_REFERENCE_SERVICE_UUID');
 
-        $this->fillServiceUUID('SIBS', 'PAYSHOP_MBWAY_SERVICE_UUID', function($service) {
+        $this->fillServiceUUID('SIBS', 'PAYSHOP_MBWAY_SERVICE_UUID', function ($service) {
             $response = $this->payshopSDK->getTerminals($service['terminal']);
 
             return isset($response['response']['terminal']['credentials']['is_mbway_enabled']) ?
@@ -41,9 +41,9 @@ class PayshopPaymentServiceUUID
                         false;
         });
 
-        $this->fillServiceUUID('SIBS', 'PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID', function($service) {
+        $this->fillServiceUUID('SIBS', 'PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID', function ($service) {
             $response = $this->payshopSDK->getTerminals($service['terminal']);
-            
+
             return isset($response['response']['terminal']['credentials']['is_multibanco_enabled']) ?
                         $response['response']['terminal']['credentials']['is_multibanco_enabled'] :
                         false;
@@ -52,15 +52,16 @@ class PayshopPaymentServiceUUID
 
     /**
      * Fill service UUID
-     * 
+     *
      * @param string $serviceType
      * @param string $serviceStorageKey
      * @param callable $aditionalChecking
+     *
      * @return void
      */
     private function fillServiceUUID($serviceType, $serviceStorageKey, $aditionalChecking = false)
     {
-       $service = $this->getService($serviceType, $this->availableServices);
+        $service = $this->getService($serviceType, $this->availableServices);
 
         if (!$service) {
             return;
@@ -84,7 +85,7 @@ class PayshopPaymentServiceUUID
 
     /**
      * Get service UUID
-     * 
+     *
      * @return array
      */
     private function getGatewayServices()
@@ -102,10 +103,10 @@ class PayshopPaymentServiceUUID
 
     /**
      * Get service
-     * 
+     *
      * @param string $serviceType
      * @param array $services
-     * 
+     *
      * @return array
      */
     private function getService($serviceType, $services)

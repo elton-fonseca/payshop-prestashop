@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -29,7 +30,6 @@ if (!defined('_PS_VERSION_')) {
  * Don't forget to prefix your containers with your own identifier
  * to avoid any conflicts with others containers.
  */
-
 class PayshopProcessEventModuleFrontController extends ModuleFrontController
 {
     /**
@@ -68,7 +68,7 @@ class PayshopProcessEventModuleFrontController extends ModuleFrontController
             }
 
             $this->payshopProcessEvent->execute($data['order']);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             PayshopLog::generate('PayshopProcessEvent: ' . $e->getMessage() . ' - ' . $e->getTraceAsString(), 'error');
 
             echo $e->getMessage();
@@ -81,6 +81,7 @@ class PayshopProcessEventModuleFrontController extends ModuleFrontController
      * Check if the status is unprocessable
      *
      * @param string $orderPaymentStatus
+     *
      * @return bool
      */
     private function unprocessablePaymentOrderStatuses($orderPaymentStatus)
@@ -96,7 +97,7 @@ class PayshopProcessEventModuleFrontController extends ModuleFrontController
             'USER_CANCELLED',
             'REDIRECTED_TO_3DS',
             'AUTHENTICATION_REQUIRED',
-            'PENDING_PAYMENT'
+            'PENDING_PAYMENT',
         ]);
     }
 }

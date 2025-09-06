@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -30,9 +31,8 @@ if (!defined('_PS_VERSION_')) {
  * Don't forget to prefix your containers with your own identifier
  * to avoid any conflicts with others containers.
  */
-
- class PayshopUpdateOrder
- {
+class PayshopUpdateOrder
+{
     /**
      * @var Modulo
      */
@@ -55,18 +55,18 @@ if (!defined('_PS_VERSION_')) {
      * @param int $prestashopOrderId
      * @param string $newOrderStatus
      * @param int $paymentOrderId
+     *
      * @return void
      */
     public function execute(
         $paymentMethod,
         $prestashopOrderId,
         $newOrderStatus,
-        $paymentOrderId
-    )
-    {
+        $paymentOrderId,
+    ) {
         $this->addPrestashopOrderPayment(
             $paymentMethod,
-            $prestashopOrderId, 
+            $prestashopOrderId,
             $newOrderStatus,
             $paymentOrderId
         );
@@ -87,16 +87,17 @@ if (!defined('_PS_VERSION_')) {
      * @param int $prestashopOrderId
      * @param string $newOrderStatus
      * @param int $payshopChargeId
+     *
      * @return int
+     *
      * @throws Exception
      */
     private function addPrestashopOrderPayment(
         $paymentMethod,
-        $prestashopOrderId, 
+        $prestashopOrderId,
         $newOrderStatus,
-        $paymentOrderId
-    )
-    {
+        $paymentOrderId,
+    ) {
         if ('PAYSHOP_ORDER_STATUS_PAID' != $newOrderStatus) {
             return;
         }
@@ -112,34 +113,28 @@ if (!defined('_PS_VERSION_')) {
         $paymentAdicioned = $baseOrder->addOrderPayment($amount, $paymentMethod, $paymentOrderId, $currency);
 
         if (!$paymentAdicioned) {
-            throw new Exception(
-                PayshopHelpers::errorMessageProcessTransation(
-                    $this->module,
-                    $prestashopOrderId,
-                    $paymentOrderId
-                )
-            );
+            throw new Exception(PayshopHelpers::errorMessageProcessTransation($this->module, $prestashopOrderId, $paymentOrderId));
         }
 
         $baseOrder->setInvoice(true);
     }
 
-
     /**
      * Update Payshop transaction status
-     * 
+     *
      * @param int $prestashopOrderId
      * @param string $newOrderStatus
      * @param int $paymentOrderId
+     *
      * @return bool
+     *
      * @throws Exception
      */
-     private function updatePayshopTransaction(
+    private function updatePayshopTransaction(
         $prestashopOrderId,
         $newOrderStatus,
-        $paymentOrderId
-    )
-    {
+        $paymentOrderId,
+    ) {
         $transaction = new PayshopTransaction();
         $transaction->where('order_id', '=', $prestashopOrderId);
 
@@ -147,17 +142,11 @@ if (!defined('_PS_VERSION_')) {
             'payment_status' => $newOrderStatus,
             'charge_id' => $paymentOrderId,
             'instrument_id' => '',
-            'payment_id' => ''
+            'payment_id' => '',
         ]);
 
         if (!$isUpdated) {
-            throw new Exception(
-                PayshopHelpers::errorMessageProcessTransation(
-                    $this->module,
-                    $prestashopOrderId,
-                    $paymentOrderId
-                )
-            );
+            throw new Exception(PayshopHelpers::errorMessageProcessTransation($this->module, $prestashopOrderId, $paymentOrderId));
         }
 
         return $isUpdated;
@@ -168,7 +157,9 @@ if (!defined('_PS_VERSION_')) {
      *
      * @param int $prestashopOrderId
      * @param string $newOrderStatus
+     *
      * @return int
+     *
      * @throws Exception
      */
     private function updatePrestashopOrder($prestashopOrderId, $newOrderStatus)
@@ -185,4 +176,4 @@ if (!defined('_PS_VERSION_')) {
 
         $history->addWithemail();
     }
- }
+}

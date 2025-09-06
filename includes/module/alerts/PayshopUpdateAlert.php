@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -29,7 +30,6 @@ if (!defined('_PS_VERSION_')) {
  * Don't forget to prefix your containers with your own identifier
  * to avoid any conflicts with others containers.
  */
-
 class PayshopUpdateAlert
 {
     /**
@@ -80,7 +80,7 @@ class PayshopUpdateAlert
         $smart->assign([
             'updateAlertCloseLink' => $this->getUpdateAlertCloseControllerLink(),
             'downloadUrl' => $onlineVersionInformations['url'],
-            'availableVersion' => $onlineVersionInformations['version']
+            'availableVersion' => $onlineVersionInformations['version'],
         ]);
 
         return $smart->fetch($this->local_path . 'views/templates/admin/update-alert.tpl');
@@ -89,7 +89,7 @@ class PayshopUpdateAlert
     /**
      * Check if the module is updated
      *
-     * @return boolean
+     * @return bool
      */
     private function isUpdated($onlineVersion)
     {

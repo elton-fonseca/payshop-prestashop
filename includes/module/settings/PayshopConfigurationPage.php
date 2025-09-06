@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -26,31 +27,31 @@ class PayshopConfigurationPage extends Payshop
             $paymentsForm = $this->renderSettingsForm($payments->submit, $payments->values, $payments->form);
         }
 
-        //variables for admin configuration
+        // variables for admin configuration
         $api_key = Configuration::get('PAYSHOP_API_KEY');
         $signature = Configuration::get('PAYSHOP_SIGNATURE');
         $sandbox_api_key = Configuration::get('PAYSHOP_SANDBOX_API_KEY');
         $sandbox_signature = Configuration::get('PAYSHOP_SANDBOX_SIGNATURE');
 
         $output = $this->context->smarty->assign(
-            array(
-                //module requirements
+            [
+                // module requirements
                 'alert' => Payshop::$form_alert,
                 'message' => Payshop::$form_message,
                 'payshop_version' => PAYSHOP_VERSION,
                 'url_base' => __PS_BASE_URI__,
                 'log' => PayshopLog::getLogUrl(),
-                //credentials
+                // credentials
                 'api_key' => $api_key,
                 'signature' => $signature,
                 'sandbox_api_key' => $sandbox_api_key,
                 'sandbox_signature' => $sandbox_signature,
-                //forms
+                // forms
                 'credentialsForm' => $credentialsForm,
                 'paymentsForm' => $paymentsForm,
-                //currencies
-                'currency' => $this->context->currency->iso_code
-            )
+                // currencies
+                'currency' => $this->context->currency->iso_code,
+            ]
         )->fetch($this->local_path . 'views/templates/admin/configurations.tpl');
 
         return $output;
@@ -70,9 +71,10 @@ class PayshopConfigurationPage extends Payshop
     /**
      * Render forms
      *
-     * @param  $submit
-     * @param  $values
-     * @param  $form
+     * @param $submit
+     * @param $values
+     * @param $form
+     *
      * @return string
      */
     private function renderSettingsForm($submit, $values, $form)
@@ -91,32 +93,31 @@ class PayshopConfigurationPage extends Payshop
             . '&configure=' . $this->name . '&tab_module=' . $this->tab . '&module_name=' . $this->name;
         $helper->token = Tools::getAdminTokenLite('AdminModules');
 
-        $helper->tpl_vars = array(
+        $helper->tpl_vars = [
             'fields_value' => $values,
             'languages' => $this->context->controller->getLanguages(),
-            'id_language' => $this->context->language->id
-        );
+            'id_language' => $this->context->language->id,
+        ];
 
-        return $helper->generateForm(array($form));
+        return $helper->generateForm([$form]);
     }
-
 
     /**
      * Are there active payments?
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     private function areThereActivePayments()
     {
-        return (
-            Configuration::get('PAYSHOP_CARD_SERVICE_UUID', false) ||
-            Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID', false) ||
-            Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID', false) ||
-            Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID', false) ||
-            Configuration::get('PAYSHOP_GOOGLEPAY_SERVICE_UUID', false) ||
-            Configuration::get('PAYSHOP_APPLEPAY_SERVICE_UUID', false) ||
-            Configuration::get('PAYSHOP_PAYPAL_SERVICE_UUID', false) ||
-            Configuration::get('PAYSHOP_CLICKTOPAY_SERVICE_UUID', false)
-        );
+        return
+            Configuration::get('PAYSHOP_CARD_SERVICE_UUID', false)
+            || Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID', false)
+            || Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID', false)
+            || Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID', false)
+            || Configuration::get('PAYSHOP_GOOGLEPAY_SERVICE_UUID', false)
+            || Configuration::get('PAYSHOP_APPLEPAY_SERVICE_UUID', false)
+            || Configuration::get('PAYSHOP_PAYPAL_SERVICE_UUID', false)
+            || Configuration::get('PAYSHOP_CLICKTOPAY_SERVICE_UUID', false)
+        ;
     }
 }

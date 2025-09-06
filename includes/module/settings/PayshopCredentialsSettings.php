@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -51,8 +52,8 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
     public function generateForm()
     {
         $title = $this->module->l('Credentials', 'PayshopCredentialsSettings');
-        $fields = array(
-            array(
+        $fields = [
+            [
                 'col' => 4,
                 'type' => 'switch',
                 'label' => $this->module->l('Production', 'PayshopCredentialsSettings'),
@@ -61,78 +62,78 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
                 'desc' => $this->module->l('Select "YES" only when you are ready to sell. ', 'PayshopCredentialsSettings') .
                     $this->module->l('Change to NO to activate the Sandbox ', 'PayshopCredentialsSettings') .
                     $this->module->l('test environment.', 'PayshopCredentialsSettings'),
-                'values' => array(
-                    array(
+                'values' => [
+                    [
                         'id' => 'PAYSHOP_PROD_STATUS_ON',
                         'value' => true,
-                        'label' => $this->module->l('Yes', 'PayshopCredentialsSettings')
-                    ),
-                    array(
+                        'label' => $this->module->l('Yes', 'PayshopCredentialsSettings'),
+                    ],
+                    [
                         'id' => 'PAYSHOP_PROD_STATUS_OFF',
                         'value' => false,
-                        'label' => $this->module->l('No', 'PayshopCredentialsSettings')
-                    )
-                )
-            ),
-            array(
+                        'label' => $this->module->l('No', 'PayshopCredentialsSettings'),
+                    ],
+                ],
+            ],
+            [
                 'col' => 8,
                 'type' => 'html',
                 'name' => '',
                 'desc' => '',
                 'label' => $this->module->l('Load credentials', 'PayshopCredentialsSettings'),
-                'html_content' => '<a href="https://popbackoffice.payshop.pt/settings/developers"'. 
+                'html_content' => '<a href="https://popbackoffice.payshop.pt/settings/developers"' .
                 'target="_blank" class="btn btn-default mp-btn-credenciais">'
-                . $this->module->l('Search my credentials', 'PayshopCredentialsSettings') . '</a>'
-            ),
-            array(
+                . $this->module->l('Search my credentials', 'PayshopCredentialsSettings') . '</a>',
+            ],
+            [
                 'col' => 8,
                 'type' => 'text',
                 'desc' => '',
                 'name' => 'PAYSHOP_API_KEY',
                 'label' => $this->module->l('Api Key', 'PayshopCredentialsSettings'),
-                'required' => true
-            ),
-            array(
+                'required' => true,
+            ],
+            [
                 'col' => 8,
                 'type' => 'text',
                 'desc' => ' ',
                 'name' => 'PAYSHOP_SIGNATURE',
                 'label' => $this->module->l('Signature', 'PayshopCredentialsSettings'),
-                'required' => true
-            ),
-            array(
+                'required' => true,
+            ],
+            [
                 'col' => 8,
                 'type' => 'text',
                 'desc' => ' ',
                 'name' => 'PAYSHOP_CLIENT_UUID',
                 'label' => $this->module->l('Client UUID', 'PayshopCredentialsSettings'),
-                'required' => true
-            ),
-            array(
+                'required' => true,
+            ],
+            [
                 'col' => 8,
                 'type' => 'text',
                 'desc' => '',
                 'name' => 'PAYSHOP_SANDBOX_API_KEY',
                 'label' => $this->module->l('Api Key', 'PayshopCredentialsSettings'),
-                'required' => true
-            ),
-            array(
+                'required' => true,
+            ],
+            [
                 'col' => 8,
                 'type' => 'text',
                 'desc' => '',
                 'name' => 'PAYSHOP_SANDBOX_SIGNATURE',
                 'label' => $this->module->l('Signature', 'PayshopCredentialsSettings'),
-                'required' => true
-            ),
-            array(
+                'required' => true,
+            ],
+            [
                 'col' => 8,
                 'type' => 'text',
                 'desc' => ' ',
                 'name' => 'PAYSHOP_SANDBOX_CLIENT_UUID',
                 'label' => $this->module->l('Client UUID', 'PayshopCredentialsSettings'),
-                'required' => true
-            )
-        );
+                'required' => true,
+            ],
+        ];
 
         return $this->buildForm($title, $fields);
     }
@@ -144,14 +145,14 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
      */
     public function postFormProcess()
     {
-        $this->validate = ([
+        $this->validate = [
             'PAYSHOP_API_KEY' => 'api_key',
             'PAYSHOP_SIGNATURE' => 'signature',
             'PAYSHOP_CLIENT_UUID' => 'client_uuid',
             'PAYSHOP_SANDBOX_API_KEY' => 'api_key',
             'PAYSHOP_SANDBOX_SIGNATURE' => 'signature',
-            'PAYSHOP_SANDBOX_CLIENT_UUID' => 'client_uuid'
-        ]);
+            'PAYSHOP_SANDBOX_CLIENT_UUID' => 'client_uuid',
+        ];
 
         parent::postFormProcess();
 
@@ -169,14 +170,14 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
      */
     public function getFormValues()
     {
-        return array(
+        return [
             'PAYSHOP_PROD_STATUS' => Configuration::get('PAYSHOP_PROD_STATUS'),
             'PAYSHOP_API_KEY' => Configuration::get('PAYSHOP_API_KEY'),
             'PAYSHOP_SIGNATURE' => Configuration::get('PAYSHOP_SIGNATURE'),
             'PAYSHOP_CLIENT_UUID' => Configuration::get('PAYSHOP_CLIENT_UUID'),
             'PAYSHOP_SANDBOX_API_KEY' => Configuration::get('PAYSHOP_SANDBOX_API_KEY'),
             'PAYSHOP_SANDBOX_SIGNATURE' => Configuration::get('PAYSHOP_SANDBOX_SIGNATURE'),
-            'PAYSHOP_SANDBOX_CLIENT_UUID' => Configuration::get('PAYSHOP_SANDBOX_CLIENT_UUID')
-        );
+            'PAYSHOP_SANDBOX_CLIENT_UUID' => Configuration::get('PAYSHOP_SANDBOX_CLIENT_UUID'),
+        ];
     }
 }

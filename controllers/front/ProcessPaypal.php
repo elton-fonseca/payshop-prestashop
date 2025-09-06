@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -29,7 +30,6 @@ if (!defined('_PS_VERSION_')) {
  * Don't forget to prefix your containers with your own identifier
  * to avoid any conflicts with others containers.
  */
-
 class PayshopProcessPaypalModuleFrontController extends ModuleFrontController
 {
     /**
@@ -68,7 +68,7 @@ class PayshopProcessPaypalModuleFrontController extends ModuleFrontController
             Tools::redirect(
                 PayshopHelpers::confirmationPageURL($this->module)
             );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             PayshopHelpers::errorResponse($e->getMessage());
         }
     }

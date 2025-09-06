@@ -1,17 +1,18 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
 class PayshopApplepayValidateMerchant
 {
-    //https://developer.apple.com/documentation/apple_pay_on_the_web/apple_pay_js_api/requesting_an_apple_pay_payment_session
+    // https://developer.apple.com/documentation/apple_pay_on_the_web/apple_pay_js_api/requesting_an_apple_pay_payment_session
     public function execute($validationURL)
     {
         $response = $this->sendAppleRequest($validationURL, $this->getConfiguration());
 
         if ($response['status'] != 200) {
-            throw new \Exception('Merchant validation failed: ' . $response['body']);
+            throw new Exception('Merchant validation failed: ' . $response['body']);
         }
 
         return json_decode($response['body'], true);
@@ -24,7 +25,7 @@ class PayshopApplepayValidateMerchant
             'displayName' => 'PAYSHOP_APPLEPAY_MERCHANT_NAME',
             'initiativeContext' => 'PAYSHOP_APPLEPAY_DOMAIN_NAME',
             'certificate' => 'PAYSHOP_APPLEPAY_CERTIFICATE_PATH',
-            'privateKey' => 'PAYSHOP_APPLEPAY_PRIVATE_KEY_PATH'
+            'privateKey' => 'PAYSHOP_APPLEPAY_PRIVATE_KEY_PATH',
         ];
 
         $config = ['initiative' => 'web'];
@@ -59,11 +60,11 @@ class PayshopApplepayValidateMerchant
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/json',
         ]);
-        
+
         $response = curl_exec($ch);
 
         if (curl_errno($ch)) {
-            throw new \Exception('Curl error: ' . curl_error($ch));
+            throw new Exception('Curl error: ' . curl_error($ch));
         }
 
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);

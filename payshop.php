@@ -1,8 +1,9 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
-/**
+/*
  * 2007-2022 PrestaShop.
  *
  * NOTICE OF LICENSE*
@@ -66,7 +67,7 @@ class Payshop extends PaymentModule
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
-        
+
         $this->loadFiles();
 
         $this->name = 'payshop';
@@ -76,7 +77,7 @@ class Payshop extends PaymentModule
         $this->bootstrap = true;
 
         $this->version = PAYSHOP_VERSION;
-        $this->ps_versions_compliancy = array('min' => '1.7.0', 'max' => _PS_VERSION_);
+        $this->ps_versions_compliancy = ['min' => '1.7.0', 'max' => _PS_VERSION_];
 
         parent::__construct();
 
@@ -94,7 +95,7 @@ class Payshop extends PaymentModule
             'waiting_payment_payshop.html',
             'waiting_payment_payshop.txt',
             'error_warning.html',
-            'error_warning.txt'
+            'error_warning.txt',
         ];
 
         $this->mailsLangs = [
@@ -158,13 +159,15 @@ class Payshop extends PaymentModule
      * Install the module
      *
      * @return bool
+     *
      * @throws PrestaShopException
      */
     public function install()
     {
         if (extension_loaded('curl') == false) {
-            $this->_errors[] = $this->l('You have to enable the cURL extension '.
+            $this->_errors[] = $this->l('You have to enable the cURL extension ' .
             'on your server to install this module.');
+
             return false;
         }
 
@@ -173,16 +176,16 @@ class Payshop extends PaymentModule
 
         $this->copyMailTemplates();
 
-        //install hooks and dependencies
-        return parent::install() &&
-            $this->registerHook('payment') &&
-            $this->registerHook('paymentReturn') &&
-            $this->registerHook('displayAdminAfterHeader') &&
-            $this->registerHook('displayWrapperTop') &&
-            $this->registerHook('orderConfirmation') &&
-            $this->registerHook('paymentOptions') &&
-            $this->registerHook('ActionFrontControllerSetMedia') &&
-            $this->registerHook('sendMailAlterTemplateVars');
+        // install hooks and dependencies
+        return parent::install()
+            && $this->registerHook('payment')
+            && $this->registerHook('paymentReturn')
+            && $this->registerHook('displayAdminAfterHeader')
+            && $this->registerHook('displayWrapperTop')
+            && $this->registerHook('orderConfirmation')
+            && $this->registerHook('paymentOptions')
+            && $this->registerHook('ActionFrontControllerSetMedia')
+            && $this->registerHook('sendMailAlterTemplateVars');
     }
 
     /**
@@ -222,7 +225,8 @@ class Payshop extends PaymentModule
     /**
      * Show payment options
      *
-     * @param  $params
+     * @param $params
+     *
      * @return array|string|void
      */
     public function hookPaymentOptions($params)
@@ -233,7 +237,8 @@ class Payshop extends PaymentModule
     /**
      * Show payment information on order confirmation page
      *
-     * @param  $params
+     * @param $params
+     *
      * @return array|string|void
      */
     public function hookOrderConfirmation($params)
@@ -241,6 +246,7 @@ class Payshop extends PaymentModule
         $order = $params['order'];
 
         $hookOrderConfirmation = new HookOrderConfirmation($this);
+
         return $hookOrderConfirmation->execute($order);
     }
 
@@ -281,7 +287,7 @@ class Payshop extends PaymentModule
         $this->context->smarty->assign([
             'hasMessage' => Tools::getValue('typeReturn') == 'failure',
             'message' => $messageError,
-            'moduleUrl' => $this->path
+            'moduleUrl' => $this->path,
         ]);
 
         return $this->display(__FILE__, 'views/templates/hook/order-wrapper-top.tpl');
@@ -313,7 +319,8 @@ class Payshop extends PaymentModule
     /**
      * Add (payshop and multibanco) reference variables to mail template
      *
-     * @param  $params
+     * @param $params
+     *
      * @return void
      */
     public function hookSendMailAlterTemplateVars($params)
@@ -330,20 +337,20 @@ class Payshop extends PaymentModule
 
         $response = PayshopClientFactory::getInstance()->getPaymentOrder($transation['charge_id']);
         $fields = $response['response']['order']['transactions'][0]['payment_data'];
-        
-        $params['template_vars']["{reference}"] = $fields['reference'];
-        $params['template_vars']["{end_date}"] = $fields['deadline'];
+
+        $params['template_vars']['{reference}'] = $fields['reference'];
+        $params['template_vars']['{end_date}'] = $fields['deadline'];
 
         if ($isNotPayshop) {
-            $params['template_vars']["{entity}"] = $fields['entity'];
+            $params['template_vars']['{entity}'] = $fields['entity'];
         }
     }
 }
 
 function ddpayshop(...$asd)
 {
-    echo "<pre>";
+    echo '<pre>';
     print_r($asd);
-    echo "</pre>";
+    echo '</pre>';
     exit;
 }

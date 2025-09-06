@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -30,7 +31,6 @@ if (!defined('_PS_VERSION_')) {
  * Don't forget to prefix your containers with your own identifier
  * to avoid any conflicts with others containers.
  */
-
 class PayshopPaymentRefused
 {
     /**
@@ -52,6 +52,7 @@ class PayshopPaymentRefused
      * Process payment refused event
      *
      * @param array $event
+     *
      * @return void
      */
     public function process($paymentOrder)

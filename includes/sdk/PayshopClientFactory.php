@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -38,7 +39,7 @@ class PayshopClientFactory
     {
     }
 
-    static $payshopClient = null;
+    public static $payshopClient;
 
     /**
      * Instanciete the class
@@ -54,7 +55,7 @@ class PayshopClientFactory
                     self::getSignature(),
                     self::isProduction()
                 );
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $message = 'API ' . $e->getMessage();
                 PayshopLog::generate('PayshopClientFactory: ' . $message, 'error');
 
@@ -69,11 +70,11 @@ class PayshopClientFactory
     /**
      * Check if the module is in production mode
      *
-     * @return boolean
+     * @return bool
      */
     public static function isProduction()
     {
-        return !! Configuration::get('PAYSHOP_PROD_STATUS');
+        return (bool) Configuration::get('PAYSHOP_PROD_STATUS');
     }
 
     /**

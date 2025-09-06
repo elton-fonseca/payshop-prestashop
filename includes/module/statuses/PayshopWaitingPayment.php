@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -20,7 +21,7 @@ class PayshopWaitingPayment
 
         $order_state = new OrderState();
 
-        $order_state->name = array();
+        $order_state->name = [];
         foreach (Language::getLanguages() as $language) {
             if (Tools::strtolower($language['iso_code']) == 'pt') {
                 $order_state->name[$language['id_lang']] = 'Aguardando pagamento';
@@ -38,7 +39,7 @@ class PayshopWaitingPayment
         $order_state->module_name = 'payshop';
         $order_state->paid = false;
 
-        //$order_state->template = 'pending';
+        // $order_state->template = 'pending';
 
         if ($order_state->add()) {
             $source = _PS_MODULE_DIR_ . 'payshop/logo.png';

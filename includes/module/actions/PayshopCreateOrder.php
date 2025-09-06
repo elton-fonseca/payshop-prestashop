@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -29,9 +30,8 @@ if (!defined('_PS_VERSION_')) {
  * Don't forget to prefix your containers with your own identifier
  * to avoid any conflicts with others containers.
  */
-
- class PayshopCreateOrder
- {
+class PayshopCreateOrder
+{
     /**
      * @var Modulo
      */
@@ -45,12 +45,12 @@ if (!defined('_PS_VERSION_')) {
     /**
      * @var PayshopCreatePrestashopOrder
      */
-    private $payshopCreatePrestashopOrder;    
+    private $payshopCreatePrestashopOrder;
 
     /**
      * @var PayshopUpdateOrder
      */
-    private $payshopUpdateOrder;    
+    private $payshopUpdateOrder;
 
     /**
      * Class constructor
@@ -69,6 +69,7 @@ if (!defined('_PS_VERSION_')) {
      * Prepare the payment order and Prestashop Order to all payments
      *
      * @param string $paymentMethod
+     *
      * @return string
      */
     public function execute($paymentMethod)
@@ -107,8 +108,8 @@ if (!defined('_PS_VERSION_')) {
         $invoiceAddressNotFilled = $cart->id_address_invoice == 0;
 
         if (
-            $moduleDisabed || $cartIsEmpty || $clientNotFilled ||
-            $deliveryAddressNotFilled || $invoiceAddressNotFilled
+            $moduleDisabed || $cartIsEmpty || $clientNotFilled
+            || $deliveryAddressNotFilled || $invoiceAddressNotFilled
         ) {
             throw new Exception($this->module->l('Checkout fields are not filled', 'PayshopCreateCharge'));
         }
@@ -118,6 +119,7 @@ if (!defined('_PS_VERSION_')) {
      * Check if module is authorized
      *
      * return void
+     *
      * @throws Exception
      */
     private function moduleIsAuthorized()

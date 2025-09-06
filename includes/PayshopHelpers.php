@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -9,6 +10,7 @@ class PayshopHelpers
      * Get payment service UUID from the configuration
      *
      * @param string $paymentMethod
+     *
      * @return string
      */
     public static function getPaymentServiceUUID($paymentMethod)
@@ -23,7 +25,7 @@ class PayshopHelpers
             case PayshopPaymentMethods::MULTIBANCO:
                 return Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID');
             default:
-                return Configuration::get('PAYSHOP_CARD_SERVICE_UUID'); //arrumar isso depois
+                return Configuration::get('PAYSHOP_CARD_SERVICE_UUID'); // arrumar isso depois
         }
     }
 
@@ -32,7 +34,9 @@ class PayshopHelpers
      *
      * @param string $column
      * @param string $value
+     *
      * @return array
+     *
      * @throws Exception
      */
     public static function getTransacion($column, $value)
@@ -53,7 +57,9 @@ class PayshopHelpers
      *
      * @param module $module
      * @param array $response
+     *
      * @return bool
+     *
      * @throws Exception
      */
     public static function checkResponse($module, $response)
@@ -83,6 +89,7 @@ class PayshopHelpers
      * Set error response
      *
      * @param string $message
+     *
      * @return void
      */
     public static function errorResponse($message)
@@ -99,6 +106,7 @@ class PayshopHelpers
      *
      * @param Module $module
      * @param string|null $orderId
+     *
      * @return array
      */
     public static function confirmationPageURL($module, $orderId = null)
@@ -119,23 +127,23 @@ class PayshopHelpers
                 'id_cart' => $cartId,
                 'id_module' => $module->id,
                 'id_order' => $orderId,
-                'key' => $securityKey
+                'key' => $securityKey,
             ]
-        );    
+        );
     }
 
     /**
      * Get formated exception message
-     * 
+     *
      * @param module $module
      * @param int $prestashopOrderId
      * @param string $payshopChargeId
+     *
      * @return string
      */
     public static function errorMessageProcessTransation(
-        $module, $prestashopOrderId, $payshopChargeId = 'undefined'
-    )
-    {
+        $module, $prestashopOrderId, $payshopChargeId = 'undefined',
+    ) {
         return vsprintf(
             $module->l(
                 'Error processing transaction. Client order id on your store: %s, Payshop charge id: %s',

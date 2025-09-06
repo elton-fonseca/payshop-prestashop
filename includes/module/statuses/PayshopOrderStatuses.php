@@ -1,13 +1,14 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once('PayshopPaid.php');
-require_once('PayshopWaitingPayment.php');
-require_once('PayshopWaitingMultibanco.php');
-require_once('PayshopWaitingPayshop.php');
-require_once('PayshopPaymentError.php');
+require_once 'PayshopPaid.php';
+require_once 'PayshopWaitingPayment.php';
+require_once 'PayshopWaitingMultibanco.php';
+require_once 'PayshopWaitingPayshop.php';
+require_once 'PayshopPaymentError.php';
 
 class PayshopOrderStatuses
 {
@@ -33,9 +34,10 @@ class PayshopOrderStatuses
 
     /**
      * Set order state name in the corresponding language
-     * 
+     *
      * @param string $paymentName
      * @param int $orderStatusId
+     *
      * @return void
      */
     private function setStatusName($paymentName, $orderStatusId = null)
@@ -47,8 +49,8 @@ class PayshopOrderStatuses
                 if (Tools::strtolower($language['iso_code']) == 'pt') {
                     $description = 'Aguardando pagamento ' . $paymentName;
                 }
-                
-                $sql = "UPDATE " . _DB_PREFIX_ ."order_state_lang SET name = '{$description}' WHERE id_order_state = {$orderStatusId} and id_lang = {$language['id_lang']}";
+
+                $sql = 'UPDATE ' . _DB_PREFIX_ . "order_state_lang SET name = '{$description}' WHERE id_order_state = {$orderStatusId} and id_lang = {$language['id_lang']}";
 
                 DB::getInstance()->execute($sql);
             }

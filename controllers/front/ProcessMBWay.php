@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -29,7 +30,6 @@ if (!defined('_PS_VERSION_')) {
  * Don't forget to prefix your containers with your own identifier
  * to avoid any conflicts with others containers.
  */
-
 class PayshopProcessMBWayModuleFrontController extends ModuleFrontController
 {
     /**
@@ -56,7 +56,7 @@ class PayshopProcessMBWayModuleFrontController extends ModuleFrontController
     {
         try {
             $this->phoneValidation();
-            
+
             [$_, $paymentOrder] = $this->payshopCreateOrder->execute(
                 PayshopPaymentMethods::MB_WAY
             );
@@ -64,15 +64,16 @@ class PayshopProcessMBWayModuleFrontController extends ModuleFrontController
             Tools::redirect(
                 PayshopClientFactory::getInstance()->getRedirectUrl($paymentOrder['token']) . '?apm=MBWAY'
             );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             PayshopHelpers::errorResponse($e->getMessage());
         }
     }
 
     /**
      * Validate the phone number
-     * 
+     *
      * @return bool
+     *
      * @throws Exception
      */
     public function phoneValidation()
@@ -81,9 +82,7 @@ class PayshopProcessMBWayModuleFrontController extends ModuleFrontController
         $mbwayPhone = trim(Tools::getValue('phone-number', ''));
 
         if (strlen($mbwayprefix) < 1 || strlen($mbwayprefix) > 4 || strlen($mbwayPhone) < 4) {
-            throw new Exception(
-                $this->module->l('Phone number is invalid', 'ProcessMBWay')
-            );
+            throw new Exception($this->module->l('Phone number is invalid', 'ProcessMBWay'));
         }
     }
 }

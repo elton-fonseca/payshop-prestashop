@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -18,7 +19,8 @@ class PayshopProcessWalletPaymentModuleFrontController extends ModuleFrontContro
     /**
      * Class constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->ajax = true;
         $this->payshopCreateWalletPayment = new PayshopCreateWalletPayment($this->module);
@@ -44,10 +46,10 @@ class PayshopProcessWalletPaymentModuleFrontController extends ModuleFrontContro
             }
 
             echo json_encode([
-                'success' => !! $result,
+                'success' => (bool) $result,
                 'redirect' => $redirect,
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             PayshopHelpers::errorResponse($e->getMessage());
         }
     }
@@ -56,7 +58,9 @@ class PayshopProcessWalletPaymentModuleFrontController extends ModuleFrontContro
      * Validate and return the processed data
      *
      * @param array $data
+     *
      * @return array
+     *
      * @throws Exception
      */
     private function validatedRequest()

@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -30,7 +31,6 @@ if (!defined('_PS_VERSION_')) {
  * Don't forget to prefix your containers with your own identifier
  * to avoid any conflicts with others containers.
  */
-
 abstract class PayshopAbstractModel
 {
     protected $table;
@@ -41,45 +41,52 @@ abstract class PayshopAbstractModel
 
     public function __construct()
     {
-        $this->columns = "*";
+        $this->columns = '*';
     }
 
     /**
      * Execute query for database without return
      *
-     * @param  string $query
+     * @param string $query
+     *
      * @return bool
      */
     public function executeQuery($query)
     {
         if (Db::getInstance()->execute($query) == false) {
             PayshopLog::generate('PayshopAbstractModel: Failed to execute query: ' . Db::getInstance()->getMsgError(), 'error');
+
             return false;
         }
+
         return true;
     }
 
     /**
      * Execute query for database returning one row
      *
-     * @param  string $query
+     * @param string $query
+     *
      * @return array|bool|object|null
      */
     public function selectQuery($query)
     {
         $sql = Db::getInstance()->getRow($query);
+
         return $sql;
     }
 
     /**
      * Execute query for database returning many rows
      *
-     * @param  string $query
+     * @param string $query
+     *
      * @return array|bool|object|null
      */
     public function selectMany($query)
     {
         $sql = Db::getInstance()->executeS($query);
+
         return $sql;
     }
 
@@ -90,6 +97,7 @@ abstract class PayshopAbstractModel
     {
         $query = "SELECT $this->columns FROM $this->table $this->where $this->orderBy";
         $result = $this->selectQuery($query);
+
         return $result;
     }
 
@@ -100,6 +108,7 @@ abstract class PayshopAbstractModel
     {
         $query = "SELECT $this->columns FROM $this->table $this->where $this->orderBy";
         $result = $this->selectMany($query);
+
         return $result;
     }
 
@@ -112,19 +121,21 @@ abstract class PayshopAbstractModel
     {
         $query = "SELECT COUNT(*) AS count FROM $this->table $this->where $this->andWhere";
         $result = $this->selectQuery($query);
+
         return $result['count'];
     }
 
     /**
      * Set columns method, needs be called with select()
      *
-     * @param  array $columns
+     * @param array $columns
+     *
      * @return AbstractModel
      */
     public function columns($columns)
     {
-        if (gettype($columns) == "array") {
-            $this->columns = implode(",", $columns);
+        if (gettype($columns) == 'array') {
+            $this->columns = implode(',', $columns);
         }
 
         return $this;
@@ -133,63 +144,70 @@ abstract class PayshopAbstractModel
     /**
      * Where method, needs be called with count() or get()
      *
-     * @param  string $column
-     * @param  string $operator
-     * @param  mixed  $value
+     * @param string $column
+     * @param string $operator
+     * @param mixed $value
+     *
      * @return AbstractModel
      */
     public function where($column, $operator, $value)
     {
         $this->where = 'WHERE ' . $column . ' ' . $operator . ' "' . $value . '"';
+
         return $this;
     }
 
     /**
      * And where method, needs be called with count() or get()
      *
-     * @param  string $column
-     * @param  string $operator
-     * @param  mixed  $value
+     * @param string $column
+     * @param string $operator
+     * @param mixed $value
+     *
      * @return AbstractModel
      */
     public function andWhere($column, $operator, $value)
     {
         $this->andWhere = 'AND ' . $column . ' ' . $operator . ' "' . $value . '"';
+
         return $this;
     }
 
     /**
      * orderBy method, needs be called with get()
      *
-     * @param  string $column
-     * @param  string $operator
+     * @param string $column
+     * @param string $operator
+     *
      * @return AbstractModel
      */
     public function orderBy($column, $operator)
     {
         $this->orderBy = 'ORDER BY ' . $column . ' ' . $operator;
+
         return $this;
     }
 
     /**
      * Insert data in database
      *
-     * @param  array $array
+     * @param array $array
+     *
      * @return bool|void
      */
     public function create($array)
     {
-        if (gettype($array) == "array") {
-            $attrs  = "";
-            $params = "";
+        if (gettype($array) == 'array') {
+            $attrs = '';
+            $params = '';
 
             foreach ($array as $attr => $param) {
-                $attrs  .= $attr . ",";
+                $attrs .= $attr . ',';
                 $params .= "'" . $param . "',";
             }
 
-            $attrs .= "created_at";
-            $params .= "'" . date("Y-m-d H:i:s") . "'";
+            $attrs .= 'created_at';
+            $params .= "'" . date('Y-m-d H:i:s') . "'";
 
             $query = "INSERT INTO $this->table ($attrs) VALUES ($params)";
             $result = $this->executeQuery($query);
@@ -203,20 +221,21 @@ abstract class PayshopAbstractModel
     /**
      * Update data in database
      *
-     * @param  array $array
+     * @param array $array
+     *
      * @return bool|void
      */
     public function update($array)
     {
-        if (gettype($array) == "array") {
-            $update = "";
+        if (gettype($array) == 'array') {
+            $update = '';
 
             foreach ($array as $attr => $param) {
                 $update .= $attr . " = '" . $param . "',";
             }
 
-            $update .= "updated_at = '" . date("Y-m-d H:i:s") . "'";
-            $query  = "UPDATE $this->table SET $update $this->where";
+            $update .= "updated_at = '" . date('Y-m-d H:i:s') . "'";
+            $query = "UPDATE $this->table SET $update $this->where";
             $result = $this->executeQuery($query);
 
             return $result;
@@ -234,6 +253,7 @@ abstract class PayshopAbstractModel
     {
         $query = "DELETE FROM $this->table $this->where";
         $result = $this->executeQuery($query);
+
         return $result;
     }
 }

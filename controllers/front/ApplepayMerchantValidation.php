@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -13,7 +14,8 @@ class PayshopApplepayMerchantValidationModuleFrontController extends ModuleFront
     /**
      * Class constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->ajax = true;
         $this->payshopApplepayValidateMerchant = new PayshopApplepayValidateMerchant($this->module);
@@ -32,7 +34,7 @@ class PayshopApplepayMerchantValidationModuleFrontController extends ModuleFront
             $validationData = $this->payshopApplepayValidateMerchant->execute($validationURL);
 
             echo json_encode($validationData);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             PayshopHelpers::errorResponse($e->getMessage());
         }
     }
@@ -41,7 +43,9 @@ class PayshopApplepayMerchantValidationModuleFrontController extends ModuleFront
      * Validate and return the processed data
      *
      * @param array $data
+     *
      * @return string
+     *
      * @throws Exception
      */
     private function getValidationUrl()

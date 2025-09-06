@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -29,7 +30,6 @@ if (!defined('_PS_VERSION_')) {
  * Don't forget to prefix your containers with your own identifier
  * to avoid any conflicts with others containers.
  */
-
 class PayshopShowReferencesOrderConfirmation
 {
     /**
@@ -56,7 +56,7 @@ class PayshopShowReferencesOrderConfirmation
     {
         $smarty = $this->module->context->smarty;
         $smarty->assign([
-            'iframeContent' => $_SESSION['payshop_iframe_content']
+            'iframeContent' => $_SESSION['payshop_iframe_content'],
         ]);
 
         return $smarty->fetch($this->module->getLocalPath() . 'views/templates/hook/show-references.tpl');

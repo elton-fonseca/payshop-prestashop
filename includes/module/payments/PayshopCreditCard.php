@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -17,7 +18,7 @@ class PayshopCreditCard
 
     /**
      * Register the credit card payment method
-     * 
+     *
      * @return PaymentOption
      */
     public function register()
@@ -28,7 +29,7 @@ class PayshopCreditCard
         );
 
         $paymentForm = $this->module->context->smarty->assign([
-            'formAction' => $formAction            
+            'formAction' => $formAction,
         ])
           ->fetch('module:payshop/views/templates/hook/payments/credit-card.tpl');
 

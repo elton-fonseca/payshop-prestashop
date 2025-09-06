@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -30,9 +31,8 @@ if (!defined('_PS_VERSION_')) {
  * Don't forget to prefix your containers with your own identifier
  * to avoid any conflicts with others containers.
  */
-
- class PayshopCreateWalletPayment
- {
+class PayshopCreateWalletPayment
+{
     /**
      * @var Modulo
      */
@@ -66,10 +66,11 @@ if (!defined('_PS_VERSION_')) {
         $this->payshopUpdateOrder = new PayshopUpdateOrder($module);
     }
 
-/**
+    /**
      * Process webhook request sent by the gateway
      *
      * @param array $data
+     *
      * @return bool
      */
     public function execute($data)
@@ -88,10 +89,10 @@ if (!defined('_PS_VERSION_')) {
         if (isset($paymentResponse['response']['details'])) {
             $key = '_payshop_googlepay_paid_' . $data['order_id'];
             $_SESSION[$key] = true;
-            
+
             return $paymentResponse['response']['details'];
         }
-        
+
         return $this->markOrderAsRefused($paymentOrderUUID, $data);
     }
 
@@ -100,6 +101,7 @@ if (!defined('_PS_VERSION_')) {
      *
      * @param array $paymentOrder
      * @param array $data
+     *
      * @return array
      */
     private function sendWalletPayment($paymentOrderUUID, $data)
@@ -117,6 +119,7 @@ if (!defined('_PS_VERSION_')) {
      * Check if the payment is successful
      *
      * @param array $paymentOrder
+     *
      * @return bool
      */
     private function isPaymentSuccessful($paymentOrder)
@@ -129,6 +132,7 @@ if (!defined('_PS_VERSION_')) {
      *
      * @param array $paymentOrder
      * @param array $data
+     *
      * @return bool
      */
     private function markOrderAsPaid($paymentOrderUUID, $data)
@@ -148,7 +152,6 @@ if (!defined('_PS_VERSION_')) {
      *
      * @return bool
      */
-
     private function markOrderAsRefused($paymentOrderUUID, $data)
     {
         $this->payshopUpdateOrder->execute(

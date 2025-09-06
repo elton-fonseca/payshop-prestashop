@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -10,7 +11,7 @@ class PayshopClient extends PayshopAbstractClient
 {
     /**
      * PayshopClient constructor.
-     * 
+     *
      * @param string $apiKey
      * @param string $signature
      * @param bool $isLiveEnvironment
@@ -18,7 +19,7 @@ class PayshopClient extends PayshopAbstractClient
     public function __construct(
         $apiKey,
         $signature,
-        $isLiveEnvironment = true
+        $isLiveEnvironment = true,
     ) {
         parent::__construct(
             $apiKey,
@@ -31,6 +32,7 @@ class PayshopClient extends PayshopAbstractClient
      * Create a new payment order
      *
      * @param array $order
+     *
      * @return array
      */
     public function createPaymentOrder($order)
@@ -48,6 +50,7 @@ class PayshopClient extends PayshopAbstractClient
      * Get payment order by uuid
      *
      * @param array $order
+     *
      * @return array
      */
     public function getPaymentOrder($orderUUID)
@@ -64,6 +67,7 @@ class PayshopClient extends PayshopAbstractClient
      * Send the push notification to the user
      *
      * @param array $payment
+     *
      * @return array
      */
     public function paymentPush($payment)
@@ -81,6 +85,7 @@ class PayshopClient extends PayshopAbstractClient
      * Confirm a order payment when is using deffered mode
      *
      * @param array $payment
+     *
      * @return array
      */
     public function paymentConfirmation($payment)
@@ -97,7 +102,8 @@ class PayshopClient extends PayshopAbstractClient
     /**
      * Send the wallet payload to the payment gateway
      *
-     * @param  array  $payload
+     * @param array $payload
+     *
      * @return array
      */
     public function paymentWallet($payload)
@@ -115,6 +121,7 @@ class PayshopClient extends PayshopAbstractClient
      * Cancel a order payment when is using deffered mode
      *
      * @param array $payment
+     *
      * @return array
      */
     public function paymentCancellation($payment)
@@ -132,9 +139,10 @@ class PayshopClient extends PayshopAbstractClient
      * Create transation metadata
      *
      * @param array $payment
+     *
      * @return array
      */
-    public function createTransationMetadata($transactionUUID,  $metadata)
+    public function createTransationMetadata($transactionUUID, $metadata)
     {
         $response = PayshopRestCli::post(
             $this->getUrl('/transaction', $transactionUUID . '/metadata'),
@@ -149,12 +157,13 @@ class PayshopClient extends PayshopAbstractClient
      * Get the client's services by client_uuid
      *
      * @param array $payment
+     *
      * @return array
      */
     public function getClientServices($clientUUID)
     {
         $response = PayshopRestCli::get(
-            $this->getUrl("/client", $clientUUID . '/services'),
+            $this->getUrl('/client', $clientUUID . '/services'),
             $this->getCredentials()
         );
 
@@ -162,15 +171,16 @@ class PayshopClient extends PayshopAbstractClient
     }
 
     /**
-     * get the terminals by terminal_uuid 
+     * get the terminals by terminal_uuid
      *
      * @param array $payment
+     *
      * @return array
      */
     public function getTerminals($terminalUUID)
     {
         $response = PayshopRestCli::get(
-            $this->getUrl("/terminals", $terminalUUID),
+            $this->getUrl('/terminals', $terminalUUID),
             $this->getCredentials()
         );
 
@@ -181,6 +191,7 @@ class PayshopClient extends PayshopAbstractClient
      * Get the URL used to redirect the user to the payment page
      *
      * @param array $payment
+     *
      * @return array
      */
     public function getRedirectUrl($token)
@@ -192,6 +203,7 @@ class PayshopClient extends PayshopAbstractClient
      * Get iframe content from the order token
      *
      * @param string $token
+     *
      * @return string
      */
     public function getIframeContent($token)
@@ -200,11 +212,11 @@ class PayshopClient extends PayshopAbstractClient
 
         $useragent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'webhook';
         curl_setopt($connect, CURLOPT_USERAGENT, $useragent);
-        
+
         curl_setopt($connect, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($connect, CURLOPT_CUSTOMREQUEST, 'GET');
         curl_setopt($connect, CURLOPT_HTTPHEADER, []);
 
         return curl_exec($connect);
-    } 
+    }
 }
