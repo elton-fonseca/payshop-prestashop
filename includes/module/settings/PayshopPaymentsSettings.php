@@ -27,7 +27,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once PAYSHOP_ROOT_URL . '/includes/module/settings/PayshopAbstractSettings.php';
+require_once __DIR__ . '/PayshopAbstractSettings.php';
 
 class PayshopPaymentsSettings extends PayshopAbstractSettings
 {
@@ -43,7 +43,7 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
     /**
      * Generate inputs form
      *
-     * @return void
+     * @return array
      */
     public function generateForm()
     {
@@ -266,7 +266,7 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
             ];
         }
 
-        if (Configuration::get('PAYSHOP_CLICKTOPAY_SERVICE_UUID', false)) {
+        if (Configuration::get('PAYSHOP_CLICKTOPAY_SERVICE_UUID', null)) {
             $fields[] = [
                 'col' => 4,
                 'type' => 'switch',
@@ -295,7 +295,7 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
     /**
      * Save form data
      *
-     * @return void
+     * @return bool|void
      */
     public function postFormProcess()
     {

@@ -74,10 +74,10 @@ class PayshopPaymentMethods
     private $payshopPaypal;
 
     /**
-     * @var PayshopClicktopay
+     * Class constructor
+     *
+     * @param Module $module
      */
-        // private $payshopClicktopay;
-
     public function __construct($module)
     {
         $this->creditCard = new PayshopCreditCard($module);
@@ -127,7 +127,7 @@ class PayshopPaymentMethods
             $paymentOptions[] = $this->payshopPaypal->register();
         }
 
-                // if (Configuration::get('PAYSHOP_CLICKTOPAY') && Configuration::get('PAYSHOP_CLICKTOPAY_SERVICE_UUID') != '') {
+        // if (Configuration::get('PAYSHOP_CLICKTOPAY') && Configuration::get('PAYSHOP_CLICKTOPAY_SERVICE_UUID') != '') {
         //     $paymentOptions[] = $this->payshopApplepay->register();
         // }
 

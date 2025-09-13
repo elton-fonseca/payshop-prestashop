@@ -119,7 +119,8 @@ class PayshopCreatePrestashopOrder
         $isCreated = $transaction->create([
             'cart_id' => $this->module->context->cart->id,
             'order_id' => $this->module->currentOrder,
-            'customer_id' => $this->module->context->customer->id,
+            // 'customer_id' => $this->module->context->customer->id,
+            'customer_id' => Context::getContext()->customer->id,
             'total' => $this->module->context->cart->getOrderTotal(true, Cart::BOTH),
             'payment_method' => $this->paymentMethod,
             'payment_status' => 'pending',
@@ -162,5 +163,8 @@ class PayshopCreatePrestashopOrder
         ];
 
         return $payments[$this->paymentMethod];
+    }
+}
+aymentMethod];
     }
 }

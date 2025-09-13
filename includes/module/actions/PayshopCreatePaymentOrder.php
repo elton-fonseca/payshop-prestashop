@@ -207,7 +207,8 @@ class PayshopCreatePaymentOrder
         $options['secure'] = false;
 
         if ($this->paymentMethod === PayshopPaymentMethods::MB_WAY) {
-            $cart = $this->module->context->cart;
+            // $cart = $this->module->context->cart;
+            $cart = Context::getContext()->cart;
             $client = $cart->id_customer;
             $client = new Customer($cart->id_customer);
 

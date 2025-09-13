@@ -48,7 +48,7 @@ class PayshopGooglepayOrderConfirmation
      *
      * @param Order $order
      *
-     * @return string|null|void
+     * @return string|void|null
      */
     public function execute($order)
     {

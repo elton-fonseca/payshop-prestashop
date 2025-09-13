@@ -138,7 +138,7 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
     /**
      * Save form data
      *
-     * @return void
+     * @return bool|void
      */
     public function postFormProcess()
     {

@@ -51,7 +51,7 @@ class PayshopCreditCard
             'ProcessCard'
         );
 
-                // $paymentForm = $this->module->context->smarty->assign([
+        // $paymentForm = $this->module->context->smarty->assign([
         //     'formAction' => $formAction,
         // ])
         //   ->fetch('module:payshop/views/templates/hook/payments/credit-card.tpl');

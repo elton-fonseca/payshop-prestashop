@@ -130,7 +130,7 @@ class PayshopPaymentServiceUUID
      * @param string $serviceType
      * @param array $services
      *
-     * @return array|null
+     * @return array|void
      */
     private function getService($serviceType, $services)
     {

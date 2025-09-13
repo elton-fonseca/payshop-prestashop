@@ -50,7 +50,7 @@ class PayshopShowReferencesOrderConfirmation
      */
     public function execute()
     {
-                // $smarty = $this->module->context->smarty;
+        // $smarty = $this->module->context->smarty;
         $smarty = Context::getContext()->smarty;
         $smarty->assign([
             'iframeContent' => $_SESSION['payshop_iframe_content'],

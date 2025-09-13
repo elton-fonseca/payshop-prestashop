@@ -34,7 +34,7 @@
 <script>
     $('#alert-update-close').click(function () {
         $.ajax({
-            url: '{$updateAlertCloseLink}',
+            url: '{$updateAlertCloseLink|escape:\'javascript\'}'
             type: 'GET',
             success: function (data) {}
         });

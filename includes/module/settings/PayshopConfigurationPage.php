@@ -56,7 +56,7 @@ class PayshopConfigurationPage extends Payshop
         $sandbox_api_key = Configuration::get('PAYSHOP_SANDBOX_API_KEY');
         $sandbox_signature = Configuration::get('PAYSHOP_SANDBOX_SIGNATURE');
 
-                // $output = $this->context->smarty->assign(
+        // $output = $this->context->smarty->assign(
         //     [
         //         // module requirements
         //         'alert' => Payshop::$form_alert,
@@ -154,7 +154,7 @@ class PayshopConfigurationPage extends Payshop
      *
      * @return bool
      */
-        private function areThereActivePayments()
+    private function areThereActivePayments()
     {
         // return
         //     Configuration::get('PAYSHOP_CARD_SERVICE_UUID', false)

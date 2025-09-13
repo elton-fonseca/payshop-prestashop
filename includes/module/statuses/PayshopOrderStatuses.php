@@ -75,8 +75,11 @@ class PayshopOrderStatuses
 
                 $sql = 'UPDATE ' . _DB_PREFIX_ . "order_state_lang SET name = '{$description}' WHERE id_order_state = {$orderStatusId} and id_lang = {$language['id_lang']}";
 
-                DB::getInstance()->execute($sql);
+                Db::getInstance()->execute($sql);
             }
+        }
+    }
+}
         }
     }
 }

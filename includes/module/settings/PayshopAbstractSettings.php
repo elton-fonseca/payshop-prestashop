@@ -80,7 +80,7 @@ class PayshopAbstractSettings
     /**
      * Save form data
      *
-     * @return bool|null
+     * @return bool|void
      */
     public function postFormProcess()
     {
@@ -177,4 +177,6 @@ class PayshopAbstractSettings
 
         return true;
     }
+}
+ }
 }

@@ -140,7 +140,8 @@ class PayshopUpdateAlert
      */
     private function getUpdateAlertCloseControllerLink()
     {
-        return $this->module->context->link->getModuleLink(
+        // return $this->module->context->link->getModuleLink(
+        return Context::getContext()->link->getModuleLink(
             $this->module->name,
             'UpdateAlertClose'
         );
