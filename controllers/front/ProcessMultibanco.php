@@ -45,7 +45,9 @@ class PayshopProcessMultibancoModuleFrontController extends ModuleFrontControlle
     {
         parent::__construct();
         $this->ajax = true;
-        $this->payshopCreateOrder = new PayshopCreateOrder($this->module);
+        /** @var PaymentModule $module */
+        $module = $this->module;
+        $this->payshopCreateOrder = new PayshopCreateOrder($module);
         $this->payshopUpdateOrder = new PayshopUpdateOrder($this->module);
     }
 

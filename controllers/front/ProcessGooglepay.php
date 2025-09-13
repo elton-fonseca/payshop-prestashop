@@ -40,7 +40,9 @@ class PayshopProcessGooglepayModuleFrontController extends ModuleFrontController
     {
         parent::__construct();
         $this->ajax = true;
-        $this->payshopCreateOrder = new PayshopCreateOrder($this->module);
+        /** @var PaymentModule $module */
+        $module = $this->module;
+        $this->payshopCreateOrder = new PayshopCreateOrder($module);
     }
 
     /**
