@@ -118,10 +118,10 @@ class PayshopCreatePaymentOrder
      */
     private function isCurrencyEuro()
     {
-        $currecy = $this->module->context->currency->iso_code;
+        $currecy = Context::getContext()->currency->iso_code;
 
         if ($currecy != 'EUR') {
-            // $total = $total * dd($this->module->context->currency->conversion_rate);
+            // $total = $total * dd(Context::getContext()->currency->conversion_rate);
             $message = $this->module->l('Product currency must be EUR', 'PayshopCreateCharge');
             PayshopLog::generate('PayshopCreatePaymentOrder: ' . $message, 'error');
             throw new Exception($message);
@@ -150,7 +150,7 @@ class PayshopCreatePaymentOrder
         return vsprintf(
             '%s %s %s',
             [
-                $this->module->context->shop->name,
+                Context::getContext()->shop->name,
                 $this->module->l(' - order #', 'PayshopCreateCharge'),
                 $this->prestashopOrderId,
             ]
@@ -164,7 +164,6 @@ class PayshopCreatePaymentOrder
      */
     private function getProcessFailedRedirectURL()
     {
-        // return $this->module->context->link->getModuleLink(
         return Context::getContext()->link->getModuleLink(
             $this->module->name,
             'ProcessFailedRedirect',
@@ -179,7 +178,6 @@ class PayshopCreatePaymentOrder
      */
     private function getProcessEventUrl()
     {
-        // return $this->module->context->link->getModuleLink(
         return Context::getContext()->link->getModuleLink(
             $this->module->name,
             'ProcessEvent'
@@ -209,7 +207,6 @@ class PayshopCreatePaymentOrder
         $options['secure'] = false;
 
         if ($this->paymentMethod === PayshopPaymentMethods::MB_WAY) {
-            // $cart = $this->module->context->cart;
             $cart = Context::getContext()->cart;
             $client = $cart->id_customer;
             $client = new Customer($cart->id_customer);

@@ -51,7 +51,7 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
 
         $fields = [];
 
-        if (Configuration::get('PAYSHOP_CARD_SERVICE_UUID', false)) {
+        if (Configuration::get('PAYSHOP_CARD_SERVICE_UUID', null)) {
             $fields[] = [
                 'col' => 4,
                 'type' => 'switch',
@@ -74,7 +74,7 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
             ];
         }
 
-        if (Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID', false)) {
+        if (Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID', null)) {
             $fields[] = [
                 'col' => 4,
                 'type' => 'switch',
@@ -97,7 +97,7 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
             ];
         }
 
-        if (Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID', false)) {
+        if (Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID', null)) {
             $fields[] = [
                 'col' => 4,
                 'type' => 'switch',
@@ -120,7 +120,7 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
             ];
         }
 
-        if (Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID', false)) {
+        if (Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID', null)) {
             $fields[] = [
                 'col' => 4,
                 'type' => 'switch',
@@ -143,7 +143,7 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
             ];
         }
 
-        if (Configuration::get('PAYSHOP_GOOGLEPAY_SERVICE_UUID', false)) {
+        if (Configuration::get('PAYSHOP_GOOGLEPAY_SERVICE_UUID', null)) {
             $fields[] = [
                 'col' => 4,
                 'type' => 'switch',
@@ -175,7 +175,7 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
             ];
         }
 
-        if (Configuration::get('PAYSHOP_APPLEPAY_SERVICE_UUID', false)) {
+        if (Configuration::get('PAYSHOP_APPLEPAY_SERVICE_UUID', null)) {
             $fields[] = [
                 'col' => 4,
                 'type' => 'switch',
