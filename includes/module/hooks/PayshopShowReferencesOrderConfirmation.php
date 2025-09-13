@@ -29,7 +29,7 @@ if (!defined('_PS_VERSION_')) {
 class PayshopShowReferencesOrderConfirmation
 {
     /**
-     * @var Modulo
+     * @var Module
      */
     private $module;
 

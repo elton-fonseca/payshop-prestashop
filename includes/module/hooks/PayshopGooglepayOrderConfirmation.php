@@ -29,7 +29,7 @@ if (!defined('_PS_VERSION_')) {
 class PayshopGooglepayOrderConfirmation
 {
     /**
-     * @var Modulo
+     * @var Module
      */
     private $module;
 
@@ -48,7 +48,7 @@ class PayshopGooglepayOrderConfirmation
      *
      * @param Order $order
      *
-     * @return string
+     * @return string|null
      */
     public function execute($order)
     {

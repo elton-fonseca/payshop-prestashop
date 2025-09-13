@@ -29,7 +29,7 @@ if (!defined('_PS_VERSION_')) {
 class PayshopApplepayOrderConfirmation
 {
     /**
-     * @var Modulo
+     * @var Module
      */
     private $module;
 

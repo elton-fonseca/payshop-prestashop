@@ -29,19 +29,9 @@ if (!defined('_PS_VERSION_')) {
 class PayshopCreateWalletPayment
 {
     /**
-     * @var Module
-     */
-    private $module;
-
-    /**
      * @var PayshopClient
      */
     private $payshopSDK;
-
-    /**
-     * @var PayshopCreatePaymentOrder
-     */
-    private $payshopCreatePaymentOrder;
 
     /**
      * @var PayshopUpdateOrder
@@ -55,9 +45,7 @@ class PayshopCreateWalletPayment
      */
     public function __construct($module)
     {
-        $this->module = $module;
         $this->payshopSDK = PayshopClientFactory::getInstance();
-        $this->payshopCreatePaymentOrder = new PayshopCreatePaymentOrder($module);
         $this->payshopUpdateOrder = new PayshopUpdateOrder($module);
     }
 
@@ -94,7 +82,7 @@ class PayshopCreateWalletPayment
     /**
      * Make payment wallet request
      *
-     * @param array $paymentOrder
+     * @param string $paymentOrderUUID
      * @param array $data
      *
      * @return array
@@ -125,7 +113,7 @@ class PayshopCreateWalletPayment
     /**
      * Mark order as paid
      *
-     * @param array $paymentOrder
+     * @param string $paymentOrderUUID
      * @param array $data
      *
      * @return bool

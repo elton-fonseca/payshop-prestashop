@@ -48,7 +48,7 @@ class PayshopPaymentSuccess
      *
      * @param array $paymentOrder
      *
-     * @return void
+     * @return mixed
      */
     public function process($paymentOrder)
     {

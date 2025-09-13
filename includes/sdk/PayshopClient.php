@@ -213,9 +213,9 @@ class PayshopClient extends PayshopAbstractClient
     /**
      * Get the URL used to redirect the user to the payment page
      *
-     * @param array $payment
+     * @param string $token
      *
-     * @return array
+     * @return string
      */
     public function getRedirectUrl($token)
     {

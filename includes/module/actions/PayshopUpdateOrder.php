@@ -38,7 +38,7 @@ class PayshopUpdateOrder
      *
      * @param Module $module
      */
-    public function __construct($module)
+    public function __construct(Module $module)
     {
         $this->module = $module;
     }
@@ -81,9 +81,9 @@ class PayshopUpdateOrder
      * @param string $paymentMethod
      * @param int $prestashopOrderId
      * @param string $newOrderStatus
-     * @param int $payshopChargeId
+     * @param int $paymentOrderId
      *
-     * @return int
+     * @return void
      *
      * @throws Exception
      */
@@ -91,8 +91,8 @@ class PayshopUpdateOrder
         $paymentMethod,
         $prestashopOrderId,
         $newOrderStatus,
-        $paymentOrderId,
-    ) {
+        $paymentOrderId
+    ): void {
         if ('PAYSHOP_ORDER_STATUS_PAID' != $newOrderStatus) {
             return;
         }
@@ -104,7 +104,7 @@ class PayshopUpdateOrder
         $id_currency_eur = Currency::getIdByIsoCode('EUR');
         $currency = new Currency($id_currency_eur);
 
-        $amount = (float) $transaction['total'];
+        $amount = (string) $transaction['total'];
         $paymentAdicioned = $baseOrder->addOrderPayment($amount, $paymentMethod, $paymentOrderId, $currency);
 
         if (!$paymentAdicioned) {
@@ -163,7 +163,7 @@ class PayshopUpdateOrder
             return;
         }
 
-        $newOrderStatusID = Configuration::get($newOrderStatus);
+        $newOrderStatusID = (int) Configuration::get($newOrderStatus);
 
         $history = new OrderHistory();
         $history->id_order = (int) $prestashopOrderId;

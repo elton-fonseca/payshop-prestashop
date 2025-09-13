@@ -46,9 +46,9 @@ class PayshopPaymentRefused
     /**
      * Process payment refused event
      *
-     * @param array $event
+     * @param array $paymentOrder
      *
-     * @return void
+     * @return mixed
      */
     public function process($paymentOrder)
     {

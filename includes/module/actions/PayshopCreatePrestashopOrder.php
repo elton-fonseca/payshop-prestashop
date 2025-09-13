@@ -29,7 +29,7 @@ if (!defined('_PS_VERSION_')) {
 class PayshopCreatePrestashopOrder
 {
     /**
-     * @var Module
+     * @var PaymentModule
      */
     private $module;
 
@@ -43,7 +43,7 @@ class PayshopCreatePrestashopOrder
      *
      * @param Module $module
      */
-    public function __construct($module)
+    public function __construct(Module $module)
     {
         $this->module = $module;
     }
@@ -76,17 +76,17 @@ class PayshopCreatePrestashopOrder
      */
     private function createPrestashopOrder()
     {
-        $cart = $this->module->context->cart;
+        $cart = $this->module->getContext()->cart;
         $customer = new Customer($cart->id_customer);
 
         $this->module->validateOrder(
-            (int) $this->module->context->cart->id,
+            (int) $this->module->getContext()->cart->id,
             (int) $this->getInitialOrderStatusId(),
-            (float) $this->module->context->cart->getOrderTotal(true, Cart::BOTH),
+            (float) $this->module->getContext()->cart->getOrderTotal(true, Cart::BOTH),
             $this->formatedPaymentMethodName(),
             null,
             null,
-            (int) $this->module->context->currency->id,
+            (int) $this->module->getContext()->currency->id,
             false,
             $customer->secure_key
         );
@@ -112,14 +112,14 @@ class PayshopCreatePrestashopOrder
         $isPaymentTest = !Configuration::get('PAYSHOP_PROD_STATUS');
 
         $transaction = new PayshopTransaction();
-        $transaction->where('cart_id', '=', $this->module->context->cart->id)->destroy();
+        $transaction->where('cart_id', '=', $this->module->getContext()->cart->id)->destroy();
 
         $transaction = new PayshopTransaction();
         $isCreated = $transaction->create([
-            'cart_id' => $this->module->context->cart->id,
+            'cart_id' => $this->module->getContext()->cart->id,
             'order_id' => $this->module->currentOrder,
-            'customer_id' => $this->module->context->customer->id,
-            'total' => $this->module->context->cart->getOrderTotal(true, Cart::BOTH),
+            'customer_id' => $this->module->getContext()->customer->id,
+            'total' => $this->module->getContext()->cart->getOrderTotal(true, Cart::BOTH),
             'payment_method' => $this->paymentMethod,
             'payment_status' => 'pending',
             'is_payment_test' => $isPaymentTest,
@@ -134,8 +134,6 @@ class PayshopCreatePrestashopOrder
 
     /**
      * Get initial order status id
-     *
-     * @param string $paymentMethod
      *
      * @return int
      */

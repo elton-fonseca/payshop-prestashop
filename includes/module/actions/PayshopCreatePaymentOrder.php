@@ -53,7 +53,7 @@ class PayshopCreatePaymentOrder
      *
      * @param Module $module
      */
-    public function __construct($module)
+    public function __construct(Module $module)
     {
         $this->module = $module;
         $this->payshopSDK = PayshopClientFactory::getInstance();
@@ -65,7 +65,7 @@ class PayshopCreatePaymentOrder
      * @param string $paymentMethod
      * @param int $prestashopOrderId
      *
-     * @return int
+     * @return array
      *
      * @throws Exception
      */
@@ -118,10 +118,10 @@ class PayshopCreatePaymentOrder
      */
     private function isCurrencyEuro()
     {
-        $currecy = $this->module->context->currency->iso_code;
+        $currecy = $this->module->getContext()->currency->iso_code;
 
         if ($currecy != 'EUR') {
-            // $total = $total * dd($this->module->context->currency->conversion_rate);
+            // $total = $total * dd($this->module->getContext()->currency->conversion_rate);
             $message = $this->module->l('Product currency must be EUR', 'PayshopCreateCharge');
             PayshopLog::generate('PayshopCreatePaymentOrder: ' . $message, 'error');
             throw new Exception($message);
@@ -135,7 +135,7 @@ class PayshopCreatePaymentOrder
      */
     private function getOrderTotal()
     {
-        $order = new Order($this->prestashopOrderId);
+        $order = new Order((int) $this->prestashopOrderId);
 
         return $order->total_paid;
     }
@@ -150,7 +150,7 @@ class PayshopCreatePaymentOrder
         return vsprintf(
             '%s %s %s',
             [
-                $this->module->context->shop->name,
+                $this->module->getContext()->shop->name,
                 $this->module->l(' - order #', 'PayshopCreateCharge'),
                 $this->prestashopOrderId,
             ]
@@ -164,7 +164,7 @@ class PayshopCreatePaymentOrder
      */
     private function getProcessFailedRedirectURL()
     {
-        return $this->module->context->link->getModuleLink(
+        return $this->module->getContext()->link->getModuleLink(
             $this->module->name,
             'ProcessFailedRedirect',
             ['prestashop_order_id' => $this->prestashopOrderId]
@@ -178,7 +178,7 @@ class PayshopCreatePaymentOrder
      */
     private function getProcessEventUrl()
     {
-        return $this->module->context->link->getModuleLink(
+        return $this->module->getContext()->link->getModuleLink(
             $this->module->name,
             'ProcessEvent'
         );
@@ -207,7 +207,7 @@ class PayshopCreatePaymentOrder
         $options['secure'] = false;
 
         if ($this->paymentMethod === PayshopPaymentMethods::MB_WAY) {
-            $cart = $this->module->context->cart;
+            $cart = $this->module->getContext()->cart;
             $client = $cart->id_customer;
             $client = new Customer($cart->id_customer);
 

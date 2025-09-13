@@ -62,7 +62,7 @@ class PayshopProcessEvent
     /**
      * Process webhook events
      *
-     * @return void
+     * @return mixed
      */
     public function execute($paymentOrder)
     {

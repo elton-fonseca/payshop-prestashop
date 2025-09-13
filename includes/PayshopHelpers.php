@@ -56,7 +56,7 @@ class PayshopHelpers
      * Get the transaction by column
      *
      * @param string $column
-     * @param string $value
+     * @param string|int $value
      *
      * @return array
      *
@@ -169,8 +169,8 @@ class PayshopHelpers
      * Get formated exception message
      *
      * @param Module $module
-     * @param int $prestashopOrderId
-     * @param string $payshopChargeId
+     * @param string $prestashopOrderId
+     * @param mixed $payshopChargeId
      *
      * @return string
      */

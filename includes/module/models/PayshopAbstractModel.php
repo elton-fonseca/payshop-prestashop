@@ -125,7 +125,7 @@ abstract class PayshopAbstractModel
      *
      * @param array $columns
      *
-     * @return AbstractModel
+     * @return static
      */
     public function columns($columns)
     {
@@ -143,7 +143,7 @@ abstract class PayshopAbstractModel
      * @param string $operator
      * @param mixed $value
      *
-     * @return AbstractModel
+     * @return static
      */
     public function where($column, $operator, $value)
     {
@@ -159,7 +159,7 @@ abstract class PayshopAbstractModel
      * @param string $operator
      * @param mixed $value
      *
-     * @return AbstractModel
+     * @return static
      */
     public function andWhere($column, $operator, $value)
     {
@@ -174,7 +174,7 @@ abstract class PayshopAbstractModel
      * @param string $column
      * @param string $operator
      *
-     * @return AbstractModel
+     * @return static
      */
     public function orderBy($column, $operator)
     {
