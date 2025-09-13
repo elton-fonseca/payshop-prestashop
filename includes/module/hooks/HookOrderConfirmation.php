@@ -48,7 +48,7 @@ class HookOrderConfirmation
      *
      * @param Order $order
      *
-     * @return string|null
+     * @return string|null|void
      */
     public function execute($order)
     {

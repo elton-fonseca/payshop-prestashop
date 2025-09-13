@@ -76,7 +76,7 @@ class PayshopPaymentMethods
     /**
      * @var PayshopClicktopay
      */
-    private $payshopClicktopay;
+        // private $payshopClicktopay;
 
     public function __construct($module)
     {
@@ -87,7 +87,7 @@ class PayshopPaymentMethods
         $this->payshopGooglepay = new PayshopGooglepay($module);
         $this->payshopApplepay = new PayshopApplepay($module);
         $this->payshopPaypal = new PayshopPaypal($module);
-        $this->payshopClicktopay = new PayshopClicktopay($module);
+                // $this->payshopClicktopay = new PayshopClicktopay($module);
     }
 
     /**
@@ -127,9 +127,9 @@ class PayshopPaymentMethods
             $paymentOptions[] = $this->payshopPaypal->register();
         }
 
-        if (Configuration::get('PAYSHOP_CLICKTOPAY') && Configuration::get('PAYSHOP_CLICKTOPAY_SERVICE_UUID') != '') {
-            $paymentOptions[] = $this->payshopApplepay->register();
-        }
+                // if (Configuration::get('PAYSHOP_CLICKTOPAY') && Configuration::get('PAYSHOP_CLICKTOPAY_SERVICE_UUID') != '') {
+        //     $paymentOptions[] = $this->payshopApplepay->register();
+        // }
 
         return $paymentOptions;
     }

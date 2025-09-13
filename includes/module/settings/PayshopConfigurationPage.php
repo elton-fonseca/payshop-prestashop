@@ -56,7 +56,28 @@ class PayshopConfigurationPage extends Payshop
         $sandbox_api_key = Configuration::get('PAYSHOP_SANDBOX_API_KEY');
         $sandbox_signature = Configuration::get('PAYSHOP_SANDBOX_SIGNATURE');
 
-        $output = $this->context->smarty->assign(
+                // $output = $this->context->smarty->assign(
+        //     [
+        //         // module requirements
+        //         'alert' => Payshop::$form_alert,
+        //         'message' => Payshop::$form_message,
+        //         'payshop_version' => PAYSHOP_VERSION,
+        //         'url_base' => __PS_BASE_URI__,
+        //         'log' => PayshopLog::getLogUrl(),
+        //         // credentials
+        //         'api_key' => $api_key,
+        //         'signature' => $signature,
+        //         'sandbox_api_key' => $sandbox_api_key,
+        //         'sandbox_signature' => $sandbox_signature,
+        //         // forms
+        //         'credentialsForm' => $credentialsForm,
+        //         'paymentsForm' => $paymentsForm,
+        //         // currencies
+        //         'currency' => $this->context->currency->iso_code,
+        //     ]
+        // )->fetch($this->local_path . 'views/templates/admin/configurations.tpl');
+
+        $this->context->smarty->assign(
             [
                 // module requirements
                 'alert' => Payshop::$form_alert,
@@ -75,7 +96,8 @@ class PayshopConfigurationPage extends Payshop
                 // currencies
                 'currency' => $this->context->currency->iso_code,
             ]
-        )->fetch($this->local_path . 'views/templates/admin/configurations.tpl');
+        );
+        $output = $this->context->smarty->fetch($this->local_path . 'views/templates/admin/configurations.tpl');
 
         return $output;
     }
@@ -87,8 +109,10 @@ class PayshopConfigurationPage extends Payshop
      */
     private function loadSettingsFiles()
     {
-        include_once PAYSHOP_ROOT_URL . '/includes/module/settings/PayshopCredentialsSettings.php';
-        include_once PAYSHOP_ROOT_URL . '/includes/module/settings/PayshopPaymentsSettings.php';
+                // include_once PAYSHOP_ROOT_URL . '/includes/module/settings/PayshopCredentialsSettings.php';
+        // include_once PAYSHOP_ROOT_URL . '/includes/module/settings/PayshopPaymentsSettings.php';
+        include_once $this->local_path . 'includes/module/settings/PayshopCredentialsSettings.php';
+        include_once $this->local_path . 'includes/module/settings/PayshopPaymentsSettings.php';
     }
 
     /**
@@ -130,17 +154,27 @@ class PayshopConfigurationPage extends Payshop
      *
      * @return bool
      */
-    private function areThereActivePayments()
+        private function areThereActivePayments()
     {
+        // return
+        //     Configuration::get('PAYSHOP_CARD_SERVICE_UUID', false)
+        //     || Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID', false)
+        //     || Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID', false)
+        //     || Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID', false)
+        //     || Configuration::get('PAYSHOP_GOOGLEPAY_SERVICE_UUID', false)
+        //     || Configuration::get('PAYSHOP_APPLEPAY_SERVICE_UUID', false)
+        //     || Configuration::get('PAYSHOP_PAYPAL_SERVICE_UUID', false)
+        //     || Configuration::get('PAYSHOP_CLICKTOPAY_SERVICE_UUID', false)
+        // ;
         return
-            Configuration::get('PAYSHOP_CARD_SERVICE_UUID', false)
-            || Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID', false)
-            || Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID', false)
-            || Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID', false)
-            || Configuration::get('PAYSHOP_GOOGLEPAY_SERVICE_UUID', false)
-            || Configuration::get('PAYSHOP_APPLEPAY_SERVICE_UUID', false)
-            || Configuration::get('PAYSHOP_PAYPAL_SERVICE_UUID', false)
-            || Configuration::get('PAYSHOP_CLICKTOPAY_SERVICE_UUID', false)
+            Configuration::get('PAYSHOP_CARD_SERVICE_UUID')
+            || Configuration::get('PAYSHOP_MBWAY_SERVICE_UUID')
+            || Configuration::get('PAYSHOP_MULTIBANCO_REFERENCE_SERVICE_UUID')
+            || Configuration::get('PAYSHOP_REFERENCE_SERVICE_UUID')
+            || Configuration::get('PAYSHOP_GOOGLEPAY_SERVICE_UUID')
+            || Configuration::get('PAYSHOP_APPLEPAY_SERVICE_UUID')
+            || Configuration::get('PAYSHOP_PAYPAL_SERVICE_UUID')
+            || Configuration::get('PAYSHOP_CLICKTOPAY_SERVICE_UUID')
         ;
     }
 }

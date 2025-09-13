@@ -27,7 +27,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once PAYSHOP_ROOT_URL . '/includes/module/settings/PayshopAbstractSettings.php';
+// require_once PAYSHOP_ROOT_URL . '/includes/module/settings/PayshopAbstractSettings.php';
+require_once __DIR__ . '/PayshopAbstractSettings.php';
 
 class PayshopCredentialsSettings extends PayshopAbstractSettings
 {
@@ -43,7 +44,7 @@ class PayshopCredentialsSettings extends PayshopAbstractSettings
     /**
      * Generate inputs form
      *
-     * @return void
+     * @return array
      */
     public function generateForm()
     {

@@ -29,7 +29,7 @@ if (!defined('_PS_VERSION_')) {
 class PayshopCreateOrder
 {
     /**
-     * @var Module
+     * @var PaymentModule
      */
     private $module;
 
@@ -51,7 +51,7 @@ class PayshopCreateOrder
     /**
      * Class constructor
      *
-     * @param Module $module
+     * @param PaymentModule $module
      */
     public function __construct($module)
     {
@@ -95,7 +95,8 @@ class PayshopCreateOrder
      */
     private function checkoutIsFilled()
     {
-        $cart = $this->module->getContext()->cart;
+        // $cart = $this->module->getContext()->cart;
+        $cart = $this->module->context->cart;
 
         $moduleDisabed = !$this->module->active;
         $cartIsEmpty = !$cart->id;

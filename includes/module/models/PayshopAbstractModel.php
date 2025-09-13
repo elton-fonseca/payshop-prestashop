@@ -123,7 +123,7 @@ abstract class PayshopAbstractModel
     /**
      * Set columns method, needs be called with select()
      *
-     * @param array $columns
+     * @param mixed $columns
      *
      * @return static
      */
@@ -186,7 +186,7 @@ abstract class PayshopAbstractModel
     /**
      * Insert data in database
      *
-     * @param array $array
+     * @param mixed $array
      *
      * @return bool|void
      */
@@ -216,7 +216,7 @@ abstract class PayshopAbstractModel
     /**
      * Update data in database
      *
-     * @param array $array
+     * @param mixed $array
      *
      * @return bool|void
      */

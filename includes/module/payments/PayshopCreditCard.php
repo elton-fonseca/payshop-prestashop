@@ -42,7 +42,7 @@ class PayshopCreditCard
     /**
      * Register the credit card payment method
      *
-     * @return PaymentOption
+     * @return PrestaShop\PrestaShop\Core\Payment\PaymentOption
      */
     public function register()
     {
@@ -51,10 +51,14 @@ class PayshopCreditCard
             'ProcessCard'
         );
 
-        $paymentForm = $this->module->context->smarty->assign([
+                // $paymentForm = $this->module->context->smarty->assign([
+        //     'formAction' => $formAction,
+        // ])
+        //   ->fetch('module:payshop/views/templates/hook/payments/credit-card.tpl');
+        $this->module->context->smarty->assign([
             'formAction' => $formAction,
-        ])
-          ->fetch('module:payshop/views/templates/hook/payments/credit-card.tpl');
+        ]);
+        $paymentForm = $this->module->context->smarty->fetch('module:payshop/views/templates/hook/payments/credit-card.tpl');
 
         $creditCardCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
 

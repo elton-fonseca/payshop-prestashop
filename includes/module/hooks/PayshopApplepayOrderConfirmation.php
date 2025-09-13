@@ -52,25 +52,26 @@ class PayshopApplepayOrderConfirmation
      */
     public function execute($order)
     {
-        $applepayMerchantValidation = $this->module->context->link->getModuleLink(
+        $applepayMerchantValidation = Context::getContext()->link->getModuleLink(
             $this->module->name,
             'ApplepayMerchantValidation'
         );
 
-        $processWalletPayment = $this->module->context->link->getModuleLink(
+        $processWalletPayment = Context::getContext()->link->getModuleLink(
             $this->module->name,
             'ProcessWalletPayment'
         );
 
-        $processFailedRedirect = $this->module->context->link->getModuleLink(
+        $processFailedRedirect = Context::getContext()->link->getModuleLink(
             $this->module->name,
             'ProcessFailedRedirect',
             ['prestashop_order_id' => $order->id]
         );
 
-        $smarty = $this->module->context->smarty;
+        $smarty = Context::getContext()->smarty;
         $smarty->assign([
-            'moduleUrl' => $this->module->path,
+                        // 'moduleUrl' => $this->module->path,
+            'moduleUrl' => $this->module->getLocalPath(),
             'storeName' => Configuration::get('PS_SHOP_NAME'),
             'applepayMerchantValidation' => $applepayMerchantValidation,
             'processWalletPayment' => $processWalletPayment,

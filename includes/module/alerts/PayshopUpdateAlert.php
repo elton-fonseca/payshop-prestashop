@@ -72,7 +72,7 @@ class PayshopUpdateAlert
             return '';
         }
 
-        $smart = $this->module->getContext()->smarty;
+        $smart = $this->module->context->smarty;
         $smart->assign([
             'updateAlertCloseLink' => $this->getUpdateAlertCloseControllerLink(),
             'downloadUrl' => $onlineVersionInformations['url'],
@@ -140,7 +140,7 @@ class PayshopUpdateAlert
      */
     private function getUpdateAlertCloseControllerLink()
     {
-        return $this->module->getContext()->link->getModuleLink(
+        return $this->module->context->link->getModuleLink(
             $this->module->name,
             'UpdateAlertClose'
         );

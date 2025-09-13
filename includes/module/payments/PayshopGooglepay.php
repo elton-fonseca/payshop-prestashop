@@ -39,7 +39,7 @@ class PayshopGooglepay
     /**
      * Register the Googlepay payment method
      *
-     * @return PaymentOption
+     * @return PrestaShop\PrestaShop\Core\Payment\PaymentOption
      */
     public function register()
     {

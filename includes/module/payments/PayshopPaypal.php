@@ -39,7 +39,7 @@ class PayshopPaypal
     /**
      * Register the Paypal reference payment method
      *
-     * @return PaymentOption
+     * @return PrestaShop\PrestaShop\Core\Payment\PaymentOption
      */
     public function register()
     {

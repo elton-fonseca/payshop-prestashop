@@ -48,7 +48,7 @@ class PayshopLog
      * Generate plugin logs
      *
      * @param string $message
-     * @param int $severity
+     * @param int|string $severity
      *
      * @return void
      */

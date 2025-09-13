@@ -169,7 +169,7 @@ class PayshopHelpers
      * Get formated exception message
      *
      * @param Module $module
-     * @param string $prestashopOrderId
+     * @param int|string $prestashopOrderId
      * @param mixed $payshopChargeId
      *
      * @return string

@@ -49,7 +49,7 @@ class PayshopUpdateOrder
      * @param string $paymentMethod
      * @param int $prestashopOrderId
      * @param string $newOrderStatus
-     * @param int $paymentOrderId
+     * @param string $paymentOrderId
      *
      * @return void
      */
@@ -81,7 +81,7 @@ class PayshopUpdateOrder
      * @param string $paymentMethod
      * @param int $prestashopOrderId
      * @param string $newOrderStatus
-     * @param int $paymentOrderId
+     * @param string $paymentOrderId
      *
      * @return void
      *
@@ -119,7 +119,7 @@ class PayshopUpdateOrder
      *
      * @param int $prestashopOrderId
      * @param string $newOrderStatus
-     * @param int $paymentOrderId
+     * @param string $paymentOrderId
      *
      * @return bool
      *
@@ -153,7 +153,7 @@ class PayshopUpdateOrder
      * @param int $prestashopOrderId
      * @param string $newOrderStatus
      *
-     * @return int
+     * @return void
      *
      * @throws Exception
      */

@@ -39,7 +39,7 @@ class PayshopClicktopay
     /**
      * Register the ClickToPay payment method
      *
-     * @return PaymentOption
+     * @return PrestaShop\PrestaShop\Core\Payment\PaymentOption
      */
     public function register()
     {

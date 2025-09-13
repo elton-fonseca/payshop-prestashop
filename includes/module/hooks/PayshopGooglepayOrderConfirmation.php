@@ -48,7 +48,7 @@ class PayshopGooglepayOrderConfirmation
      *
      * @param Order $order
      *
-     * @return string|null
+     * @return string|null|void
      */
     public function execute($order)
     {
@@ -58,20 +58,21 @@ class PayshopGooglepayOrderConfirmation
             return;
         }
 
-        $processWalletPayment = $this->module->context->link->getModuleLink(
+        $processWalletPayment = Context::getContext()->link->getModuleLink(
             $this->module->name,
             'ProcessWalletPayment'
         );
 
-        $processFailedRedirect = $this->module->context->link->getModuleLink(
+        $processFailedRedirect = Context::getContext()->link->getModuleLink(
             $this->module->name,
             'ProcessFailedRedirect',
             ['prestashop_order_id' => $order->id]
         );
 
-        $smarty = $this->module->context->smarty;
+        $smarty = Context::getContext()->smarty;
         $smarty->assign([
-            'moduleUrl' => $this->module->path,
+                        // 'moduleUrl' => $this->module->path,
+            'moduleUrl' => $this->module->getLocalPath(),
             'storeName' => Configuration::get('PS_SHOP_NAME'),
             'environment' => PayshopClientFactory::isProduction() ? 'PRODUCTION' : 'TEST',
             'googlePayMerchantId' => Configuration::get('PAYSHOP_GOOGLEPAY_MERCHANT_ID'),

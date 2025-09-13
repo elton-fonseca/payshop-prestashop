@@ -78,7 +78,7 @@ class PayshopPaymentServiceUUID
      *
      * @param string $serviceType
      * @param string $serviceStorageKey
-     * @param callable $aditionalChecking
+     * @param callable|false $aditionalChecking
      *
      * @return void
      */
@@ -130,7 +130,7 @@ class PayshopPaymentServiceUUID
      * @param string $serviceType
      * @param array $services
      *
-     * @return array
+     * @return array|null
      */
     private function getService($serviceType, $services)
     {

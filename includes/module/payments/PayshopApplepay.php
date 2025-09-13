@@ -39,7 +39,7 @@ class PayshopApplepay
     /**
      * Register the ApplePay payment method
      *
-     * @return PaymentOption
+     * @return PrestaShop\PrestaShop\Core\Payment\PaymentOption
      */
     public function register()
     {

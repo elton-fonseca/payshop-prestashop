@@ -46,7 +46,7 @@ class PayshopAbstractSettings
     /**
      * Build Config Form
      *
-     * @return void
+     * @return array
      */
     public function buildForm($title, $fields)
     {
@@ -68,7 +68,7 @@ class PayshopAbstractSettings
     /**
      * Verify form submit
      *
-     * @return void
+     * @return bool|null
      */
     public function verifyPostProcess()
     {
@@ -80,7 +80,7 @@ class PayshopAbstractSettings
     /**
      * Save form data
      *
-     * @return void
+     * @return bool|null
      */
     public function postFormProcess()
     {
@@ -134,8 +134,9 @@ class PayshopAbstractSettings
      * Validate input for submit
      *
      * @param mixed $input
+     * @param mixed $value
      *
-     * @return void
+     * @return bool
      */
     public function validateInput($input, $value)
     {

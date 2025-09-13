@@ -39,7 +39,7 @@ class PayshopMBWay
     /**
      * Register the MBWay payment method
      *
-     * @return PaymentOption
+     * @return PrestaShop\PrestaShop\Core\Payment\PaymentOption
      */
     public function register()
     {
