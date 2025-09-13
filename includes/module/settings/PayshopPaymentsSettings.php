@@ -243,7 +243,7 @@ class PayshopPaymentsSettings extends PayshopAbstractSettings
             ];
         }
 
-        if (Configuration::get('PAYSHOP_PAYPAL_SERVICE_UUID', false)) {
+        if (Configuration::get('PAYSHOP_PAYPAL_SERVICE_UUID', null)) {
             $fields[] = [
                 'col' => 4,
                 'type' => 'switch',

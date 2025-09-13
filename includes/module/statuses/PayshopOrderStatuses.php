@@ -59,7 +59,7 @@ class PayshopOrderStatuses
      * Set order state name in the corresponding language
      *
      * @param string $paymentName
-     * @param int $orderStatusId
+     * @param int|string|false|null $orderStatusId
      *
      * @return void
      */

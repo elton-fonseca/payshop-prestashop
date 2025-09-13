@@ -75,6 +75,8 @@ class PayshopAbstractSettings
         if (((bool) Tools::isSubmit($this->submit)) == true) {
             return $this->postFormProcess();
         }
+
+        return null;
     }
 
     /**

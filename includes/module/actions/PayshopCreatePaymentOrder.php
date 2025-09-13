@@ -164,7 +164,8 @@ class PayshopCreatePaymentOrder
      */
     private function getProcessFailedRedirectURL()
     {
-        return $this->module->context->link->getModuleLink(
+        // return $this->module->context->link->getModuleLink(
+        return Context::getContext()->link->getModuleLink(
             $this->module->name,
             'ProcessFailedRedirect',
             ['prestashop_order_id' => $this->prestashopOrderId]
@@ -178,7 +179,8 @@ class PayshopCreatePaymentOrder
      */
     private function getProcessEventUrl()
     {
-        return $this->module->context->link->getModuleLink(
+        // return $this->module->context->link->getModuleLink(
+        return Context::getContext()->link->getModuleLink(
             $this->module->name,
             'ProcessEvent'
         );
