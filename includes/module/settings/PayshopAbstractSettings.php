@@ -178,5 +178,3 @@ class PayshopAbstractSettings
         return true;
     }
 }
- }
-}

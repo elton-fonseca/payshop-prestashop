@@ -165,6 +165,3 @@ class PayshopCreatePrestashopOrder
         return $payments[$this->paymentMethod];
     }
 }
-aymentMethod];
-    }
-}
