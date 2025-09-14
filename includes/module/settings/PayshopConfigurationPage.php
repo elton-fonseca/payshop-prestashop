@@ -109,7 +109,7 @@ class PayshopConfigurationPage extends Payshop
      */
     private function loadSettingsFiles()
     {
-                // include_once PAYSHOP_ROOT_URL . '/includes/module/settings/PayshopCredentialsSettings.php';
+        // include_once PAYSHOP_ROOT_URL . '/includes/module/settings/PayshopCredentialsSettings.php';
         // include_once PAYSHOP_ROOT_URL . '/includes/module/settings/PayshopPaymentsSettings.php';
         include_once $this->local_path . 'includes/module/settings/PayshopCredentialsSettings.php';
         include_once $this->local_path . 'includes/module/settings/PayshopPaymentsSettings.php';

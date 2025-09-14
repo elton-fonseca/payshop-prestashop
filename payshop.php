@@ -75,7 +75,7 @@ class Payshop extends PaymentModule
         $this->need_instance = 1;
         $this->bootstrap = true;
 
-        $this->version = PAYSHOP_VERSION;
+        $this->version = '2.1.4';
         $this->ps_versions_compliancy = ['min' => '1.7.0', 'max' => _PS_VERSION_];
 
         parent::__construct();

@@ -87,7 +87,7 @@ class PayshopPaymentMethods
         $this->payshopGooglepay = new PayshopGooglepay($module);
         $this->payshopApplepay = new PayshopApplepay($module);
         $this->payshopPaypal = new PayshopPaypal($module);
-                // $this->payshopClicktopay = new PayshopClicktopay($module);
+        // $this->payshopClicktopay = new PayshopClicktopay($module);
     }
 
     /**
