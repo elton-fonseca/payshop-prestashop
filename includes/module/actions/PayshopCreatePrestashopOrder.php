@@ -76,18 +76,18 @@ class PayshopCreatePrestashopOrder
      */
     private function createPrestashopOrder()
     {
-        $cart = $this->module->context->cart;
+        $cart = Context::getContext()->cart;
         $customer = new Customer($cart->id_customer);
 
         $this->module->validateOrder(
-            (int) $this->module->context->cart->id,
+            (int) Context::getContext()->cart->id,
             (int) $this->getInitialOrderStatusId(),
-            (float) $this->module->context->cart->getOrderTotal(true, Cart::BOTH),
+            (float) Context::getContext()->cart->getOrderTotal(true, Cart::BOTH),
             $this->formatedPaymentMethodName(),
             null,
             // null,
             [],
-            (int) $this->module->context->currency->id,
+            (int) Context::getContext()->currency->id,
             false,
             $customer->secure_key
         );
@@ -113,14 +113,14 @@ class PayshopCreatePrestashopOrder
         $isPaymentTest = !Configuration::get('PAYSHOP_PROD_STATUS');
 
         $transaction = new PayshopTransaction();
-        $transaction->where('cart_id', '=', $this->module->context->cart->id)->destroy();
+        $transaction->where('cart_id', '=', Context::getContext()->cart->id)->destroy();
 
         $transaction = new PayshopTransaction();
         $isCreated = $transaction->create([
-            'cart_id' => $this->module->context->cart->id,
+            'cart_id' => Context::getContext()->cart->id,
             'order_id' => $this->module->currentOrder,
-            'customer_id' => $this->module->context->customer->id,
-            'total' => $this->module->context->cart->getOrderTotal(true, Cart::BOTH),
+            'customer_id' => Context::getContext()->customer->id,
+            'total' => Context::getContext()->cart->getOrderTotal(true, Cart::BOTH),
             'payment_method' => $this->paymentMethod,
             'payment_status' => 'pending',
             'is_payment_test' => $isPaymentTest,

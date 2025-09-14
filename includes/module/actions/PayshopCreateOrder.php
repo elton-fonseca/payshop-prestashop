@@ -95,7 +95,7 @@ class PayshopCreateOrder
      */
     private function checkoutIsFilled()
     {
-        $cart = $this->module->context->cart;
+        $cart = Context::getContext()->cart;
 
         $moduleDisabed = !$this->module->active;
         $cartIsEmpty = !$cart->id;
