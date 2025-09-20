@@ -83,7 +83,7 @@ class PayshopProcessFailedRedirectModuleFrontController extends ModuleFrontContr
 
                     /** @var Cookie $cookie */
                     $cookie = $this->context->cookie;
-                    $cookie->id_cart = (int) $new_cart['cart']->id;
+                    $cookie->__set('id_cart', (int) $new_cart['cart']->id);
                     $cookie->write();
 
                     $this->restoreStock($order);
