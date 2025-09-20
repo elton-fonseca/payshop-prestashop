@@ -71,8 +71,7 @@ class PayshopGooglepayOrderConfirmation
 
         $smarty = Context::getContext()->smarty;
         $smarty->assign([
-                        // 'moduleUrl' => $this->module->path,
-            'moduleUrl' => $this->module->getLocalPath(),
+            'moduleUrl' => 'modules/' . $this->module->name,
             'storeName' => Configuration::get('PS_SHOP_NAME'),
             'environment' => PayshopClientFactory::isProduction() ? 'PRODUCTION' : 'TEST',
             'googlePayMerchantId' => Configuration::get('PAYSHOP_GOOGLEPAY_MERCHANT_ID'),

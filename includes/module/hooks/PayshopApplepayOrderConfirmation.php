@@ -70,8 +70,7 @@ class PayshopApplepayOrderConfirmation
 
         $smarty = Context::getContext()->smarty;
         $smarty->assign([
-                        // 'moduleUrl' => $this->module->path,
-            'moduleUrl' => $this->module->getLocalPath(),
+            'moduleUrl' => 'modules/' . $this->module->name,
             'storeName' => Configuration::get('PS_SHOP_NAME'),
             'applepayMerchantValidation' => $applepayMerchantValidation,
             'processWalletPayment' => $processWalletPayment,

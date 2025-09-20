@@ -23,7 +23,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<link rel="stylesheet" href="{$moduleUrl|escape:'htmlall':'UTF-8'}views/css/wallets.css">
+<link rel="stylesheet" href="{$moduleUrl|escape:'htmlall':'UTF-8'}/views/css/wallets.css">
 
 <script crossorigin="" src="https://applepay.cdn-apple.com/jsapi/1.latest/apple-pay-sdk.js"></script>
 
@@ -35,12 +35,12 @@
 
           <h2>Realize o seu pagamento através do Apple Pay</h2>
           <apple-pay-button id="applePayButton" buttonstyle="white-outline" type="pay" locale="pt-PT"></apple-pay-button>
-          <img src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/img/payshop-logo.png" alt="Payshop" width="150">
+          <img src="{$moduleUrl|escape:'htmlall':'UTF-8'}/views/img/payshop-logo.png" alt="Payshop" width="150">
         </div>
     </div>
 
     <div class="flow-button-wallets" id="flow-button-wallets">
-      <img src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/img/applepay.png" alt="Google Pay" width="70px">
+      <img src="{$moduleUrl|escape:'htmlall':'UTF-8'}/views/img/applepay.png" alt="Google Pay" width="70px">
     </div>
 </div>
 

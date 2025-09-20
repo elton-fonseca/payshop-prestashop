@@ -23,7 +23,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<link rel="stylesheet" href="{$moduleUrl|escape:'htmlall':'UTF-8'}views/css/wallets.css">
+<link rel="stylesheet" href="{$moduleUrl|escape:'htmlall':'UTF-8'}/views/css/wallets.css">
 
 <div>
     <div class="overlap-wallets" id="googlepay-payshop">
@@ -32,12 +32,12 @@
 
           <h2>Realize o seu pagamento através do Google Pay</h2>
           <div id="google-pay-buttom"></div>
-          <img src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/img/payshop-logo.png" alt="Payshop" width="150">
+          <img src="{$moduleUrl|escape:'htmlall':'UTF-8'}/views/img/payshop-logo.png" alt="Payshop" width="150">
         </div>
     </div>
 
     <div class="flow-button-wallets" id="flow-button-wallets">
-      <img src="{$moduleUrl|escape:'htmlall':'UTF-8'}views/img/googlepay.png" alt="Google Pay" width="70px">
+      <img src="{$moduleUrl|escape:'htmlall':'UTF-8'}/views/img/googlepay.png" alt="Google Pay" width="70px">
     </div>
 </div>
 
